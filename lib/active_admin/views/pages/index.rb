@@ -24,8 +24,8 @@ module ActiveAdmin
         # controller. Defaults to rendering the ActiveAdmin::Pages::Index::Table
         def main_content
           wrap_with_batch_action_form do
-            build_table_tools
             build_collection
+            build_table_tools
           end
         end
 
@@ -60,9 +60,9 @@ module ActiveAdmin
         include ::ActiveAdmin::ViewHelpers::DownloadFormatLinksHelper
 
         def build_table_tools
-          div class: "table_tools" do
+          div class: "table_tools row" do
             build_batch_actions_selector
-            build_scopes
+            # build_scopes
             build_index_list
           end if any_table_tools?
         end

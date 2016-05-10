@@ -6,9 +6,9 @@ module ActiveAdmin
 
       def build(title, attributes = {})
         super(attributes)
-        add_class "panel"
-        @title = h3(title.to_s)
-        @contents = div(class: "panel_contents")
+        add_class "panel panel-default"
+        @title = div(title.to_s, class: 'panel-heading')
+        @contents = div(class: "panel_contents panel-body")
       end
 
       def add_child(child)

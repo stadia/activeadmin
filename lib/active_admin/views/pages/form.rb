@@ -9,7 +9,7 @@ module ActiveAdmin
             render_or_call_method_or_proc_on(resource, form_presenter[:title])
           else
             assigns[:page_title] || I18n.t("active_admin.#{normalized_action}_model",
-                                      model: active_admin_config.resource_label)
+                                         model: active_admin_config.resource_label)
           end
         end
 
@@ -58,8 +58,8 @@ module ActiveAdmin
             params[:action]
           end
         end
-      end
 
+      end
     end
   end
 end

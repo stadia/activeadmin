@@ -8,6 +8,7 @@ module ActiveAdmin
       def build(section)
         @section = section
         super(@section.title)
+        add_class 'panel panel-default'
         add_class @section.custom_class if @section.custom_class
         self.id = @section.id
         build_sidebar_content

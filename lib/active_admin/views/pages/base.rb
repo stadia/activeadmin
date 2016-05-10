@@ -48,9 +48,11 @@ module ActiveAdmin
             div id: "wrapper" do
               build_unsupported_browser
               build_header
-              build_title_bar
-              build_page_content
-              build_footer
+              div id: "page-wrapper" do
+                build_title_bar
+                build_page_content
+              end
+              # build_footer
             end
           end
         end
@@ -71,30 +73,32 @@ module ActiveAdmin
 
         def build_page_content
           build_flash_messages
-          div id: "active_admin_content", class: (skip_sidebar? ? "without_sidebar" : "with_sidebar") do
+          div id: "active_admin_content", class: (skip_sidebar? ? "without_sidebar row" : "with_sidebar row") do
             build_main_content_wrapper
             build_sidebar unless skip_sidebar?
           end
         end
 
         def build_flash_messages
-          div class: 'flashes' do
+          div class: "flashes row" do
             flash_messages.each do |type, message|
-              div message, class: "flash flash_#{type}"
+              div message, class: "flash flash_#{type} alert alert-dismissible", role: 'alert' do
+                button class: 'close', 'data-dismiss': 'alert', 'aria-label': 'Close' do
+                  span 'x', 'aria-hidden': 'true'
+                end
+              end
             end
           end
         end
 
         def build_main_content_wrapper
-          div id: "main_content_wrapper" do
-            div id: "main_content" do
-              main_content
-            end
+          div id: "main_content", class: (skip_sidebar? ? 'col-lg-12' : 'col-lg-9') do
+            main_content
           end
         end
 
         def main_content
-          I18n.t('active_admin.main_content', model: title).html_safe
+          I18n.t('active_admin.main_content', model: title)
         end
 
         def title
@@ -125,7 +129,7 @@ module ActiveAdmin
 
         # Renders the sidebar
         def build_sidebar
-          div id: "sidebar" do
+          div id: "sidebar", class: 'col-lg-3' do
             sidebar_sections_for_action.collect do |section|
               sidebar_section(section)
             end

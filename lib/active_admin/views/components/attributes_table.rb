@@ -10,7 +10,9 @@ module ActiveAdmin
         options = { }
         options[:for] = @collection.first if single_record?
         super(options)
+        add_class 'table-responsive'
         @table = table
+        @table.add_class 'table'
         build_colgroups
         rows(*attrs)
       end

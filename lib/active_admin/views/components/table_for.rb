@@ -17,7 +17,10 @@ module ActiveAdmin
         @row_class      = options.delete(:row_class)
 
         build_table
+        options[:width] = '100%'
+        options[:style] = options.key?(:style) ? "#{options[:style]} width:100%" : 'width:100%'
         super(options)
+        add_class 'table table-striped table-bordered table-hover dtr-inline'
         columns(*attrs)
       end
 
@@ -59,7 +62,7 @@ module ActiveAdmin
 
       def build_table_head
         @thead = thead do
-          @header_row = tr
+          @header_row = tr role: 'row'
         end
       end
 
@@ -68,8 +71,8 @@ module ActiveAdmin
         sort_key = sortable? && col.sortable? && col.sort_key
         params   = request.query_parameters.except :page, :order, :commit, :format
 
-        classes << 'sortable'                         if sort_key
-        classes << "sorted-#{current_sort[1]}"        if sort_key && current_sort[0] == sort_key
+        classes << 'sortable sorting'                         if sort_key
+        classes << "sorted-#{current_sort[1]} sorting_#{current_sort[1]}" if sort_key && current_sort[0] == sort_key
         classes << col.html_class
 
         if sort_key
@@ -91,7 +94,7 @@ module ActiveAdmin
               classes << @row_class.call(elem)
             end
 
-            tr(class: classes.flatten.join(' '), id: dom_id_for(elem))
+            tr(class: classes.flatten.join(' '), id: dom_id_for(elem), role: 'row')
           end
         end
       end

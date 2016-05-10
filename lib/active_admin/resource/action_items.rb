@@ -8,7 +8,7 @@ module ActiveAdmin
       # Adds the default action items to a resource when it's initialized
       def initialize(*args)
         super
-        add_default_action_items
+        add_bootstrap_action_items
       end
 
       # @return [Array] The set of action items for this resource
@@ -60,6 +60,12 @@ module ActiveAdmin
         add_default_show_action_item
       end
 
+      def add_bootstrap_action_items
+        add_bootstrap_new_action_item
+        add_bootstrap_edit_action_item
+        add_bootstrap_show_action_item
+      end
+
       # Adds the default New link on index
       def add_default_new_action_item
         add_action_item :new, only: :index do
@@ -88,6 +94,33 @@ module ActiveAdmin
         end
       end
 
+      # Adds the default New link on index
+      def add_bootstrap_new_action_item
+        add_action_item :new, only: :index do
+          if controller.action_methods.include?('new') && authorized?(ActiveAdmin::Auth::CREATE, active_admin_config.resource_class)
+            link_to I18n.t('active_admin.new_model', model: active_admin_config.resource_label), new_resource_path, class: 'btn btn-primary', style: 'margin:15px 0 10px 10px'
+          end
+        end
+      end
+
+      # Adds the default Edit link on show
+      def add_bootstrap_edit_action_item
+        add_action_item :edit, only: :show do
+          if controller.action_methods.include?('edit') && authorized?(ActiveAdmin::Auth::UPDATE, resource)
+            link_to I18n.t('active_admin.edit_model', model: active_admin_config.resource_label), edit_resource_path(resource), class: 'btn btn-primary', style: 'margin:15px 0 10px 10px'
+          end
+        end
+      end
+
+      # Adds the default Destroy link on show
+      def add_bootstrap_show_action_item
+        add_action_item :destroy, only: :show do
+          if controller.action_methods.include?('destroy') && authorized?(ActiveAdmin::Auth::DESTROY, resource)
+            link_to I18n.t('active_admin.delete_model', model: active_admin_config.resource_label), resource_path(resource),
+                    method: :delete, data: {confirm: I18n.t('active_admin.delete_confirmation')}, class: 'btn btn-warning', style: 'margin:15px 0 10px 10px'
+          end
+        end
+      end
     end
   end
 

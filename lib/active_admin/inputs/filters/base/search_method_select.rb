@@ -44,11 +44,12 @@ module ActiveAdmin
           end
 
           def input_html
+            (input_html_options[:class] ||= '') << ' form-control'
             builder.text_field current_filter, input_html_options
           end
 
           def select_html
-            template.select_tag '', template.options_for_select(filter_options, current_filter)
+            template.select_tag '', template.options_for_select(filter_options, current_filter), class: 'form-control'
           end
 
           def filters
