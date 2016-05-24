@@ -56,9 +56,6 @@ module ActiveAdmin
 
         form_for search, options do |f|
           filters.each do |attribute, opts|
-            opts[:input_html] ||= {}
-            (opts[:input_html][:class] ||= '') << ' form-control'
-
             next if opts.key?(:if)     && !call_method_or_proc_on(self, opts[:if])
             next if opts.key?(:unless) &&  call_method_or_proc_on(self, opts[:unless])
 
