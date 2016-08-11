@@ -1,0 +1,51 @@
+# This is the default configuration file. Enabling and disabling is configured
+# in separate files. This file adds all other parameters apart from Enabled.
+
+inherit_from:
+  - .disabled.yml
+
+# Common configuration.
+AllCops:
+  Exclude:
+   - 'lib/generators/**/*'
+   - 'features/**/*'
+   - 'spec/**/*'
+   - 'script/**/*'
+   - 'tasks/**/*'
+   - 'test-rails-app/**/*'
+  # Cop names are not displayed in offense messages by default. Change behavior
+  # by overriding DisplayCopNames, or by giving the -D/--display-cop-names
+  # option.
+  DisplayCopNames: true
+  # Style guide URLs are not displayed in offense messages by default. Change
+  # behavior by overriding DisplayStyleGuide, or by giving the
+  # -S/--display-style-guide option.
+  DisplayStyleGuide: true
+  # What version of the Ruby interpreter is the inspected code intended to
+  # run on? (If there is more than one, set this to the lowest version.)
+  TargetRubyVersion: 2.3
+
+Style/IndentationConsistency:
+  # The difference between `rails` and `normal` is that the `rails` style
+  # prescribes that in classes and modules the `protected` and `private`
+  # modifier keywords shall be indented the same as public methods and that
+  # protected and private members shall be indented one step more than the
+  # modifiers. Other than that, both styles mean that entities on the same
+  # logical depth shall have the same indentation.
+  EnforcedStyle: rails
+  SupportedStyles:
+    - normal
+    - rails
+
+##################### Rails ##################################
+
+Rails:
+  Enabled: true
+
+Rails/TimeZone:
+  # The value `strict` means that `Time` should be used with `zone`.
+  # The value `flexible` allows usage of `in_time_zone` instead of `zone`.
+  EnforcedStyle: strict
+  SupportedStyles:
+    - strict
+    - flexible
