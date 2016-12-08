@@ -47,4 +47,3 @@ public
 .rails-version
 .rbenv-version
 .localeapp/*
-.rubocop_todo.yml
