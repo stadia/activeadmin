@@ -20,7 +20,13 @@ if rails_major == '5'
   gem 'ransack',             github: 'activerecord-hackery/ransack'
 end
 
-gem 'mime-types', '< 3' # Remove this line when we drop support for Ruby 1.9
+platform :ruby_19 do # Remove this block when we drop support for Ruby 1.9
+  gem 'kaminari', '~> 0.15'
+  gem 'mime-types', '< 3'
+  gem 'nokogiri', '< 1.7'
+  gem 'public_suffix', '< 1.5'
+end
+
 
 # Optional dependencies
 gem 'cancan'
@@ -30,14 +36,16 @@ gem 'pundit'
 
 # Utility gems used in both development & test environments
 gem 'rake', require: false
-gem 'parallel_tests'
+gem 'parallel_tests', '< 2.10' #2.10 requires ruby '>= 2.0.0'
 
 # Debugging
 gem 'pry'                                   # Easily debug from your console with `binding.pry`
 
 group :development do
   # Debugging
-  gem 'better_errors'                       # Web UI to debug exceptions. Go to /__better_errors to access the latest one
+  gem 'better_errors',                      # Web UI to debug exceptions. Go to /__better_errors to access the latest one
+      platforms: [:ruby_20, :ruby_21, :ruby_22, :ruby_23]
+
   gem 'binding_of_caller', platforms: :mri  # Retrieve the binding of a method's caller in MRI Ruby >= 1.9.2
 
   # Performance
@@ -57,7 +65,8 @@ end
 group :test do
   gem 'capybara'
   gem 'simplecov', require: false           # Test coverage generator. Go to /coverage/ after running tests
-  gem 'coveralls', require: false           # Test coverage website. Go to https://coveralls.io
+  gem 'json', '~> 1.8', require: false      # Required by simplecov, > 2 removes support for Ruby 1.9
+  gem 'codecov', require: false             # Test coverage website. Go to https://codecov.io
   gem 'tins', '~> 1.6.0', require: false    # Required by coveralls, > 1.6.0 removes support for Ruby 1.9
   gem 'cucumber-rails', require: false
   gem 'cucumber', '1.3.20'
