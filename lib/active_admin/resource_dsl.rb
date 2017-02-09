@@ -8,6 +8,25 @@ module ActiveAdmin
 
     private
 
+    # Redefine sort behaviour for column
+    #
+    # For example:
+    #
+    #   # nulls last
+    #   order_by(:age) do |order_clause|
+    #     [order_clause.to_sql, 'NULLS LAST'].join(' ')  if order_clause.order == 'desc'
+    #   end
+    #
+    #   # by last_name but in the case that there is no last name, by first_name.
+    #   order_by(:full_name) do |order_clause|
+    #     ['COALESCE(NULLIF(last_name, ''), first_name), first_name', order_clause.order].join(' ')
+    #   end
+    #
+    #
+    def order_by(column, &block)
+      config.ordering[column] = block
+    end
+
     def belongs_to(target, options = {})
       config.belongs_to(target, options)
     end
@@ -49,10 +68,11 @@ module ActiveAdmin
     #
     def permit_params(*args, &block)
       param_key = config.param_key.to_sym
+      belongs_to_params =  config.belongs_to_params
 
       controller do
         define_method :permitted_params do
-          params.permit *active_admin_namespace.permitted_params,
+          params.permit *(active_admin_namespace.permitted_params + belongs_to_params),
             param_key => block ? instance_exec(&block) : args
         end
       end
@@ -128,6 +148,13 @@ module ActiveAdmin
 
     def collection_action(name, options = {}, &block)
       action config.collection_actions, name, options, &block
+    end
+
+    def decorate_with(decorator_class)
+      # Force storage as a string. This will help us with reloading issues.
+      # Assuming decorator_class.to_s will return the name of the class allows
+      # us to handle a string or a class.
+      config.decorator_class_name = "::#{ decorator_class }"
     end
 
     # Defined Callbacks

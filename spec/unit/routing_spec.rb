@@ -30,6 +30,24 @@ describe ActiveAdmin, "Routing", type: :routing do
     end
   end
 
+  describe "route_options" do
+    context "with a custom path set in route_options" do
+      before(:each) do
+        ActiveAdmin.application.namespaces[:admin].route_options = { path: '/custom-path' }
+        reload_routes!
+      end
+
+      after(:all) do
+        ActiveAdmin.application.namespaces[:admin].route_options = {}
+        reload_routes!
+      end
+
+      it "should route using the custom path" do
+        expect(admin_posts_path).to eq "/custom-path/posts"
+      end
+    end
+  end
+
   describe "standard resources" do
     context "when in admin namespace" do
       it "should route the index path" do
@@ -148,6 +166,31 @@ describe ActiveAdmin, "Routing", type: :routing do
         expect({ get: "/admin/users/do_something" }).to \
           route_to({ controller: 'admin/users', action: 'do_something'})
       end
+    end
+  end
+
+  describe "nested belongs to resource" do
+    before do
+      ActiveAdmin.register(Tagging) do
+        belongs_to :user, optional: true
+        belongs_to :post
+      end
+      reload_routes!
+    end
+    it "should route the nested index path" do
+      expect(admin_user_post_taggings_path(1,2)).to eq "/admin/users/1/posts/2/taggings"
+    end
+
+    it "should route the nested show path" do
+      expect(admin_user_post_tagging_path(1,2,3)).to eq "/admin/users/1/posts/2/taggings/3"
+    end
+
+    it "should route the nested skipping optional index path" do
+      expect(admin_post_taggings_path(1)).to eq "/admin/posts/1/taggings"
+    end
+
+    it "should route the nested skipping optional show path" do
+      expect(admin_post_tagging_path(1,2)).to eq "/admin/posts/1/taggings/2"
     end
   end
 

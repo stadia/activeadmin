@@ -41,6 +41,9 @@ module ActiveAdmin
     # Set the site title image displayed in the main layout (has precendence over :site_title)
     inheritable_setting :site_title_image, ""
 
+    # Set the site footer text (defaults to Powered by ActiveAdmin text with version)
+    inheritable_setting :footer, ""
+
     # Set a favicon
     inheritable_setting :favicon, false
 
@@ -80,6 +83,9 @@ module ActiveAdmin
     # Options that a passed to root_to.
     inheritable_setting :root_to_options, {}
 
+    # Options passed to the routes, i.e. { path: '/custom' }
+    inheritable_setting :route_options, {}
+
     # Display breadcrumbs
     inheritable_setting :breadcrumb, true
 
@@ -101,6 +107,9 @@ module ActiveAdmin
     # Whether to display 'Current Filters' on search screen
     inheritable_setting :current_filters, true
 
+    # class to handle ordering
+    inheritable_setting :order_clause, ActiveAdmin::OrderClause
+
     # Request parameters that are permitted by default
     inheritable_setting :permitted_params, [
       :utf8, :_method, :authenticity_token, :commit, :id
@@ -117,6 +126,8 @@ module ActiveAdmin
 
     # Active Admin makes educated guesses when displaying objects, this is
     # the list of methods it tries calling in order
+    # Note that Formtastic also has 'collection_label_methods' similar to this
+    # used by auto generated dropdowns in filter or belongs_to field of Active Admin
     setting :display_name_methods, [ :display_name,
                                       :full_name,
                                       :name,

@@ -7,7 +7,7 @@ module ActiveAdmin
     #
     #     dropdown_menu "Administration" do
     #       item "Edit Details", edit_details_path
-    #       item "Edit My Account", edit_my_acccount_path
+    #       item "Edit My Account", edit_my_account_path
     #     end
     #
     # This will create a button with the label "Administration" and
@@ -54,6 +54,7 @@ module ActiveAdmin
 
       def build_menu(options)
         options[:class] ||= ''
+<<<<<<< HEAD
         options[:class] << ' dropdown_menu_list dropdown-menu'
 
         # menu_list = nil
@@ -64,6 +65,17 @@ module ActiveAdmin
         #
         # menu_list
         ul(options)
+=======
+        options[:class] << ' dropdown_menu_list'
+
+        menu_list = nil
+
+        div class: 'dropdown_menu_list_wrapper' do
+          menu_list = ul(options)
+        end
+
+        menu_list
+>>>>>>> a7f75368539cd2353aab4c4f84540e0f922c683f
       end
 
     end

@@ -142,7 +142,7 @@ module ActiveAdmin
 
         # Renders the content for the footer
         def build_footer
-          insert_tag view_factory.footer
+          insert_tag view_factory.footer, active_admin_namespace
         end
 
       end

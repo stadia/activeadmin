@@ -1,7 +1,13 @@
 require 'rails_helper'
 
 class Post
-  ransacker :custom_searcher do
+  ransacker :custom_title_searcher do |parent|
+    parent.table[:title]
+  end
+  ransacker :custom_created_at_searcher do |parent|
+    parent.table[:created_at]
+  end
+  ransacker :custom_searcher_numeric, type: :numeric do
     # nothing to see here
   end
 end
@@ -153,17 +159,31 @@ describe ActiveAdmin::Filters::ViewHelper do
     end
   end
 
-  describe "datetime attribute" do
-    let(:body) { Capybara.string(filter :created_at) }
+  describe "date attribute" do
+    let(:body) { Capybara.string(filter :published_date) }
 
     it "should generate a date greater than" do
-      expect(body).to have_selector("input.datepicker[name='q[created_at_gteq_date]']")
+      expect(body).to have_selector("input.datepicker[name='q[published_date_gteq]']")
     end
     it "should generate a seperator" do
       expect(body).to have_selector("span.seperator")
     end
     it "should generate a date less than" do
-      expect(body).to have_selector("input.datepicker[name='q[created_at_lteq_date]']")
+      expect(body).to have_selector("input.datepicker[name='q[published_date_lteq]']")
+    end
+  end
+
+  describe "datetime attribute" do
+    let(:body) { Capybara.string(filter :created_at) }
+
+    it "should generate a date greater than" do
+      expect(body).to have_selector("input.datepicker[name='q[created_at_gteq_datetime]']")
+    end
+    it "should generate a seperator" do
+      expect(body).to have_selector("span.seperator")
+    end
+    it "should generate a date less than" do
+      expect(body).to have_selector("input.datepicker[name='q[created_at_lteq_datetime]']")
     end
   end
 
@@ -389,21 +409,52 @@ describe ActiveAdmin::Filters::ViewHelper do
 
   describe "custom search methods" do
 
+    it "should use the default type of the ransacker" do
+      body = Capybara.string(filter :custom_searcher_numeric)
+      expect(body).to have_selector("option[value=custom_searcher_numeric_equals]")
+      expect(body).to have_selector("option[value=custom_searcher_numeric_greater_than]")
+      expect(body).to have_selector("option[value=custom_searcher_numeric_less_than]")
+    end
+
     it "should work as select" do
-      body = Capybara.string(filter :custom_searcher, as: :select, collection: ['foo'])
-      expect(body).to have_selector("select[name='q[custom_searcher]']")
+      body = Capybara.string(filter :custom_title_searcher, as: :select, collection: ['foo'])
+      expect(body).to have_selector("select[name='q[custom_title_searcher_eq]']")
     end
 
     it "should work as string" do
-      body = Capybara.string(filter :custom_searcher, as: :string)
-      expect(body).to have_selector("input[name='q[custom_searcher]']")
+      body = Capybara.string(filter :custom_title_searcher, as: :string)
+      expect(body).to have_selector("option[value=custom_title_searcher_contains]")
+      expect(body).to have_selector("option[value=custom_title_searcher_starts_with]")
+    end
+
+    describe "custom date range search" do
+      let(:qteq) { "2010-10-01" }
+      let(:lteq) { "2010-10-02" }
+      let(:scope){ Post.search custom_created_at_searcher_gteq_datetime: qteq, custom_created_at_searcher_lteq_datetime: lteq }
+      let(:body) { Capybara.string(render_filter scope, custom_created_at_searcher: {as: :date_range}) }
+
+      it "should work as date_range" do
+        expect(body).to have_selector("input[name='q[custom_created_at_searcher_gteq_datetime]'][value='2010-10-01']")
+        expect(body).to have_selector("input[name='q[custom_created_at_searcher_lteq_datetime]'][value='2010-10-02']")
+      end
+
+      context "filter value can't be casted to date" do
+        let(:qteq) { "Ooops" }
+        let(:lteq) { "Ooops" }
+
+        it "should work display empty filter values" do
+          expect(body).to have_selector("input[name='q[custom_created_at_searcher_gteq_datetime]'][value='']")
+          expect(body).to have_selector("input[name='q[custom_created_at_searcher_lteq_datetime]'][value='']")
+        end
+      end
+
     end
   end
 
   describe "does not support some filter inputs" do
     it "should fallback to use formtastic inputs" do
-      body = Capybara.string(filter :custom_searcher, as: :text)
-      expect(body).to have_selector("textarea[name='q[custom_searcher]']")
+      body = Capybara.string(filter :custom_title_searcher, as: :text)
+      expect(body).to have_selector("textarea[name='q[custom_title_searcher]']")
     end
   end
 

@@ -209,11 +209,10 @@ module ActiveAdmin
 
       def apply_sorting(chain)
         params[:order] ||= active_admin_config.sort_order
-
-        order_clause = OrderClause.new params[:order]
+        order_clause = active_admin_config.order_clause.new(active_admin_config, params[:order])
 
         if order_clause.valid?
-          chain.reorder(order_clause.to_sql(active_admin_config))
+          order_clause.apply(chain)
         else
           chain # just return the chain
         end
@@ -222,14 +221,8 @@ module ActiveAdmin
       # Applies any Ransack search methods to the currently scoped collection.
       # Both `search` and `ransack` are provided, but we use `ransack` to prevent conflicts.
       def apply_filtering(chain)
-        @search = chain.ransack clean_search_params
+        @search = chain.ransack(params[:q] || {})
         @search.result
-      end
-
-      def clean_search_params
-        q = params[:q] || {}
-        q = q.to_unsafe_h if q.respond_to? :to_unsafe_h
-        q.delete_if{ |key, value| value.blank? }
       end
 
       def apply_scoping(chain)
