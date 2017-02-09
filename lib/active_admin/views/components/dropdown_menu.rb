@@ -54,28 +54,16 @@ module ActiveAdmin
 
       def build_menu(options)
         options[:class] ||= ''
-<<<<<<< HEAD
         options[:class] << ' dropdown_menu_list dropdown-menu'
 
         # menu_list = nil
         #
-        # div :class => 'dropdown_menu_list_wrapper' do
+        # div class: 'dropdown_menu_list_wrapper' do
         #   menu_list = ul(options)
         # end
         #
         # menu_list
         ul(options)
-=======
-        options[:class] << ' dropdown_menu_list'
-
-        menu_list = nil
-
-        div class: 'dropdown_menu_list_wrapper' do
-          menu_list = ul(options)
-        end
-
-        menu_list
->>>>>>> a7f75368539cd2353aab4c4f84540e0f922c683f
       end
 
     end
