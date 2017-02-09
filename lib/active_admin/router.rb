@@ -23,7 +23,7 @@ module ActiveAdmin
           if namespace.root?
             root namespace.root_to_options.merge(to: namespace.root_to)
           else
-            namespace namespace.name do
+            namespace namespace.name, namespace.route_options.dup do
               root namespace.root_to_options.merge(to: namespace.root_to, as: :root)
             end
           end
@@ -38,26 +38,29 @@ module ActiveAdmin
         resources.each do |config|
           routes = aa_router.resource_routes(config)
 
-          # Add in the parent if it exists
-          if config.belongs_to?
-            belongs_to = routes
-            routes     = Proc.new do
-              # If it's optional, make the normal resource routes
-              instance_exec &belongs_to if config.belongs_to_config.optional?
+          # Add in the parents for each, starting from the first(out) to the last(in) exists
+          
+          if(config.belongs_to?)
+            belongs_to = config.belongs_to_config.reverse.reduce(routes) do |r,btc|
+              Proc.new do
+                # If it's optional, make the normal resource routes
+                instance_exec &r if btc.optional?
 
-              # Make the nested belongs_to routes
-              # :only is set to nothing so that we don't clobber any existing routes on the resource
-              resources config.belongs_to_config.target.resource_name.plural, only: [] do
-                instance_exec &belongs_to
+                # Make the nested belongs_to routes
+                # :only is set to nothing so that we don't clobber any existing routes on the resource
+                resources btc.target.resource_name.plural, only: [] do
+                  instance_exec &r
+                end
               end
             end
+            routes = belongs_to
           end
 
           # Add on the namespace if required
           unless config.namespace.root?
             nested = routes
             routes = Proc.new do
-              namespace config.namespace.name do
+              namespace config.namespace.name, config.namespace.route_options.dup do
                 instance_exec &nested
               end
             end

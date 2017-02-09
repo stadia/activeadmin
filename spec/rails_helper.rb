@@ -37,33 +37,12 @@ module ActiveAdminIntegrationSpecHelper
     reload_routes!
   end
 
-  # Sets up a describe block where you can render controller
-  # actions. Uses the Admin::PostsController as the subject
-  # for the describe block
-  def describe_with_render(*args, &block)
-    describe *args do
-      include RSpec::Rails::ControllerExampleGroup
-      render_views
-      # metadata[:behaviour][:describes] = ActiveAdmin.namespaces[:admin].resources['Post'].controller
-      module_eval &block
-    end
-  end
-
   def arbre(assigns = {}, helpers = mock_action_view, &block)
     Arbre::Context.new(assigns, helpers, &block)
   end
 
   def render_arbre_component(assigns = {}, helpers = mock_action_view, &block)
     arbre(assigns, helpers, &block).children.first
-  end
-
-  # Setup a describe block which uses capybara and rails integration
-  # test methods.
-  def describe_with_capybara(*args, &block)
-    describe *args do
-      include RSpec::Rails::IntegrationExampleGroup
-      module_eval &block
-    end
   end
 
   # Returns a fake action view instance to use with our renderers
@@ -89,14 +68,15 @@ module ActiveAdminIntegrationSpecHelper
 end
 
 ENV['RAILS_ENV'] = 'test'
-ENV['RAILS_ROOT'] = File.expand_path("../rails/rails-#{ENV['RAILS']}", __FILE__)
+
+require 'rails'
+ENV['RAILS_ROOT'] = File.expand_path("../rails/rails-#{Rails.version}", __FILE__)
 
 # Create the test app if it doesn't exists
 unless File.exists?(ENV['RAILS_ROOT'])
   system 'rake setup'
 end
 
-require 'rails'
 require 'active_record'
 require 'active_admin'
 require 'devise'
@@ -146,7 +126,7 @@ end
 
 # improve the performance of the specs suite by not logging anything
 # see http://blog.plataformatec.com.br/2011/12/three-tips-to-improve-the-performance-of-your-test-suite/
-Rails.logger.level = 4
+Rails.logger.level = Logger::FATAL
 
 # Improves performance by forcing the garbage collector to run less often.
 unless ENV['DEFER_GC'] == '0' || ENV['DEFER_GC'] == 'false'

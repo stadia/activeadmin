@@ -1,13 +1,3 @@
-$LOAD_PATH.unshift(File.dirname(__FILE__))
-$LOAD_PATH << File.expand_path('../support', __FILE__)
-
-ENV['BUNDLE_GEMFILE'] = File.expand_path('../../Gemfile', __FILE__)
-require "bundler"
-Bundler.setup
-
-require 'detect_rails_version'
-ENV['RAILS'] = detect_rails_version
-
 require 'simplecov'
 
 SimpleCov.start do
@@ -16,5 +6,7 @@ SimpleCov.start do
   add_filter 'bundle/' # for Travis
 end
 
-require 'codecov'
-SimpleCov.formatter = SimpleCov::Formatter::Codecov
+if ENV['CI'] == 'true'
+  require 'codecov'
+  SimpleCov.formatter = SimpleCov::Formatter::Codecov
+end
