@@ -1,18 +1,13 @@
 require 'rails_helper'
 
-describe ActiveAdmin::Helpers::Collection do
+RSpec.describe ActiveAdmin::Helpers::Collection do
 
   include ActiveAdmin::Helpers::Collection
 
-  before(:all) do
-    Post.delete_all
+  before do
     Post.create!(title: "A post")
     Post.create!(title: "A post")
     Post.create!(title: "An other post")
-  end
-
-  after(:all) do
-    Post.delete_all
   end
 
   describe "#collection_size" do

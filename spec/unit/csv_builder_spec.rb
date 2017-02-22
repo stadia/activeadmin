@@ -2,29 +2,40 @@
 
 require 'rails_helper'
 
-describe ActiveAdmin::CSVBuilder do
-  let(:builder) { ActiveAdmin::CSVBuilder.new options, &block }
-  let(:options) { {} }
-  let(:block)   { ->{} }
+RSpec.describe ActiveAdmin::CSVBuilder do
 
-  let(:view_context) {
-    context = Class.new
-    context.send :include, MethodOrProcHelper
-    context.new
-  }
-  let(:controller) {
-    controller = double view_context: view_context, find_collection: collection
-    allow(controller).to receive(:apply_decorator) { |r| r }
-    controller
-  }
-  let(:collection) { Post.all }
+  describe '.default_for_resource using Post' do
+    let(:csv_builder) { ActiveAdmin::CSVBuilder.default_for_resource(Post).tap(&:exec_columns) }
 
-  before{ |ex| builder.send :exec_columns, view_context unless ex.metadata[:skip_exec] }
+    it 'returns a default csv_builder for Post' do
+      expect(csv_builder).to be_a(ActiveAdmin::CSVBuilder)
+    end
 
-  before :all do
-    Post.destroy_all
-    @post1 = Post.create!(title: "Hello1", published_date: Date.today - 2.day )
-    @post2 = Post.create!(title: "Hello2", published_date: Date.today - 1.day )
+    it 'defines Id as the first column' do
+      expect(csv_builder.columns.first.name).to eq 'Id'
+      expect(csv_builder.columns.first.data).to eq :id
+    end
+
+    it "has Post's content_columns" do
+      csv_builder.columns[1..-1].each_with_index do |column, index|
+        expect(column.name).to eq Post.content_columns[index].name.humanize
+        expect(column.data).to eq Post.content_columns[index].name.to_sym
+      end
+    end
+
+    context 'when column has a localized name' do
+      let(:localized_name) { 'Titulo' }
+
+      before do
+        allow(Post).to receive(:human_attribute_name).and_call_original
+        allow(Post).to receive(:human_attribute_name).with(:title){ localized_name }
+      end
+
+      it 'gets name from I18n' do
+        title_index = Post.content_columns.map(&:name).index('title') + 1 # First col is always id
+        expect(csv_builder.columns[title_index].name).to eq localized_name
+      end
+    end
   end
 
   context 'when empty' do

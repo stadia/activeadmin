@@ -2,7 +2,7 @@ require 'rails_helper'
 require File.expand_path('config_shared_examples', File.dirname(__FILE__))
 
 module ActiveAdmin
-  describe Resource do
+  RSpec.describe Resource do
 
     it_should_behave_like "ActiveAdmin::Resource"
     before { load_defaults! }
@@ -148,6 +148,8 @@ module ActiveAdmin
 
 
     describe "sort order" do
+      class MockResource
+      end
 
       context "when resource class responds to primary_key" do
         it "should sort by primary key desc by default" do

@@ -1,6 +1,10 @@
 require 'rails_helper'
+require 'active_admin/view_helpers/active_admin_application_helper'
+require 'active_admin/view_helpers/auto_link_helper'
+require 'active_admin/view_helpers/display_helper'
+require 'active_admin/view_helpers/method_or_proc_helper'
 
-describe ActiveAdmin::ViewHelpers::DisplayHelper do
+RSpec.describe ActiveAdmin::ViewHelpers::DisplayHelper do
   include ActiveAdmin::ViewHelpers::ActiveAdminApplicationHelper
   include ActiveAdmin::ViewHelpers::AutoLinkHelper
   include ActiveAdmin::ViewHelpers::DisplayHelper
@@ -18,6 +22,13 @@ describe ActiveAdmin::ViewHelpers::DisplayHelper do
 
   def url_options
     { locale: nil }
+  end
+
+  before do
+    load_resources do
+      ActiveAdmin.register(User)
+      ActiveAdmin.register(Post){ belongs_to :user, optional: true }
+    end
   end
 
   describe '#display_name' do
