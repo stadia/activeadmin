@@ -38,22 +38,19 @@ module ActiveAdmin
         resources.each do |config|
           routes = aa_router.resource_routes(config)
 
-          # Add in the parents for each, starting from the first(out) to the last(in) exists
-          
-          if(config.belongs_to?)
-            belongs_to = config.belongs_to_config.reverse.reduce(routes) do |r,btc|
-              Proc.new do
-                # If it's optional, make the normal resource routes
-                instance_exec &r if btc.optional?
+          # Add in the parent if it exists
+          if config.belongs_to?
+            belongs_to = routes
+            routes     = Proc.new do
+              # If it's optional, make the normal resource routes
+              instance_exec &belongs_to if config.belongs_to_config.optional?
 
-                # Make the nested belongs_to routes
-                # :only is set to nothing so that we don't clobber any existing routes on the resource
-                resources btc.target.resource_name.plural, only: [] do
-                  instance_exec &r
-                end
+              # Make the nested belongs_to routes
+              # :only is set to nothing so that we don't clobber any existing routes on the resource
+              resources config.belongs_to_config.target.resource_name.plural, only: [] do
+                instance_exec &belongs_to
               end
             end
-            routes = belongs_to
           end
 
           # Add on the namespace if required
@@ -97,7 +94,9 @@ module ActiveAdmin
           page = config.underscored_resource_name
           get "/#{page}" => "#{page}#index"
           config.page_actions.each do |action|
-            build_route.call action.http_verb, "/#{page}/#{action.name}" => "#{page}##{action.name}"
+            Array.wrap(action.http_verb).each do |verb|
+              build_route.call verb, "/#{page}/#{action.name}" => "#{page}##{action.name}"
+            end
           end
         else
           raise "Unsupported config class: #{config.class}"

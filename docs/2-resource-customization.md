@@ -1,3 +1,6 @@
+---
+redirect_from: /docs/2-resource-customization.html
+---
 # Working with Resources
 
 Every Active Admin resource corresponds to a Rails model. So before creating a
@@ -15,9 +18,6 @@ end
 ```
 
 ## Setting up Strong Parameters
-
-Rails 4 replaces `attr_accessible` with [Strong Parameters](https://github.com/rails/strong_parameters),
-which moves attribute whitelisting from the model to the controller.
 
 Use the `permit_params` method to define which attributes may be changed:
 
@@ -72,7 +72,7 @@ ActiveAdmin.register Post do
   belongs_to :user
   permit_params :title, :content, :publisher_id
 end
-
+```
 
 The `permit_params` call creates a method called `permitted_params`. You should use this method when overriding `create` or `update` actions:
 
@@ -313,8 +313,8 @@ end
 
 ## Customizing resource retrieval
 
-Our controllers are built on [Inherited Resources](https://github.com/josevalim/inherited_resources),
-so you can use [all of its features](https://github.com/josevalim/inherited_resources#overwriting-defaults).
+Our controllers are built on [Inherited Resources](https://github.com/activeadmin/inherited_resources),
+so you can use [all of its features](https://github.com/activeadmin/inherited_resources#overwriting-defaults).
 
 If you need to customize the collection properties, you can overwrite the `scoped_collection` method.
 

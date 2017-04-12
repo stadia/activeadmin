@@ -1,6 +1,6 @@
-require 'active_admin/view_helpers/fields_for'
+require 'rails_helper'
 
-describe ActiveAdmin::ViewHelpers::FormHelper, ".fields_for" do
+RSpec.describe ActiveAdmin::ViewHelpers::FormHelper, ".fields_for" do
   include ActiveAdmin::ViewHelpers::FormHelper
 
   it "should skip :action, :controller and :commit" do

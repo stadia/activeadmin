@@ -1,18 +1,6 @@
 require 'rails_helper'
 
-class Post
-  ransacker :custom_title_searcher do |parent|
-    parent.table[:title]
-  end
-  ransacker :custom_created_at_searcher do |parent|
-    parent.table[:created_at]
-  end
-  ransacker :custom_searcher_numeric, type: :numeric do
-    # nothing to see here
-  end
-end
-
-describe ActiveAdmin::Filters::ViewHelper do
+RSpec.describe ActiveAdmin::Filters::ViewHelper do
 
   # Setup an ActionView::Base object which can be used for
   # generating the form for.
@@ -108,6 +96,19 @@ describe ActiveAdmin::Filters::ViewHelper do
       expect(body).to have_selector("option[value=title_starts_with][selected=selected]", text: "Starts with")
     end
 
+    context "with filters options" do
+      let(:body) { Capybara.string(filter :title, filters: [:contains, :starts_with]) }
+
+      it "should generate provided options for filter select" do
+        expect(body).to have_selector("option[value=title_contains]", text: "Contains")
+        expect(body).to have_selector("option[value=title_starts_with]", text: "Starts with")
+      end
+
+      it "should not generate a select option for ends with" do
+        expect(body).not_to have_selector("option[value=title_ends_with]")
+      end
+    end
+
     context "with predicate" do
       %w[eq equals cont contains start starts_with end ends_with].each do |predicate|
         describe "'#{predicate}'" do
@@ -149,9 +150,8 @@ describe ActiveAdmin::Filters::ViewHelper do
 
       it "should remove original ordering to prevent PostgreSQL error" do
         expect(scope.object.klass).to receive(:reorder).with('title asc') {
-          distinct = ActiveAdmin::Dependency.rails >= 4 ? :distinct : :uniq
-          m = double distinct => double(pluck: ['A Title'])
-          expect(m.send(distinct)).to receive(:pluck).with :title
+          m = double :distinct => double(pluck: ['A Title'])
+          expect(m.distinct).to receive(:pluck).with :title
           m
         }
         body
@@ -188,24 +188,39 @@ describe ActiveAdmin::Filters::ViewHelper do
   end
 
   describe "integer attribute" do
-    let(:body) { Capybara.string(filter :id) }
+    context "without options" do
+      let(:body) { Capybara.string(filter :id) }
 
-    it "should generate a select option for equal to" do
-      expect(body).to have_selector("option[value=id_equals]", text: "Equals")
+      it "should generate a select option for equal to" do
+        expect(body).to have_selector("option[value=id_equals]", text: "Equals")
+      end
+      it "should generate a select option for greater than" do
+        expect(body).to have_selector("option[value=id_greater_than]", text: "Greater than")
+      end
+      it "should generate a select option for less than" do
+        expect(body).to have_selector("option[value=id_less_than]", text: "Less than")
+      end
+      it "should generate a text field for input" do
+        expect(body).to have_selector("input[name='q[id_equals]']")
+      end
+      it "should select the option which is currently being filtered" do
+        scope = Post.search id_greater_than: 1
+        body = Capybara.string(render_filter scope, id: {})
+        expect(body).to have_selector("option[value=id_greater_than][selected=selected]", text: "Greater than")
+      end
     end
-    it "should generate a select option for greater than" do
-      expect(body).to have_selector("option", text: "Greater than")
-    end
-    it "should generate a select option for less than" do
-      expect(body).to have_selector("option", text: "Less than")
-    end
-    it "should generate a text field for input" do
-      expect(body).to have_selector("input[name='q[id_equals]']")
-    end
-    it "should select the option which is currently being filtered" do
-      scope = Post.search id_greater_than: 1
-      body = Capybara.string(render_filter scope, id: {})
-      expect(body).to have_selector("option[value=id_greater_than][selected=selected]", text: "Greater than")
+
+    context "with filters options" do
+      let(:body) { Capybara.string(filter :id, filters: [:equals, :greater_than]) }
+
+      it "should generate provided options for filter select" do
+        expect(body).to have_selector("option[value=id_equals]", text: "Equals")
+        expect(body).to have_selector("option[value=id_greater_than]", text: "Greater than")
+      end
+
+      it "should not generate a select option for less than" do
+        expect(body).not_to have_selector("option[value=id_less_than]")
+      end
     end
   end
 

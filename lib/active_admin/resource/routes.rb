@@ -5,27 +5,31 @@ module ActiveAdmin
       # @return [String] the path to this resource collection page
       # @example "/admin/posts"
       def route_collection_path(params = {}, additional_params = {})
-        RouteBuilder.new(self).collection_path(params, additional_params)
+        route_builder.collection_path(params, additional_params)
       end
 
       def route_batch_action_path(params = {}, additional_params = {})
-        RouteBuilder.new(self).batch_action_path(params, additional_params)
+        route_builder.batch_action_path(params, additional_params)
       end
 
       # @param resource [ActiveRecord::Base] the instance we want the path of
       # @return [String] the path to this resource collection page
       # @example "/admin/posts/1"
       def route_instance_path(resource, additional_params = {})
-        RouteBuilder.new(self).instance_path(resource, additional_params)
+        route_builder.instance_path(resource, additional_params)
       end
 
       def route_edit_instance_path(resource, additional_params = {})
-        RouteBuilder.new(self).edit_instance_path(resource, additional_params)
+        route_builder.edit_instance_path(resource, additional_params)
       end
 
       # Returns the routes prefix for this config
       def route_prefix
         namespace.module_name.try(:underscore)
+      end
+
+      def route_builder
+        @route_builder ||= RouteBuilder.new(self)
       end
 
       def route_uncountable?
@@ -51,12 +55,14 @@ module ActiveAdmin
         end
 
         def batch_action_path(params, additional_params = {})
-          path = resource.resources_configuration[:self][:route_collection_name]
-          route_name = route_name(path, action: :batch_action)
+          route_name = route_name(
+            resource.resources_configuration[:self][:route_collection_name],
+            action: :batch_action,
+            suffix: (resource.route_uncountable? ? "index_path" : "path")
+          )
 
           query = params.slice(:q, :scope)
-          query = query.permit! if query.respond_to? :permit!
-          query = query.to_h if Rails::VERSION::MAJOR >= 5
+          query = query.permit!.to_h
           routes.public_send route_name, *route_collection_params(params), additional_params.merge(query)
         end
 
@@ -87,9 +93,9 @@ module ActiveAdmin
           suffix = options[:suffix] || "path"
           route = []
 
-          route << options[:action]           # "edit" or "new"
+          route << options[:action]           # "batch_action", "edit" or "new"
           route << resource.route_prefix      # "admin"
-          route += belongs_to_names
+          route << belongs_to_name if nested? # "category"
           route << resource_path_name         # "posts" or "post"
           route << suffix                     # "path" or "index path"
 
@@ -99,25 +105,25 @@ module ActiveAdmin
 
         # @return params to pass to instance path
         def route_instance_params(instance)
-          belongs_to_names.reverse.reduce([instance]) do |arr,name| 
-            arr + [arr.last.public_send(name)]
-          end.map{|i| i.to_param }.reverse
+          if nested?
+            [instance.public_send(belongs_to_name).to_param, instance.to_param]
+          else
+            instance.to_param
+          end
         end
 
         def route_collection_params(params)
-          belongs_to_names.map{|name| params[:"#{name}_id"]}
-        end
-
-        def belongs_to_names
-          required_belongs_to.map{|bc| bc.target.resource_name.singular }
-        end
-
-        def required_belongs_to
-          if resource.belongs_to?
-            resource.belongs_to_config.select{|bc| bc.required?} 
-          else
-            []
+          if nested?
+            params[:"#{belongs_to_name}_id"]
           end
+        end
+
+        def nested?
+          resource.belongs_to? && resource.belongs_to_config.required?
+        end
+
+        def belongs_to_name
+          resource.belongs_to_config.target.resource_name.singular if nested?
         end
 
         def routes

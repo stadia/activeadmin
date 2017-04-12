@@ -1,10 +1,18 @@
 require 'rails_helper'
 
-describe ActiveAdmin::Resource::BelongsTo do
+RSpec.describe ActiveAdmin::Resource::BelongsTo do
+  before do
+    load_resources do
+      ActiveAdmin.register User
+      ActiveAdmin.register Post do belongs_to :user end
+    end
+  end
 
+  let(:namespace) { ActiveAdmin.application.namespace(:admin) }
   let(:user_config){ ActiveAdmin.register User }
   let(:post_config){ ActiveAdmin.register Post do belongs_to :user end }
-  let(:belongs_to){ post_config.belongs_to_config.first }
+  let(:belongs_to){ post_config.belongs_to_config }
+
 
   it "should have an owner" do
     expect(belongs_to.owner).to eq post_config
@@ -49,14 +57,18 @@ describe ActiveAdmin::Resource::BelongsTo do
 
   describe "controller" do
     let(:controller) { post_config.controller.new }
+    let(:http_params) { {user_id: user.id}  }
+    let(:user) { User.create! }
+
     before do
-      user = User.create!
       request = double 'Request', format: 'application/json'
-      allow(controller).to receive(:params) { {user_id: user.id} }
+      allow(controller).to receive(:params) { ActionController::Parameters.new(http_params) }
       allow(controller).to receive(:request){ request }
     end
+
     it 'should be able to access the collection' do
       expect(controller.send :collection).to be_a ActiveRecord::Relation
+
     end
     it 'should be able to build a new resource' do
       expect(controller.send :build_resource).to be_a Post

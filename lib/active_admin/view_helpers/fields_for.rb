@@ -16,7 +16,6 @@ module ActiveAdmin
       def fields_for_params(params, options = {})
         namespace = options[:namespace]
         except    = Array.wrap(options[:except]).map &:to_s
-        params    = params.respond_to?(:to_unsafe_h) ? params.to_unsafe_h : params
 
         params.flat_map do |k, v|
           next if namespace.nil? && %w(controller action commit utf8).include?(k.to_s)
@@ -39,7 +38,7 @@ module ActiveAdmin
             end
           when nil
             { k => '' }
-          when TrueClass,FalseClass
+          when TrueClass, FalseClass
             { k => v }
           else
             raise "I don't know what to do with #{v.class} params: #{v.inspect}"

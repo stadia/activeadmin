@@ -1,8 +1,6 @@
 # Rails template to build the sample app for specs
 
-if Rails::VERSION::MAJOR == 4 && Rails::VERSION::MINOR >= 2
-  copy_file File.expand_path('../templates/manifest.js', __FILE__), 'app/assets/config/manifest.js', force: true
-end
+copy_file File.expand_path('../templates/manifest.js', __FILE__), 'app/assets/config/manifest.js', force: true
 
 generate :model, 'post title:string body:text published_date:date author_id:integer ' +
   'position:integer custom_category_id:integer starred:boolean foo_id:integer'
@@ -14,18 +12,24 @@ create_file 'app/models/post.rb', <<-RUBY.strip_heredoc, force: true
     accepts_nested_attributes_for :author
     accepts_nested_attributes_for :taggings
 
-    unless Rails::VERSION::MAJOR > 3 && !defined? ProtectedAttributes
+    ransacker :custom_title_searcher do |parent|
+      parent.table[:title]
+    end
+
+    ransacker :custom_created_at_searcher do |parent|
+      parent.table[:created_at]
+    end
+
+    ransacker :custom_searcher_numeric, type: :numeric do
+      # nothing to see here
+    end
+
+    if defined? ProtectedAttributes
       attr_accessible :id, :title, :body, :starred, :author, :position, :published_date, :author_id, :custom_category_id, :category
     end
   end
 RUBY
 copy_file File.expand_path('../templates/post_decorator.rb', __FILE__), 'app/models/post_decorator.rb'
-
-generate :model, "post_comment message:string post_id:integer"
-inject_into_file 'app/models/post_comment.rb', %q{
-   belongs_to :post
-   attr_accessible :message, :post unless Rails::VERSION::MAJOR > 3 && !defined? ProtectedAttributes
- }, after: 'class PostComment < ActiveRecord::Base'
 
 generate :model, 'blog/post title:string body:text published_date:date author_id:integer ' +
   'position:integer custom_category_id:integer starred:boolean foo_id:integer'
@@ -37,7 +41,7 @@ create_file 'app/models/blog/post.rb', <<-RUBY.strip_heredoc, force: true
     accepts_nested_attributes_for :author
     accepts_nested_attributes_for :taggings
 
-    unless Rails::VERSION::MAJOR > 3 && !defined? ProtectedAttributes
+    if defined? ProtectedAttributes
       attr_accessible :title, :body, :starred, :author, :position, :published_date, :author_id, :custom_category_id, :category
     end
   end
@@ -56,7 +60,7 @@ create_file 'app/models/user.rb', <<-RUBY.strip_heredoc, force: true
       parent.table[:age]
     end
 
-    unless Rails::VERSION::MAJOR > 3 && !defined? ProtectedAttributes
+    if defined? ProtectedAttributes
       attr_accessible :first_name, :last_name, :username,  :age
     end
 
@@ -70,7 +74,7 @@ create_file 'app/models/profile.rb', <<-RUBY.strip_heredoc, force: true
   class Profile < ActiveRecord::Base
     belongs_to :user
 
-    unless Rails::VERSION::MAJOR > 3 && !defined? ProtectedAttributes
+    if defined? ProtectedAttributes
       attr_accessible :bio
     end
   end
@@ -85,7 +89,7 @@ create_file 'app/models/category.rb', <<-RUBY.strip_heredoc, force: true
     has_many :authors, through: :posts
     accepts_nested_attributes_for :posts
 
-    unless Rails::VERSION::MAJOR > 3 && !defined? ProtectedAttributes
+    if defined? ProtectedAttributes
       attr_accessible :name, :description
     end
   end
@@ -109,7 +113,7 @@ create_file 'app/models/tag.rb', <<-RUBY.strip_heredoc, force: true
       self.id = SecureRandom.uuid
     end
 
-    unless Rails::VERSION::MAJOR > 3 && !defined? ProtectedAttributes
+    if defined? ProtectedAttributes
       attr_accessible :name
     end
   end
@@ -129,15 +133,12 @@ gsub_file 'config/environments/test.rb', /  config.cache_classes = true/, <<-RUB
   config.action_mailer.default_url_options = {host: 'example.com'}
   config.assets.digest = false
 
-  if Rails::VERSION::MAJOR >= 4 && Rails::VERSION::MINOR >= 1
-    config.active_record.maintain_test_schema = false
-  end
+  config.active_record.maintain_test_schema = false
 
 RUBY
 
 # Add our local Active Admin to the application
 gem 'activeadmin', path: '../..'
-gem 'inherited_resources', git: 'https://github.com/activeadmin/inherited_resources'
 gem 'devise'
 
 run 'bundle install'
@@ -148,7 +149,7 @@ generate 'active_admin:install'
 # Force strong parameters to raise exceptions
 inject_into_file 'config/application.rb', <<-RUBY, after: 'class Application < Rails::Application'
 
-    config.action_controller.action_on_unpermitted_parameters = :raise if Rails::VERSION::MAJOR >= 4
+    config.action_controller.action_on_unpermitted_parameters = :raise
 
 RUBY
 
@@ -164,12 +165,6 @@ directory File.expand_path('../templates/policies', __FILE__), 'app/policies'
 if ENV['RAILS_ENV'] != 'test'
   inject_into_file 'config/routes.rb', "\n  root to: redirect('admin')", after: /.*routes.draw do/
 end
-
-remove_file 'public/index.html' if File.exists? 'public/index.html' # remove once Rails 3.2 support is dropped
-
-# Devise master doesn't set up its secret key on Rails 4.1
-# https://github.com/plataformatec/devise/issues/2554
-gsub_file 'config/initializers/devise.rb', /# config.secret_key =/, 'config.secret_key ='
 
 rake "db:drop db:create db:migrate", env: 'development'
 rake "db:drop db:create db:migrate", env: 'test'

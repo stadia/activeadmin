@@ -1,4 +1,5 @@
 require 'active_admin/resource/action_items'
+require 'active_admin/resource/attributes'
 require 'active_admin/resource/controllers'
 require 'active_admin/resource/menu'
 require 'active_admin/resource/page_presenters'
@@ -53,6 +54,9 @@ module ActiveAdmin
 
     #Set order clause
     attr_writer :order_clause
+    # Display create another checkbox on a new page
+    # @return [Boolean]
+    attr_writer :create_another
 
     # Store a reference to the DSL so that we can dereference it during garbage collection.
     attr_accessor :dsl
@@ -87,6 +91,7 @@ module ActiveAdmin
     include Sidebars
     include Routes
     include Ordering
+    include Attributes
 
     # The class this resource wraps. If you register the Post model, Resource#resource_class
     # will point to the Post class
@@ -125,23 +130,24 @@ module ActiveAdmin
     end
 
     def belongs_to(target, options = {})
-      this_belongs_to = Resource::BelongsTo.new(self, target, options)
-      self.navigation_menu_name = target unless this_belongs_to.optional?
-      belongs_to_config << this_belongs_to
+      @belongs_to = Resource::BelongsTo.new(self, target, options)
+      self.menu_item_options = false if @belongs_to.required?
       controller.send :belongs_to, target, options.dup
     end
 
     def belongs_to_config
-      @belongs_to ||= []
+      @belongs_to
     end
 
-    def belongs_to_params
-      belongs_to_config.select{ |c| c.required? }.map{ |c| c.to_param }
+    def belongs_to_param
+      if belongs_to? && belongs_to_config.required?
+        belongs_to_config.to_param
+      end
     end
 
     # Do we belong to another resource?
     def belongs_to?
-      belongs_to_config.length > 0
+      !!belongs_to_config
     end
 
     # The csv builder for this resource
@@ -157,9 +163,29 @@ module ActiveAdmin
       @order_clause || namespace.order_clause
     end
 
+    def create_another
+      instance_variable_defined?(:@create_another) ? @create_another : namespace.create_another
+    end
+
     def find_resource(id)
       resource = resource_class.public_send *method_for_find(id)
       (decorator_class && resource) ? decorator_class.new(resource) : resource
+    end
+
+    def resource_columns
+      resource_attributes.values
+    end
+
+    def resource_attributes
+      @resource_attributes ||= default_attributes
+    end
+
+    def association_columns
+      @association_columns ||= resource_attributes.select{ |key, value| key != value }.values
+    end
+
+    def content_columns
+      @content_columns ||= resource_attributes.select{ |key, value| key == value }.values
     end
 
     private
@@ -167,15 +193,13 @@ module ActiveAdmin
     def method_for_find(id)
       if finder = resources_configuration[:self][:finder]
         [finder, id]
-      elsif Rails::VERSION::MAJOR >= 4
-        [:find_by, { resource_class.primary_key => id }]
       else
-        [:"find_by_#{resource_class.primary_key}", id]
+        [:find_by, { resource_class.primary_key => id }]
       end
     end
 
     def default_csv_builder
-      @default_csv_builder ||= CSVBuilder.default_for_resource(resource_class)
+      @default_csv_builder ||= CSVBuilder.default_for_resource(self)
     end
 
   end # class Resource

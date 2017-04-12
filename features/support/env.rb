@@ -103,29 +103,11 @@ Before do
 end
 
 # Force deprecations to raise an exception.
-# This would set `behavior = :raise`, but that wasn't added until Rails 4.
-ActiveSupport::Deprecation.behavior = -> message, callstack do
-  e = StandardError.new message
-  e.set_backtrace callstack.map(&:to_s)
-  puts e # sometimes Cucumber otherwise won't show the error message
-  raise e
-end
+ActiveSupport::Deprecation.behavior = :raise
 
 # improve the performance of the specs suite by not logging anything
 # see http://blog.plataformatec.com.br/2011/12/three-tips-to-improve-the-performance-of-your-test-suite/
 Rails.logger.level = 4
-
-# Improves performance by forcing the garbage collector to run less often.
-unless ENV['DEFER_GC'] == '0' || ENV['DEFER_GC'] == 'false'
-  require File.expand_path('../../../spec/support/deferred_garbage_collection', __FILE__)
-  Before { DeferredGarbageCollection.start }
-  After  { DeferredGarbageCollection.reconsider }
-end
-
-# Don't run @rails4 tagged features for versions before Rails 4.
-Before('@rails4') do |scenario|
-  scenario.skip_invoke! if Rails::VERSION::MAJOR < 4
-end
 
 Around '@silent_unpermitted_params_failure' do |scenario, block|
   original = ActionController::Parameters.action_on_unpermitted_parameters

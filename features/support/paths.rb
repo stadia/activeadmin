@@ -41,6 +41,9 @@ module NavigationHelpers
     when /^the index page for (.*)$/
       send "admin_#{$1}_path"
 
+    when /^the (.*) index page for (.*)$/
+      send "admin_#{$2}_path", format: $1
+
     when /^the last author's posts$/
       admin_user_posts_path(User.last)
 
@@ -49,9 +52,6 @@ module NavigationHelpers
 
     when /^the last post's show page$/
       admin_post_path(Post.last)
-
-    when /^the last author's last post's taggings$/
-      admin_user_post_taggings_path(User.last, Post.where(author_id: User.last.id).last)
 
     when /^the last post's edit page$/
       edit_admin_post_path(Post.last)

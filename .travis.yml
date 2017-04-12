@@ -9,57 +9,35 @@ bundler_args: --without development
 cache: bundler
 
 before_install:
-  - source script/install_phantomjs.sh
+  - PATH=$(npm bin):$PATH # needed to install phantomjs via npm
+  - if [ $(phantomjs --version) != '2.1.1' ]; then npm install phantomjs-prebuilt@2.1; fi
   - gem update --system # use the very latest Rubygems
   - rvm @global do gem uninstall bundler -a -x
-  - rvm @global do gem install bundler -v 1.14.3 # latest version known to work
-
-before_script:
-  - bundle exec rake setup
+  - rvm @global do gem install bundler -v 1.14.6 # latest version known to work
 
 script:
-  - bundle exec rake test
+  - bundle exec rake
 
 rvm:
-  - jruby-9.1.7.0
-  - 1.9.3
+  - jruby-9.1.8.0
   - 2.2.6
   - 2.3.3
   - 2.4.0
 
 gemfile:
-  - gemfiles/rails_32.gemfile
-  - gemfiles/rails_40.gemfile
-  - gemfiles/rails_41.gemfile
   - gemfiles/rails_42.gemfile
   - gemfiles/rails_50.gemfile
 
 env:
   global:
-    - JRUBY_OPTS="-J-Xmx1024m --debug"
+    - JRUBY_OPTS="-J-Xmx1024m --dev --debug"
 
 matrix:
   fast_finish: true
 
-  exclude:
-    - rvm: 1.9.3
-      gemfile: gemfiles/rails_50.gemfile
-
-    - rvm: 2.4.0
-      gemfile: gemfiles/rails_32.gemfile
-
-    - rvm: 2.4.0
-      gemfile: gemfiles/rails_40.gemfile
-
-    - rvm: 2.4.0
-      gemfile: gemfiles/rails_41.gemfile
-
   allow_failures:
-    - rvm: jruby-9.1.7.0
+    - rvm: jruby-9.1.8.0
       gemfile: gemfiles/rails_50.gemfile
-
-    - rvm: 2.4.0
-      gemfile: gemfiles/rails_42.gemfile
 
 notifications:
   irc:

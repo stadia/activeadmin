@@ -1,10 +1,6 @@
 module ActiveAdmin
   # This is the class where all the register blocks are evaluated.
   class ResourceDSL < DSL
-    def initialize(config, resource_class)
-      @resource = resource_class
-      super(config)
-    end
 
     private
 
@@ -47,7 +43,7 @@ module ActiveAdmin
     end
 
     #
-    # Rails 4 Strong Parameters Support
+    # Keys included in the `permitted_params` setting are automatically whitelisted.
     #
     # Either
     #
@@ -64,16 +60,19 @@ module ActiveAdmin
     #     end
     #   end
     #
-    # Keys included in the `permitted_params` setting are automatically whitelisted.
-    #
     def permit_params(*args, &block)
       param_key = config.param_key.to_sym
-      belongs_to_params =  config.belongs_to_params
+      belongs_to_param = config.belongs_to_param
+      create_another_param = :create_another if config.create_another
 
       controller do
         define_method :permitted_params do
-          params.permit *(active_admin_namespace.permitted_params + belongs_to_params),
-            param_key => block ? instance_exec(&block) : args
+          permitted_params =
+            active_admin_namespace.permitted_params +
+              Array.wrap(belongs_to_param) +
+              Array.wrap(create_another_param)
+
+          params.permit(*permitted_params, param_key => block ? instance_exec(&block) : args)
         end
       end
     end
@@ -107,7 +106,7 @@ module ActiveAdmin
     #   end
     #
     def csv(options={}, &block)
-      options[:resource] = @resource
+      options[:resource] = config
 
       config.csv_builder = CSVBuilder.new(options, &block)
     end
@@ -136,8 +135,7 @@ module ActiveAdmin
       title = options.delete(:title)
 
       controller do
-        callback = ActiveAdmin::Dependency.rails >= 4 ? :before_action : :before_filter
-        send(callback, only: [name]) { @page_title = title } if title
+        before_action(only: [name]) { @page_title = title } if title
         define_method(name, &block || Proc.new{})
       end
     end
@@ -187,17 +185,22 @@ module ActiveAdmin
     delegate :before_save,    :after_save,    to: :controller
     delegate :before_destroy, :after_destroy, to: :controller
 
-    # This code defines both *_filter and *_action for Rails 3.2 to Rails 5.
-    actions = [
+    # This code defines both *_filter and *_action for Rails 4.0 to Rails 5 and  *_action for Rails >= 5.1
+    phases = [
       :before, :skip_before,
       :after,  :skip_after,
       :around, :skip
     ]
-    destination = ActiveAdmin::Dependency.rails >= 4 ? :action : :filter
-    [:action, :filter].each do |name|
-      actions.each do |action|
+    keywords = if Rails::VERSION::MAJOR == 5 && Rails::VERSION::MINOR >= 1
+                       [:action]
+                     else
+                       [:action, :filter]
+                     end
+
+    keywords.each do |name|
+       phases.each do |action|
         define_method "#{action}_#{name}" do |*args, &block|
-          controller.public_send "#{action}_#{destination}", *args, &block
+          controller.public_send "#{action}_action", *args, &block
         end
       end
     end

@@ -16,8 +16,8 @@ Feature: Belongs To
       end
     """
     When I go to the last author's posts
-    Then the "Posts" tab should be selected
-    And I should not see a menu item for "Users"
+    Then the "Users" tab should be selected
+    And I should not see a menu item for "Posts"
     And I should see "Displaying 1 Post"
     And I should see a link to "Users" in the breadcrumb
     And I should see a link to "Jane Doe" in the breadcrumb
@@ -28,7 +28,7 @@ Feature: Belongs To
       ActiveAdmin.register User
       ActiveAdmin.register Post do
         belongs_to :user
-        permit_params :title, :body, :published_date if Rails::VERSION::MAJOR >= 4
+        permit_params :title, :body, :published_date
 
         form do |f|
           f.inputs "Your Post" do
@@ -56,7 +56,7 @@ Feature: Belongs To
       ActiveAdmin.register User
       ActiveAdmin.register Post do
         belongs_to :user
-        permit_params :title, :body, :published_date if Rails::VERSION::MAJOR >= 4
+        permit_params :title, :body, :published_date
 
         form do |f|
           f.inputs "Your Post" do
@@ -93,7 +93,7 @@ Feature: Belongs To
     When I go to the last author's posts
     And I follow "View"
     Then I should be on the last author's last post page
-    And the "Posts" tab should be selected
+    And the "Users" tab should be selected
 
   Scenario: When the belongs to is optional
     Given a configuration of:
@@ -109,24 +109,6 @@ Feature: Belongs To
 
     When I follow "Posts"
     Then the "Posts" tab should be selected
-
-  Scenario: When the belongs to is nested
-    Given a configuration of:
-    """
-      ActiveAdmin.register User
-      ActiveAdmin.register Post do
-        belongs_to :user
-      end
-      ActiveAdmin.register Tagging do
-        belongs_to :user
-        belongs_to :post
-      end
-    """
-    When I go to the last author's last post's taggings
-    Then I should see a link to "Users" in the breadcrumb
-    And I should see a link to "Jane Doe" in the breadcrumb
-    And I should see a link to "Posts" in the breadcrumb
-    And I should see a link to "Hello World" in the breadcrumb
 
   Scenario: Displaying belongs to resources in main menu
     Given a configuration of:

@@ -1,7 +1,7 @@
 require 'rails_helper'
 require "rspec/mocks/standalone"
 
-describe ActiveAdmin::FormBuilder do
+RSpec.describe ActiveAdmin::FormBuilder do
   # Setup an ActionView::Base object which can be used for
   # generating the form for.
   let(:helpers) do
@@ -28,6 +28,10 @@ describe ActiveAdmin::FormBuilder do
 
     def view.fa_icon(*args)
       args.inspect
+    end
+
+    def view.action_name
+      'edit'
     end
 
     view
@@ -135,17 +139,15 @@ describe ActiveAdmin::FormBuilder do
     end
   end
 
-  if Rails::VERSION::MAJOR > 3
-    context "file input present" do
-      let :body do
-        build_form do |f|
-          f.input :body, as: :file
-        end
+  context "file input present" do
+    let :body do
+      build_form do |f|
+        f.input :body, as: :file
       end
+    end
 
-      it "adds multipart attribute automatically" do
-        expect(body).to have_selector("form[enctype='multipart/form-data']")
-      end
+    it "adds multipart attribute automatically" do
+      expect(body).to have_selector("form[enctype='multipart/form-data']")
     end
   end
 
@@ -159,13 +161,39 @@ describe ActiveAdmin::FormBuilder do
       end
       expect(body).to have_selector("[id=post_title]", count: 1)
     end
-    it "should generate one button and a cancel link" do
+
+    context "create another checkbox" do
+      subject do
+        build_form do |f|
+          f.actions
+        end
+      end
+
+      %w(new create).each do |action_name|
+        it "generates create another checkbox on #{action_name} page" do
+          expect(helpers).to receive(:action_name) { action_name }
+          allow(helpers).to receive(:active_admin_config) { instance_double(ActiveAdmin::Resource, create_another: true) }
+
+          is_expected.to have_selector("[type=checkbox]", count: 1)
+                            .and have_selector("[name=create_another]", count: 1)
+        end
+      end
+
+      %w(show edit update).each do |action_name|
+        it "doesn't generate create another checkbox on #{action_name} page" do
+          is_expected.not_to have_selector("[name=create_another]", count: 1)
+        end
+      end
+    end
+
+    it "should generate one button create another checkbox and a cancel link" do
       body = build_form do |f|
         f.actions
       end
       expect(body).to have_selector("[type=submit]", count: 1)
       expect(body).to have_selector("[class=cancel]", count: 1)
     end
+
     it "should generate multiple actions" do
       body = build_form do |f|
         f.actions do
@@ -526,7 +554,7 @@ describe ActiveAdmin::FormBuilder do
       let :body do
         build_form({url: '/categories'}, Category.new) do |f|
           f.object.posts.build
-          f.has_many :posts do |p,i|
+          f.has_many :posts do |p, i|
             p.input :title, label: "Title #{i}"
           end
         end

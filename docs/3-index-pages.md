@@ -1,3 +1,6 @@
+---
+redirect_from: /docs/3-index-pages.html
+---
 # Customizing the Index Page
 
 Filtering and listing resources is one of the most important tasks for
@@ -98,6 +101,12 @@ the collection as a proc to be called at render time.
 
 ```ruby
 filter :author, as: :check_boxes, collection: proc { Author.all }
+```
+
+To override options for string or numeric filter pass `filters` option.
+
+```ruby
+  filter :title, filters: [:starts_with, :ends_with]
 ```
 
 Also, if you don't need the select with the options 'contains', 'equals', 'starts_with' or 'ends_with'

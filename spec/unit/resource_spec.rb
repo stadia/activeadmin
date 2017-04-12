@@ -2,7 +2,7 @@ require 'rails_helper'
 require File.expand_path('config_shared_examples', File.dirname(__FILE__))
 
 module ActiveAdmin
-  describe Resource do
+  RSpec.describe Resource do
 
     it_should_behave_like "ActiveAdmin::Resource"
     before { load_defaults! }
@@ -80,15 +80,15 @@ module ActiveAdmin
     describe "#belongs_to" do
 
       it "should build a belongs to configuration" do
-        expect(config.belongs_to_config.length).to eq 0
+        expect(config.belongs_to_config).to eq nil
         config.belongs_to :posts
-        expect(config.belongs_to_config.length).to eq 1
+        expect(config.belongs_to_config).to_not eq nil
       end
 
-      it "should set the target menu to the belongs to target" do
+      it "should not set the target menu to the belongs to target" do
         expect(config.navigation_menu_name).to eq ActiveAdmin::DEFAULT_MENU
         config.belongs_to :posts
-        expect(config.navigation_menu_name).to eq :posts
+        expect(config.navigation_menu_name).to eq ActiveAdmin::DEFAULT_MENU
       end
 
     end
@@ -148,6 +148,8 @@ module ActiveAdmin
 
 
     describe "sort order" do
+      class MockResource
+      end
 
       context "when resource class responds to primary_key" do
         it "should sort by primary key desc by default" do
@@ -195,7 +197,7 @@ module ActiveAdmin
     describe "#csv_builder" do
       context "when no csv builder set" do
         it "should return a default column builder with id and content columns" do
-          expect(config.csv_builder.exec_columns.size).to eq Category.content_columns.size + 1
+          expect(config.csv_builder.exec_columns.size).to eq @config.content_columns.size + 1
         end
       end
 
@@ -232,13 +234,8 @@ module ActiveAdmin
       let(:resource) { namespace.register(Post) }
       let(:post) { double }
       before do
-        if Rails::VERSION::MAJOR >= 4
-          allow(Post).to receive(:find_by).with("id" => "12345") { post }
-          allow(Post).to receive(:find_by).with("id" => "54321") { nil }
-        else
-          allow(Post).to receive(:find_by_id).with("12345") { post }
-          allow(Post).to receive(:find_by_id).with("54321") { nil }
-        end
+        allow(Post).to receive(:find_by).with("id" => "12345") { post }
+        allow(Post).to receive(:find_by).with("id" => "54321") { nil }
       end
 
       it 'can find the resource' do
@@ -260,13 +257,8 @@ module ActiveAdmin
         let(:different_post) { double }
         before do
           allow(Post).to receive(:primary_key).and_return 'something_else'
-          if Rails::VERSION::MAJOR >= 4
-            allow(Post).to receive(:find_by).
+          allow(Post).to receive(:find_by).
               with("something_else" => "55555") { different_post }
-          else
-            allow(Post).to receive(:find_by_something_else).
-              with("55555") { different_post }
-          end
         end
 
         it 'can find the post by the custom primary key' do
@@ -299,36 +291,20 @@ module ActiveAdmin
           end
         end.new
       }
-      let(:resource) { ActiveAdmin::ResourceDSL.new(double, double) }
+      let(:resource) { ActiveAdmin::ResourceDSL.new(double) }
 
       before do
         expect(resource).to receive(:controller).and_return(controller)
       end
 
-      context "filters" do
+      context "actions" do
         [
-          :before_filter, :skip_before_filter,
-          :after_filter, :skip_after_filter,
-          :around_filter, :skip_filter
+          :before_action, :skip_before_action,
+          :after_action, :skip_after_action,
+          :around_action, :skip_action
         ].each do |method|
           it "delegates #{method}" do
-            expected = method.to_s.dup
-            expected.sub! 'filter', 'action' if ActiveAdmin::Dependency.rails >= 4
-            expect(resource.send(method)).to eq "called #{expected}"
-          end
-        end
-      end
-
-      if ActiveAdmin::Dependency.rails >= 4
-        context "actions" do
-          [
-            :before_action, :skip_before_action,
-            :after_action, :skip_after_action,
-            :around_action, :skip_action
-          ].each do |method|
-            it "delegates #{method}" do
-              expect(resource.send(method)).to eq "called #{method}"
-            end
+            expect(resource.send(method)).to eq "called #{method}"
           end
         end
       end

@@ -85,7 +85,7 @@ module ActiveAdmin
         @tbody = tbody do
           # Build enough rows for our collection
           @collection.each do |elem|
-            classes = [cycle('odd', 'even')]
+            classes = [helpers.cycle('odd', 'even')]
 
             if @row_class
               classes << @row_class.call(elem)
@@ -98,7 +98,7 @@ module ActiveAdmin
 
       def build_table_cell(col, resource)
         td class: col.html_class do
-          html = format_attribute(resource, col.data)
+          html = helpers.format_attribute(resource, col.data)
           # Don't add the same Arbre twice, while still allowing format_attribute to call status_tag
           current_arbre_element << html unless current_arbre_element.children.include? html
         end
@@ -139,7 +139,7 @@ module ActiveAdmin
 
         attr_accessor :title, :data , :html_class
 
-        def initialize(*args, &block) 
+        def initialize(*args, &block)
           @options = args.extract_options!
 
           @title = args[0]

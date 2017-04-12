@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe ActiveAdmin::Views::UnsupportedBrowser do
+RSpec.describe ActiveAdmin::Views::UnsupportedBrowser do
   let(:helpers){ mock_action_view }
   let(:namespace) { double :namespace, unsupported_browser_matcher: /MSIE [1-8]\.0/ }
   let(:component) { double :unsupported_browser_component }
@@ -14,7 +14,7 @@ describe ActiveAdmin::Views::UnsupportedBrowser do
   end
 
   it "should render the panel" do
-    expect(I18n).to receive(:t).and_return("headline", "recommendation" ,"turn_off_compatibility_view")
+    expect(I18n).to receive(:t).and_return("headline", "recommendation" , "turn_off_compatibility_view")
     expect(build_panel.content.gsub(/\s+/, "")).to eq "<h1>headline</h1><p>recommendation</p><p>turn_off_compatibility_view</p>"
   end
 

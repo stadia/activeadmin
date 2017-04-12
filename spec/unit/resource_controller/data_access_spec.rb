@@ -1,8 +1,21 @@
 require 'rails_helper'
 
-describe ActiveAdmin::ResourceController::DataAccess do
-  let(:params) do
+RSpec.describe ActiveAdmin::ResourceController::DataAccess do
+  before do
+    load_resources { config }
+  end
+
+  let(:config) do
+    ActiveAdmin.register Post do
+    end
+  end
+
+  let(:http_params) do
     {}
+  end
+
+  let(:params) do
+    ActionController::Parameters.new(http_params)
   end
 
   let(:controller) do
@@ -14,7 +27,7 @@ describe ActiveAdmin::ResourceController::DataAccess do
   end
 
   describe "searching" do
-    let(:params) {{ q: {} }}
+    let(:http_params) {{ q: {} }}
     it "should call the search method" do
       chain = double "ChainObj"
       expect(chain).to receive(:ransack).with(params[:q]).once.and_return(Post.ransack)
@@ -22,7 +35,7 @@ describe ActiveAdmin::ResourceController::DataAccess do
     end
 
     context "params includes empty values" do
-      let(:params) do
+      let(:http_params) do
         { q: {id_eq: 1, position_eq: ""} }
       end
       it "should return relation without empty filters" do
@@ -34,14 +47,12 @@ describe ActiveAdmin::ResourceController::DataAccess do
         controller.send :apply_filtering, Post
       end
     end
-
-
   end
 
   describe "sorting" do
 
     context "valid clause" do
-      let(:params) {{ order: "id_asc" }}
+      let(:http_params) {{ order: "id_asc" }}
 
       it "reorders chain" do
         chain = double "ChainObj"
@@ -51,7 +62,7 @@ describe ActiveAdmin::ResourceController::DataAccess do
     end
 
     context "invalid clause" do
-      let(:params) {{ order: "_asc" }}
+      let(:http_params) {{ order: "_asc" }}
 
       it "returns chain untouched" do
         chain = double "ChainObj"
@@ -72,7 +83,7 @@ describe ActiveAdmin::ResourceController::DataAccess do
       end
 
       context "when params applicable" do
-        let(:params) {{ order: "published_date_desc" }}
+        let(:http_params) {{ order: "published_date_desc" }}
         it "reorders chain" do
           chain = double "ChainObj"
           expect(chain).to receive(:reorder).with('"posts"."published_date" desc NULLS LAST').once.and_return(Post.search)
@@ -80,7 +91,7 @@ describe ActiveAdmin::ResourceController::DataAccess do
         end
       end
       context "when params not applicable" do
-        let(:params) {{ order: "published_date_asc" }}
+        let(:http_params) {{ order: "published_date_asc" }}
         it "reorders chain" do
           chain = double "ChainObj"
           expect(chain).to receive(:reorder).with('"posts"."published_date" asc').once.and_return(Post.search)
@@ -182,4 +193,38 @@ describe ActiveAdmin::ResourceController::DataAccess do
       end
     end
   end
+
+  describe "build_resource" do
+
+    let(:config) do
+      ActiveAdmin.register Post do
+        permit_params :body, taggings_attributes: [:id, :tag_id]
+      end
+    end
+
+    let!(:tag) { Tag.create! }
+
+    let(:params) do
+      ActionController::Parameters.new({ post: { body: 'Body', taggings_attributes: [tag_id: tag.id] } })
+    end
+
+    before do
+      expect(Post).to receive(:new).with(a_hash_including(:body, :taggings_attributes )).and_call_original
+    end
+
+    subject do
+      controller.send :build_resource
+    end
+
+    it "should return post with assigned attributes" do
+      expect(subject.body).to be_present
+    end
+
+    # see issue 4548
+    it "should assign nested attributes once" do
+      expect(subject.taggings.size).to eq(1)
+    end
+
+  end
+
 end

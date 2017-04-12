@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe "Breadcrumbs" do
+RSpec.describe "Breadcrumbs" do
 
   include ActiveAdmin::ViewHelpers
 
@@ -16,7 +16,7 @@ describe "Breadcrumbs" do
                                defined_actions: actions }
     let(:post)        { double display_name: 'Hello World' }
     let(:post_config) { double find_resource: post, resource_name: double(route_key: 'posts'),
-                               defined_actions: actions, belongs_to_config: [double(target: user_config)] }
+                               defined_actions: actions, belongs_to_config: double(target: user_config) }
 
     let :active_admin_config do
       post_config
@@ -129,7 +129,7 @@ describe "Breadcrumbs" do
       context "when User.find(4e24d6249ccf967313000000) does exist" do
         before do
           display_name = double(display_name: 'Hello :)')
-          allow(user_config).to receive(:find_resource).and_return(display_name) 
+          allow(user_config).to receive(:find_resource).and_return(display_name)
         end
         it "should have a link to /admin/users/4e24d6249ccf967313000000 using display name" do
           expect(trail[2][:name]).to eq "Hello :)"
@@ -193,7 +193,7 @@ describe "Breadcrumbs" do
     context "when the 'show' action is disabled" do
       let(:post_config) { double find_resource: post, resource_name: double(route_key: 'posts'),
                                  defined_actions: actions - [:show], # this is the change
-                                 belongs_to_config: [double(target: user_config)] }
+                                 belongs_to_config: double(target: user_config) }
 
       let(:path) { "/admin/posts/1/edit" }
 

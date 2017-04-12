@@ -1,13 +1,13 @@
 require 'rails_helper'
 
 module ActiveAdmin
-  describe Resource, "Ordering" do
+  RSpec.describe Resource, "Ordering" do
     describe "#order_by" do
 
       let(:application) { ActiveAdmin::Application.new }
       let(:namespace) { ActiveAdmin::Namespace.new application, :admin }
       let(:resource_config) { ActiveAdmin::Resource.new namespace, Post }
-      let(:dsl){ ActiveAdmin::ResourceDSL.new(resource_config, Post) }
+      let(:dsl){ ActiveAdmin::ResourceDSL.new(resource_config) }
 
       it "should register the ordering in the config" do
         dsl.run_registration_block do

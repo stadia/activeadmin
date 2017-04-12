@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe ActiveAdmin::Views::TableFor do
+RSpec.describe ActiveAdmin::Views::TableFor do
   describe "creating with the dsl" do
 
     let(:collection) do
@@ -258,7 +258,7 @@ describe ActiveAdmin::Views::TableFor do
     context "when using an Array of Hashes" do
       let(:table) do
         render_arbre_component nil, helpers do
-          table_for [{foo: 1},{foo: 2}] do
+          table_for [{foo: 1}, {foo: 2}] do
             column :foo
           end
         end
@@ -308,9 +308,10 @@ describe ActiveAdmin::Views::TableFor do
     end
 
     context "when i18n option is specified" do
-      before(:each) do
-        I18n.backend.store_translations :en,
-          activerecord: { attributes: { post: { title: "Name" } } }
+      around do |example|
+        with_translation(activerecord: { attributes: { post: { title: "Name" } } }) do
+          example.call
+        end
       end
 
       let(:table) do
@@ -327,9 +328,10 @@ describe ActiveAdmin::Views::TableFor do
     end
 
     context "when i18n option is not specified" do
-      before(:each) do
-        I18n.backend.store_translations :en,
-          activerecord: { attributes: { post: { title: "Name" } } }
+      around do |example|
+        with_translation(activerecord: { attributes: { post: { title: "Name" } } }) do
+          example.call
+        end
       end
 
       let(:collection) do
