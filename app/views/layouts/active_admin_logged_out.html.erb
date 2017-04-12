@@ -9,7 +9,7 @@
     <%= stylesheet_link_tag style, options %>
   <% end %>
   <% ActiveAdmin.application.javascripts.each do |path| %>
-    <%= javascript_include_tag path %>
+    <%= javascript_include_tag path, type: 'text/javascript' %>
   <% end %>
 
   <%= favicon_link_tag ActiveAdmin.application.favicon if ActiveAdmin.application.favicon %>

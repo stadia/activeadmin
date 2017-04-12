@@ -30,7 +30,7 @@ module ActiveAdmin
             end
 
             active_admin_application.javascripts.each do |path|
-              text_node(javascript_include_tag(path))
+              text_node(javascript_include_tag(path, type: 'text/javascript'))
             end
 
             if active_admin_namespace.favicon
