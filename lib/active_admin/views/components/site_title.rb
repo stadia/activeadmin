@@ -11,7 +11,7 @@ module ActiveAdmin
         super(id: "site_title")
         @namespace = namespace
 
-        button class: 'navbar-toggle', 'data-toggle': 'collapse', 'data-target': '.navbar-collapse' do
+        button class: 'navbar-toggle', 'data-toggle' => 'collapse', 'data-target' => '.navbar-collapse' do
           span class: 'sr-only' do
             text_node 'Toggle navigation'
           end
@@ -20,7 +20,11 @@ module ActiveAdmin
           span class: 'icon-bar'
         end
 
-        text_node site_title_with_link
+        if site_title_link?
+          text_node site_title_with_link
+        else
+          text_node site_title_content
+        end
       end
 
       def site_title_link?
