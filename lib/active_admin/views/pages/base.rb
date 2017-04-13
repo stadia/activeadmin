@@ -94,7 +94,7 @@ module ActiveAdmin
         end
 
         def build_main_content_wrapper
-          div id: "main_content", class: (skip_sidebar? ? 'col-lg-12' : 'col-lg-9') do
+          div id: "main_content", class: (skip_sidebar? ? 'col-lg-12' : 'col-lg-10') do
             main_content
           end
         end
@@ -131,7 +131,7 @@ module ActiveAdmin
 
         # Renders the sidebar
         def build_sidebar
-          div id: "sidebar", class: 'col-lg-3' do
+          div id: "sidebar", class: 'col-lg-2' do
             sidebar_sections_for_action.collect do |section|
               sidebar_section(section)
             end
