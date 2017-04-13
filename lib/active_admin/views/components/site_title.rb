@@ -20,11 +20,7 @@ module ActiveAdmin
           span class: 'icon-bar'
         end
 
-        if site_title_link?
-          text_node site_title_with_link
-        else
-          text_node site_title_content
-        end
+        text_node site_title_with_link
       end
 
       def site_title_link?
