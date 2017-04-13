@@ -54,7 +54,7 @@ module ActiveAdmin
           if children = item.items(self).presence
             li.add_class "has_nested"
             ul class: 'nav nav-second-level collapse' do
-              children.each { |child| build_menu_item child }
+              children.each{ |child| build_menu_item child }
             end
           end
         end

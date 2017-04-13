@@ -7,7 +7,7 @@ module ActiveAdmin
         'div'
       end
 
-      def build(namespace, option = nil)
+      def build(namespace)
         super(id: "site_title")
         @namespace = namespace
 

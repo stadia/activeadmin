@@ -82,7 +82,7 @@ module ActiveAdmin
         end
 
         def build_flash_messages
-          div class: "flashes row" do
+          div class: 'flashes row' do
             flash_messages.each do |type, message|
               div message, class: "flash flash_#{type} alert alert-dismissible", role: 'alert' do
                 button class: 'close', 'data-dismiss': 'alert', 'aria-label': 'Close' do
@@ -100,7 +100,7 @@ module ActiveAdmin
         end
 
         def main_content
-          I18n.t('active_admin.main_content', model: title)
+          I18n.t('active_admin.main_content', model: title).html_safe
         end
 
         def title
