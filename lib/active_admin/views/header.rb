@@ -10,11 +10,13 @@ module ActiveAdmin
         @menu = menu
         @utility_menu = @namespace.fetch_menu(:utility_navigation)
 
-        build_site_title
-        build_utility_navigation
-        div class: 'navbar-default sidebar', role: 'navigation' do
-          div class: 'sidebar-nav navbar-collapse' do
-            build_global_navigation
+        div class: 'container-fluid' do
+          build_site_title
+          build_utility_navigation
+          div class: 'navbar-default sidebar', role: 'navigation' do
+            div class: 'sidebar-nav navbar-collapse' do
+              build_global_navigation
+            end
           end
         end
       end
