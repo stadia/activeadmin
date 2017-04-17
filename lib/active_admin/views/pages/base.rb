@@ -50,7 +50,7 @@ module ActiveAdmin
             div id: "wrapper" do
               build_unsupported_browser
               build_header
-              div id: "page-wrapper" do
+              div id: "page-wrapper container-fluid" do
                 build_title_bar
                 build_page_content
               end
