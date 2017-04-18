@@ -10,6 +10,16 @@ module ActiveAdmin
           build_page
         end
 
+        protected
+
+        def build_head
+          @head = head do
+            meta :"http-equiv" => "Content-type", content: "text/html; charset=utf-8", charset: "utf-8"
+            meta :"http-equiv" => "X-UA-Compatible", content: "IE=edge"
+            meta :"name" => "viewport", content: "width=device-width, initial-scale=1"
+          end
+        end
+
         private
 
         delegate :active_admin_config, :controller, :params, to: :helpers
@@ -30,7 +40,7 @@ module ActiveAdmin
             end
 
             active_admin_application.javascripts.each do |path|
-              text_node(javascript_include_tag(path, type: 'text/javascript'))
+              text_node(javascript_include_tag(path))
             end
 
             if active_admin_namespace.favicon
@@ -82,12 +92,15 @@ module ActiveAdmin
         end
 
         def build_flash_messages
+          return if flash_messages.empty?
+
           div class: 'flashes row' do
             flash_messages.each do |type, message|
-              div message, class: "flash flash_#{type} alert alert-dismissible", role: 'alert' do
-                button class: 'close', 'data-dismiss': 'alert', 'aria-label': 'Close' do
-                  span 'x', 'aria-hidden': 'true'
+              div class: "flash flash_#{type} alert alert-dismissible col-xs-12", role: 'alert' do
+                button class: 'close', 'data-dismiss' => 'alert', 'aria-label' => 'close', type: 'button' do
+                  span 'x', 'aria-hidden' => 'true'
                 end
+                text_node message
               end
             end
           end

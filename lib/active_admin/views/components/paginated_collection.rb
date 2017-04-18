@@ -51,7 +51,7 @@ module ActiveAdmin
 
         add_class 'row'
 
-        @contents = div(class: "paginated_collection_contents")
+        @contents = div(class: "paginated_collection_contents col-xs-12 ")
         build_pagination_with_formats(options)
         @built = true
       end
@@ -68,7 +68,7 @@ module ActiveAdmin
       protected
 
       def build_pagination_with_formats(options)
-        div id: "index_footer" do
+        div id: "index_footer", class: "col-xs-12" do
           build_per_page_select if @per_page.is_a?(Array)
           build_pagination
           div(page_entries_info(options).html_safe, class: "pagination_information")

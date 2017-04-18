@@ -11,7 +11,7 @@ module ActiveAdmin
         super(id: "site_title")
         @namespace = namespace
 
-        button class: 'navbar-toggle', 'data-toggle' => 'collapse', 'data-target' => '.navbar-collapse' do
+        button class: 'navbar-toggle', 'data-toggle' => 'collapse', 'data-target' => '.navbar-collapse', type: 'button' do
           span class: 'sr-only' do
             text_node 'Toggle navigation'
           end
