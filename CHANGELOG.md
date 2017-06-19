@@ -2,6 +2,10 @@
 
 ## Master (unreleased)
 
+### Removals
+
+* Ruby 2.1 support has been dropped [#5002][] by [@deivid-rodriguez][]
+
 ### Deprecations
 
 * Deprecated `type` param from `status_tag` and related CSS classes [#4989][] by [@javierjulio][]
@@ -25,6 +29,8 @@
 
 ##### Minor
 
+* Base localization support, better associations handling for active filters sidebar [#4951][] by [@Fivell][]
+* Allow AA scopes to return paginated collections [#4996][] by [@Fivell][]
 * Added `scopes_show_count` configuration to  setup show_count attribute for scopes globally [#4950][] by [@Fivell][]
 * Allow custom panel title given with `attributes_table` [#4940][] by [@ajw725][]
 
@@ -150,9 +156,14 @@ Please check [0-6-stable](https://github.com/activeadmin/activeadmin/blob/0-6-st
 [#4851]: https://github.com/activeadmin/activeadmin/pull/4851
 [#4867]: https://github.com/activeadmin/activeadmin/pull/4867
 [#4882]: https://github.com/activeadmin/activeadmin/pull/4882
+[#4940]: https://github.com/activeadmin/activeadmin/pull/4940
 [#4950]: https://github.com/activeadmin/activeadmin/pull/4950
+[#4951]: https://github.com/activeadmin/activeadmin/pull/4951
+[#4989]: https://github.com/activeadmin/activeadmin/pull/4989
+[#4996]: https://github.com/activeadmin/activeadmin/pull/4996
 
 
+[@ajw725]: https://github.com/ajw725
 [@bolshakov]: https://github.com/bolshakov
 [@chancancode]: https://github.com/chancancode
 [@craigmcnamara]: https://github.com/craigmcnamara
@@ -161,6 +172,7 @@ Please check [0-6-stable](https://github.com/activeadmin/activeadmin/blob/0-6-st
 [@drn]: https://github.com/drn
 [@Fivell]: https://github.com/Fivell
 [@gonzedge]: https://github.com/gonzedge
+[@javierjulio]: https://github.com/javierjulio
 [@johnnyshields]: https://github.com/johnnyshields
 [@PChambino]: https://github.com/PChambino
 [@potatosalad]: https://github.com/potatosalad
