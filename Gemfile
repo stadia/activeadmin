@@ -20,6 +20,7 @@ gem 'pry' # Easily debug from your console with `binding.pry`
 
 # Code style
 gem 'rubocop', '0.49.1'
+gem 'mdl', '0.4.0'
 
 # Translations
 gem 'i18n-tasks'
@@ -43,11 +44,10 @@ group :test do
   gem 'capybara'
   gem 'simplecov', require: false # Test coverage generator. Go to /coverage/ after running tests
   gem 'codecov', require: false # Test coverage website. Go to https://codecov.io
-  gem 'cucumber-rails', github: 'cucumber/cucumber-rails', require: false
+  gem 'cucumber-rails', require: false
   gem 'cucumber'
   gem 'database_cleaner'
   gem 'jasmine'
-  gem 'jslint_on_rails'
   gem 'launchy'
   gem 'rails-i18n' # Provides default i18n for many languages
   gem 'rspec-rails'
