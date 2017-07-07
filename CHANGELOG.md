@@ -2,6 +2,8 @@
 
 ## Master (unreleased)
 
+* Fixed [#4173](../../issues/4173) by including the default Kaminari templates [#5069](../../pull/5069) by [@javierjulio][]
+
 ### Removals
 
 * Ruby 2.1 support has been dropped [#5002][] by [@deivid-rodriguez][]
@@ -9,6 +11,8 @@
 
 ### Deprecations
 
+* Deprecated `config.register_stylesheet` and `config.register_javascript`. Import
+  your CSS and JS files in `active_admin.scss` or `active_admin.js`. [#5060][] by [@javierjulio][]
 * Deprecated `type` param from `status_tag` and related CSS classes [#4989][] by [@javierjulio][]
   * The method signature has changed from:
     ```ruby
