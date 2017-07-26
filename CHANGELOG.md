@@ -1,9 +1,10 @@
 # Changelog
 
-## Master (unreleased)
+## ## 1.1.0 [☰](https://github.com/activeadmin/activeadmin/compare/v1.0.0...v1.1.0)
 
 ### Bug Fixes
 
+* Fixed [#5093][] Handle table prefix & table suffix for `ActiveAdminComment` model
 * Fixed [#4173][] by including the default Kaminari templates [#5069][] by [@javierjulio][]
 * Fixed [#5043][]. Do not crash in sidebar rendering when a default scope is not
   specified. [#5044] by [@Fivell][].
@@ -52,6 +53,7 @@
 * Added `scopes_show_count` configuration to  setup show_count attribute for scopes globally [#4950][] by [@Fivell][]
 * Allow custom panel title given with `attributes_table` [#4940][] by [@ajw725][]
 * Allow passing a class to `action_item` block [#4997][] by [@Fivell][]
+* Add pagination to the comments section [#5088][] by [@alex-bogomolov][]
 
 ## 1.0.0 [☰](https://github.com/activeadmin/activeadmin/compare/v0.6.3...master)
 
@@ -195,6 +197,8 @@ Please check [0-6-stable](https://github.com/activeadmin/activeadmin/blob/0-6-st
 [#5046]: https://github.com/activeadmin/activeadmin/pull/5046
 [#5060]: https://github.com/activeadmin/activeadmin/pull/5060
 [#5069]: https://github.com/activeadmin/activeadmin/pull/5069
+[#5088]: https://github.com/activeadmin/activeadmin/pull/5088
+[#5093]: https://github.com/activeadmin/activeadmin/pull/5093 
 
 [@ajw725]: https://github.com/ajw725
 [@bolshakov]: https://github.com/bolshakov
@@ -216,3 +220,4 @@ Please check [0-6-stable](https://github.com/activeadmin/activeadmin/blob/0-6-st
 [@TimPetricola]: https://github.com/TimPetricola
 [@varyonic]: https://github.com/varyonic
 [@zorab47]: https://github.com/zorab47
+[@alex-bogomolov]: https://github.com/alex-bogomolov
