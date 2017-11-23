@@ -6,7 +6,11 @@
 
 ENV['RAILS_ENV'] = 'test'
 
-require File.expand_path('../../../spec/spec_helper', __FILE__)
+require 'simplecov' if ENV["COVERAGE"] == "true"
+
+Dir["#{File.expand_path('../../step_definitions', __FILE__)}/*.rb"].each do |f|
+  require f
+end
 
 require 'rails'
 ENV['RAILS_ROOT'] = File.expand_path("../../../spec/rails/rails-#{Rails.version}", __FILE__)
@@ -46,19 +50,15 @@ end
 require 'capybara/rails'
 require 'capybara/cucumber'
 require 'capybara/session'
-require 'capybara/poltergeist'
-require 'phantomjs/poltergeist'
+require 'selenium-webdriver'
 
-Capybara.javascript_driver = :poltergeist
+Capybara.javascript_driver = :selenium_chrome_headless
 
 # Capybara defaults to XPath selectors rather than Webrat's default of CSS3. In
 # order to ease the transition to Capybara we set the default here. If you'd
 # prefer to use XPath just remove this line and adjust any selectors in your
 # steps to use the XPath syntax.
 Capybara.default_selector = :css
-
-# Make input type=hidden visible
-Capybara.ignore_hidden_elements = false
 
 # If you set this to false, any error raised from within your app will bubble
 # up to your step definition and out to cucumber unless you catch it somewhere
@@ -114,4 +114,8 @@ Around '@silent_unpermitted_params_failure' do |scenario, block|
   ActionController::Parameters.action_on_unpermitted_parameters = false
   block.call
   ActionController::Parameters.action_on_unpermitted_parameters = original
+end
+
+Around '@locale_manipulation' do |scenario, block|
+  I18n.with_locale(:en) { block.call }
 end

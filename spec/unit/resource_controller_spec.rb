@@ -20,6 +20,8 @@ RSpec.describe ActiveAdmin::ResourceController do
         after_destroy :call_after_destroy
 
         controller do
+          private
+
           def call_after_build(obj); end
           def call_before_save(obj); end
           def call_after_save(obj); end
@@ -103,6 +105,17 @@ RSpec.describe ActiveAdmin::ResourceController do
       end
     end
   end
+
+  describe "action methods" do
+    before do
+      load_resources { ActiveAdmin.register Post }
+    end
+
+    it "should have actual action methods" do
+      controller.class.clear_action_methods! # make controller recalculate :action_methods on the next call
+      expect(controller.action_methods.sort).to eq ["batch_action", "create", "destroy", "edit", "index", "new", "show", "update"]
+    end
+  end
 end
 
 RSpec.describe "A specific resource controller", type: :controller do
@@ -161,7 +174,7 @@ RSpec.describe "A specific resource controller", type: :controller do
     before do
       allow(Post).to receive(:find).and_return(post)
       controller.class_eval { public :resource }
-      allow(controller).to receive(:params).and_return( ActionController::Parameters.new(http_params) )
+      allow(controller).to receive(:params).and_return(ActionController::Parameters.new(http_params))
     end
 
     subject { controller.resource }
@@ -217,10 +230,9 @@ RSpec.describe "A specific resource controller", type: :controller do
     end
   end
 
-
   describe "performing batch_action" do
     let(:batch_action) { ActiveAdmin::BatchAction.new :flag, "Flag", &batch_action_block }
-    let(:batch_action_block) { proc { } }
+    let(:batch_action_block) { proc { self.instance_variable_set :@block_context, self.class } }
     let(:params) { ActionController::Parameters.new(http_params) }
 
     before do
@@ -240,8 +252,8 @@ RSpec.describe "A specific resource controller", type: :controller do
       end
 
       it "should call the block in controller scope" do
-        expect(controller).to receive(:render_in_context).with(controller, nil).and_return({})
         controller.batch_action
+        expect(controller.instance_variable_get(:@block_context)).to eq Admin::PostsController
       end
     end
 

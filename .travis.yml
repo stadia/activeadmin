@@ -1,28 +1,34 @@
 ---
 
+addons:
+  chrome: stable
+
 language: ruby
 
 sudo: false
+
+dist: trusty
 
 bundler_args: --without development
 
 cache: bundler
 
+before_script:
+  - unset _JAVA_OPTIONS
+
 before_install:
-  - PATH=$(npm bin):$PATH # needed to install phantomjs via npm
-  - if [ $(phantomjs --version) != '2.1.1' ]; then npm install phantomjs-prebuilt@2.1; fi
   - gem update --system # use the very latest Rubygems
-  - rvm @global do gem uninstall bundler -a -x
-  - rvm @global do gem install bundler -v 1.14.6 # latest version known to work
+  - gem install bundler # use the very latest Bundler
 
 script:
   - bundle exec rake
+  - bundle exec rake docs:build
 
 rvm:
-  - jruby-9.1.8.0
-  - 2.2.6
-  - 2.3.3
-  - 2.4.0
+  - jruby-9.1.14.0
+  - 2.2.8
+  - 2.3.5
+  - 2.4.2
 
 gemfile:
   - gemfiles/rails_42.gemfile
@@ -31,25 +37,8 @@ gemfile:
 
 env:
   global:
-    - JRUBY_OPTS="-J-Xmx1024m --dev --debug"
+    - JRUBY_OPTS="-J-Djava.security.egd=file:/dev/./urandom -J-Xmx1024m --dev --debug"
+    - COVERAGE=true
 
 matrix:
   fast_finish: true
-
-  allow_failures:
-    - rvm: jruby-9.1.8.0
-      gemfile: gemfiles/rails_50.gemfile
-    - rvm: jruby-9.1.8.0
-      gemfile: gemfiles/rails_51.gemfile
-
-notifications:
-  irc:
-    channels:
-      - irc.freenode.org#activeadmin
-
-    on_success: change
-    on_failure: always
-    skip_join: true
-
-    template:
-      - "(%{branch}/%{commit} by %{author}): %{message} (%{build_url})"

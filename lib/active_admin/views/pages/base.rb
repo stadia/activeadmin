@@ -24,9 +24,14 @@ module ActiveAdmin
 
         def build_active_admin_head
           within @head do
-            insert_tag Arbre::HTML::Title, [title, render_or_call_method_or_proc_on(self, active_admin_namespace.site_title)].compact.join(" | ")
+            insert_tag Arbre::HTML::Title, [title, helpers.active_admin_namespace.site_title(self)].compact.join(" | ")
+
             active_admin_application.stylesheets.each do |style, options|
               text_node stylesheet_link_tag(style, options).html_safe
+            end
+
+            active_admin_namespace.meta_tags.each do |name, content|
+              text_node(tag(:meta, name: name, content: content))
             end
 
             active_admin_application.javascripts.each do |path|
@@ -35,10 +40,6 @@ module ActiveAdmin
 
             if active_admin_namespace.favicon
               text_node(favicon_link_tag(active_admin_namespace.favicon))
-            end
-
-            active_admin_namespace.meta_tags.each do |name, content|
-              text_node(tag(:meta, name: name, content: content))
             end
 
             text_node csrf_meta_tag
@@ -75,7 +76,7 @@ module ActiveAdmin
           build_flash_messages
           div id: "active_admin_content", class: (skip_sidebar? ? "without_sidebar" : "with_sidebar") do
             build_main_content_wrapper
-            build_sidebar unless skip_sidebar?
+            sidebar sidebar_sections_for_action, id: 'sidebar' unless skip_sidebar?
           end
         end
 
@@ -122,15 +123,6 @@ module ActiveAdmin
             active_admin_config.action_items_for(params[:action], self)
           else
             []
-          end
-        end
-
-        # Renders the sidebar
-        def build_sidebar
-          div id: "sidebar" do
-            sidebar_sections_for_action.collect do |section|
-              sidebar_section(section)
-            end
           end
         end
 

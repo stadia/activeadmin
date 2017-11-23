@@ -78,7 +78,7 @@ module ActiveAdmin
       end
 
       def add_create_another_checkbox
-        if %w(new create).include?(action_name) &&  active_admin_config && active_admin_config.create_another
+        if %w(new create).include?(helpers.action_name) && active_admin_config && active_admin_config.create_another
           current_arbre_element.add_child(create_another_checkbox)
         end
       end
@@ -111,7 +111,7 @@ module ActiveAdmin
               id: 'create_another',
               class: 'create_another',
               name: 'create_another',
-              type: 'checkbox',
+              type: 'checkbox'
             )
             label(I18n.t('active_admin.create_another', model: label), for: 'create_another')
           end
