@@ -1,3 +1,3 @@
 module ActiveAdmin
-  VERSION = '2.0.0.alpha'
+  VERSION = '1.2.0'
 end
