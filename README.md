@@ -1,13 +1,13 @@
 # Active Admin
 
-[Active Admin](https://www.activeadmin.info) is a Ruby on Rails framework for creating elegant backends for website administration.
+[Active Admin](https://www.activeadmin.info) is a Ruby on Rails framework for
+creating elegant backends for website administration.
 
 [![Version         ][rubygems_badge]][rubygems]
 [![Travis CI       ][travis_badge]][travis]
 [![Quality         ][codeclimate_badge]][codeclimate]
 [![Coverage        ][codecov_badge]][codecov]
 [![Inch CI         ][inch_badge]][inch]
-[![Gratipay Team   ][gratipay_badge]][gratipay]
 
 ## Goals
 
@@ -37,9 +37,9 @@ is a good place to start. If you have questions, feel free to ask.
 
 ## Want to support us?
 
-You can support us with a weekly tip via [Gratipay][gratipay.com].
+You can support us with a weekly tip via [Liberapay][liberapay.com].
 
-[![Support via Gratipay][gratipay_button]][gratipay]
+[![Support via Liberapay][liberapay_button]][liberapay_donate]
 
 ## Dependencies
 
@@ -65,19 +65,18 @@ Tool                  | Description
 [rubygems]: https://rubygems.org/gems/activeadmin
 [travis_badge]: http://img.shields.io/travis/activeadmin/activeadmin/master.svg
 [travis]: https://travis-ci.org/activeadmin/activeadmin
-[codeclimate_badge]: http://img.shields.io/codeclimate/github/activeadmin/activeadmin.svg
-[codeclimate]: https://codeclimate.com/github/activeadmin/activeadmin
+[codeclimate_badge]: https://api.codeclimate.com/v1/badges/779e407d22bacff19733/maintainability
+[codeclimate]: https://codeclimate.com/github/activeadmin/activeadmin/maintainability
 [codecov_badge]: https://codecov.io/gh/activeadmin/activeadmin/branch/master/graph/badge.svg
 [codecov]: https://codecov.io/gh/activeadmin/activeadmin
 [inch_badge]: http://inch-ci.org/github/activeadmin/activeadmin.svg?branch=master
 [inch]: http://inch-ci.org/github/activeadmin/activeadmin
-[gratipay_badge]: https://img.shields.io/gratipay/team/Active-Admin.svg
-[gratipay]: https://gratipay.com/Active-Admin/
 
 [docs]: http://activeadmin.info/0-installation.html
 [demo]: http://demo.activeadmin.info/admin
 [wiki]: https://github.com/activeadmin/activeadmin/wiki
 [stackoverflow]: http://stackoverflow.com/questions/tagged/activeadmin
 [contributing]: https://github.com/activeadmin/activeadmin/blob/master/CONTRIBUTING.md
-[gratipay.com]: https://gratipay.com
-[gratipay_button]: https://cdn.rawgit.com/gratipay/gratipay-badge/2.1.3/dist/gratipay.png
+[liberapay.com]: https://liberapay.com
+[liberapay_button]: https://liberapay.com/assets/widgets/donate.svg
+[liberapay_donate]: https://liberapay.com/Active-Admin/donate

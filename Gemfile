@@ -12,7 +12,7 @@ gem 'parallel_tests'
 gem 'pry' # Easily debug from your console with `binding.pry`
 
 # Code style
-gem 'rubocop', '0.49.1'
+gem 'rubocop', '0.51.0'
 gem 'mdl', '0.4.0'
 
 # Translations
@@ -41,6 +41,7 @@ group :test do
   gem 'cucumber'
   gem 'database_cleaner'
   gem 'jasmine'
+  gem 'jasmine-core', '2.9.1' # last release with Ruby 2.2 support.
   gem 'launchy'
   gem 'rails-i18n' # Provides default i18n for many languages
   gem 'rspec-rails'
@@ -48,5 +49,5 @@ group :test do
   gem 'shoulda-matchers', '<= 2.8.0'
   gem 'sqlite3', platforms: :mri
   gem 'selenium-webdriver'
-  gem 'chromedriver-helper'
+  gem 'chromedriver-helper', '1.1.0' # 1.2 causing build failure with JRuby.
 end
