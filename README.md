@@ -1,12 +1,12 @@
 # Active Admin
 
-[Active Admin](https://www.activeadmin.info) is a Ruby on Rails framework for
+[Active Admin](https://activeadmin.info) is a Ruby on Rails framework for
 creating elegant backends for website administration.
 
 [![Version         ][rubygems_badge]][rubygems]
-[![Travis CI       ][travis_badge]][travis]
-[![Quality         ][codeclimate_badge]][codeclimate]
-[![Coverage        ][codecov_badge]][codecov]
+[![Circle CI       ][circle_badge]][circle]
+[![Coverage        ][coverage_badge]][coverage]
+[![Tidelift        ][tidelift_badge]][tidelift]
 [![Inch CI         ][inch_badge]][inch]
 
 ## Goals
@@ -37,6 +37,8 @@ is a good place to start. If you have questions, feel free to ask.
 
 ## Want to support us?
 
+Subscribe to [Tidelift][tidelift] to support Active Admin and get licensing assurances and timely security notifications.
+
 You can support us with a weekly tip via [Liberapay][liberapay.com].
 
 [![Support via Liberapay][liberapay_button]][liberapay_donate]
@@ -63,14 +65,14 @@ Tool                  | Description
 
 [rubygems_badge]: http://img.shields.io/gem/v/activeadmin.svg
 [rubygems]: https://rubygems.org/gems/activeadmin
-[travis_badge]: http://img.shields.io/travis/activeadmin/activeadmin/master.svg
-[travis]: https://travis-ci.org/activeadmin/activeadmin
-[codeclimate_badge]: https://api.codeclimate.com/v1/badges/779e407d22bacff19733/maintainability
-[codeclimate]: https://codeclimate.com/github/activeadmin/activeadmin/maintainability
-[codecov_badge]: https://codecov.io/gh/activeadmin/activeadmin/branch/master/graph/badge.svg
-[codecov]: https://codecov.io/gh/activeadmin/activeadmin
+[circle_badge]: https://circleci.com/gh/activeadmin/activeadmin/tree/master.svg
+[circle]: https://circleci.com/gh/activeadmin/activeadmin/tree/master
+[coverage_badge]: https://api.codeclimate.com/v1/badges/779e407d22bacff19733/test_coverage
+[coverage]: https://codeclimate.com/github/activeadmin/activeadmin/test_coverage
 [inch_badge]: http://inch-ci.org/github/activeadmin/activeadmin.svg?branch=master
 [inch]: http://inch-ci.org/github/activeadmin/activeadmin
+[tidelift_badge]: https://tidelift.com/badges/github/activeadmin/activeadmin
+[tidelift]: https://tidelift.com/subscription/pkg/rubygems-activeadmin?utm_source=rubygems-activeadmin&utm_medium=readme
 
 [docs]: http://activeadmin.info/0-installation.html
 [demo]: http://demo.activeadmin.info/admin

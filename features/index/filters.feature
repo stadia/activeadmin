@@ -1,3 +1,4 @@
+@filters
 Feature: Index Filtering
 
   Scenario: Default Resources Filters
@@ -32,11 +33,7 @@ Feature: Index Filtering
     """
     When I fill in "Title" with "<script>alert('hax')</script>"
     And I press "Filter"
-<<<<<<< HEAD
-    Then I should see current filter "title_contains" equal to "alert('hax')" with label "Title contains"
-=======
     Then I should see current filter "title_contains" equal to "<script>alert('hax')</script>" with label "Title contains"
->>>>>>> 3f9f081e512bc0f04398c3daca79530fd23428bb
 
   Scenario: Filtering posts with no results
     Given 3 posts exist
@@ -67,10 +64,10 @@ Feature: Index Filtering
     And I press "Filter"
 
     Then I follow "2"
-    Then I should see "Displaying Posts 3 - 4 of 7 in total"
+    Then I should see "Displaying Posts 3 - 4 of 7 in total"
 
     Then I follow "3"
-    Then I should see "Displaying Posts 5 - 6 of 7 in total"
+    Then I should see "Displaying Posts 5 - 6 of 7 in total"
 
   Scenario: Filtering posts while not on the first page
     Given 9 posts exist
@@ -81,7 +78,7 @@ Feature: Index Filtering
       end
     """
     When I follow "2"
-    Then I should see "Displaying Posts 6 - 9 of 9 in total"
+    Then I should see "Displaying Posts 6 - 9 of 9 in total"
 
     When I fill in "Title" with "Hello World 2"
     And I press "Filter"
@@ -178,7 +175,7 @@ Feature: Index Filtering
     And I should see "Mystery" within ".index_table"
     And I should see "Non-Fiction" within ".index_table"
     And the "Jane Doe" checkbox should not be checked
-    And I should not see a sidebar titled "Search Status:"
+    And should not see a sidebar titled "Search Status:"
 
   Scenario: Checkboxes - Filtering categories via posts written by Jane Doe
     Given a category named "Mystery" exists

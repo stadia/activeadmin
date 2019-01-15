@@ -43,6 +43,12 @@ module ActiveAdmin
       @namespaces = Namespace::Store.new
     end
 
+    # == Deprecated Settings
+
+    def allow_comments=(*)
+      raise "`config.allow_comments` is no longer provided in ActiveAdmin 1.x. Use `config.comments` instead."
+    end
+
     include AssetRegistration
 
     # Event that gets triggered on load of Active Admin

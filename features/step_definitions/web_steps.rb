@@ -9,14 +9,8 @@ module WithinHelpers
 end
 World(WithinHelpers)
 
-# Single-line step scoper
-When /^(.*) within (.*[^:])$/ do |step_name, parent|
+When /^(.*) within (.*)$/ do |step_name, parent|
   with_scope(parent) { step step_name }
-end
-
-# Multi-line step scoper
-When /^(.*) within (.*[^:]):$/ do |step_name, parent, table_or_string|
-  with_scope(parent) { step "#{step_name}:", table_or_string }
 end
 
 Given /^I am on (.+)$/ do |page_name|
@@ -47,30 +41,18 @@ When /^I (check|uncheck) "([^"]*)"$/ do |action, field|
   send action, field
 end
 
-When /^I attach the file "([^"]*)" to "([^"]*)"$/ do |path, field|
-  attach_file(field, File.expand_path(path))
-end
-
 Then /^I should( not)? see( the element)? "([^"]*)"$/ do |negate, is_css, text|
   should = negate ? :not_to        : :to
   have   = is_css ? have_css(text) : have_content(text)
   expect(page).send should, have
 end
 
-Then /^I should see the select "([^"]*)" with options "([^"]+)"?$/ do |label, with_options|
-  expect(page).to have_select(label, with_options: with_options.split(', '))
-end
-
-Then /^I should see the field "([^"]*)" of type "([^"]+)"?$/ do |label, of_type|
-  expect(page).to have_field(label, type: of_type)
-end
-
-Then /^the "([^"]*)" field(?: within (.*))? should contain "([^"]*)"$/ do |field, parent, value|
+Then /^the "([^"]*)" field(?: within (.*))? should( not)? contain "([^"]*)"$/ do |field, parent, negate, value|
   with_scope(parent) do
     field = find_field(field)
     value = field.tag_name == 'textarea' ? field.text : field.value
 
-    expect(value).to match(/#{value}/)
+    expect(value).send negate ? :not_to : :to, match(/#{value}/)
   end
 end
 

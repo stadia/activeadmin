@@ -1,9 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe ActiveAdmin::Application, type: :request do
-
-  include Rails.application.routes.url_helpers
-
   let(:resource) { ActiveAdmin.register Category }
 
   [false, nil].each do |value|
@@ -77,5 +74,17 @@ RSpec.describe ActiveAdmin::Application, type: :request do
     application.default_namespace = namespace
 
     with_temp_application(application) { yield }
+  end
+
+  def with_temp_application(application)
+    original_application = ActiveAdmin.application
+    ActiveAdmin.application = application
+
+    load_resources { ActiveAdmin.register(Category) }
+
+    yield
+
+  ensure
+    ActiveAdmin.application = original_application
   end
 end

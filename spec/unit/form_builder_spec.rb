@@ -5,7 +5,7 @@ RSpec.describe ActiveAdmin::FormBuilder do
   # Setup an ActionView::Base object which can be used for
   # generating the form for.
   let(:helpers) do
-    view = action_view
+    view = mock_action_view
     def view.posts_path
       "/posts"
     end
@@ -992,6 +992,20 @@ RSpec.describe ActiveAdmin::FormBuilder do
         selector = "input.datepicker[type=text][name='post[created_at]']"
         expect(body).to have_selector(selector)
         expect(body.find(selector)["data-datepicker-options"]).to eq({ minDate: '2013-10-18', maxDate: '2013-12-31' }.to_json)
+      end
+    end
+
+    describe "with label as proc" do
+      let :body do
+        build_form do |f|
+          f.inputs do
+            f.input :created_at, as: :datepicker, label: proc { 'Title from proc' }
+          end
+        end
+      end
+
+      it "should render proper label" do
+        expect(body).to have_selector("label", text: "Title from proc")
       end
     end
   end
