@@ -110,7 +110,8 @@ module ActiveAdmin
     # end
     # ```
     #
-    # In addition, you can insert the position of the row in the greater collection by using the index_column special command:
+    # In addition, you can insert the position of the row in the greater
+    # collection by using the index_column special command:
     #
     # ```ruby
     # index do
@@ -120,7 +121,8 @@ module ActiveAdmin
     # end
     # ```
     #
-    # index_column take an optional offset parameter to allow a developer to set the starting number for the index (default is 1).
+    # index_column take an optional offset parameter to allow a developer to set
+    # the starting number for the index (default is 1).
     #
     # ## Sorting
     #
@@ -128,9 +130,7 @@ module ActiveAdmin
     # sortable by default. If you are creating a custom column, you may need to give
     # Active Admin a hint for how to sort the table.
     #
-    # If a column is defined using a block, you must pass the key to turn on sorting. The key
-    # is the attribute which gets used to sort objects using Active Record.
-    #
+    # You can pass the key specifying the attribute which gets used to sort objects using Active Record.
     # By default, this is the column on the resource's table that the attribute corresponds to.
     # Otherwise, any attribute that the resource collection responds to can be used.
     #
@@ -362,7 +362,7 @@ module ActiveAdmin
           end
         end
 
-      private
+        private
 
         def defaults(resource, options = {})
           if controller.action_methods.include?('show') && authorized?(ActiveAdmin::Auth::READ, resource)

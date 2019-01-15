@@ -113,6 +113,34 @@ Feature: Batch Actions
     Given I submit the batch action form with "flag"
     Then I should see a flash with "Successfully flagged 10 posts"
 
+  Scenario: Using a custom batch action with form as Hash
+    Given 10 posts exist
+    And an index configuration of:
+      """
+      ActiveAdmin.register Post do
+        batch_action(:flag, form: {type: ["a", "b"]}) do
+          redirect_to collection_path, notice: "Successfully flagged 10 posts"
+        end
+      end
+      """
+    When I check the 1st record
+    Given I submit the batch action form with "flag"
+    Then I should see a flash with "Successfully flagged 10 posts"
+
+  Scenario: Using a custom batch action with form as proc
+    Given 10 posts exist
+    And an index configuration of:
+      """
+      ActiveAdmin.register Post do
+        batch_action(:flag, form: -> { {type: params[:type]} }) do
+          redirect_to collection_path, notice: "Successfully flagged 10 posts"
+        end
+      end
+      """
+    When I check the 1st record
+    Given I submit the batch action form with "flag"
+    Then I should see a flash with "Successfully flagged 10 posts"
+
   Scenario: Disabling batch actions for a resource
     Given 10 posts exist
     And an index configuration of:
@@ -175,20 +203,23 @@ Feature: Batch Actions
     Then I should see the batch action :very_complex_and_time_consuming "Very Complex and Time Consuming Selected"
     And I should see the batch action :passing_a_symbol "Passing A Symbol Selected"
 
+  @javascript
   Scenario: Use a Form with text
     Given 10 posts exist
     And an index configuration of:
       """
       ActiveAdmin.register Post do
         batch_action :destroy, false
-        batch_action(:action_with_form, form: { name: :text }) {}
+        batch_action(:action_with_form, form: { name: :textarea }) {}
       end
       """
 
     When I check the 1st record
     And I follow "Batch Actions"
-    Then I should be show a input with name "name" and type "text"
+    And I click "Action With Form"
+    And I should see the field "name" of type "textarea"
 
+  @javascript
   Scenario: Use a Form with select
     Given 10 posts exist
     And an index configuration of:
@@ -201,8 +232,10 @@ Feature: Batch Actions
 
     When I check the 1st record
     And I follow "Batch Actions"
-    Then I should be show a select with name "type" with the values "a, b"
+    And I click "Action With Form"
+    And I should see the select "type" with options "a, b"
 
+  @javascript
   Scenario: Use a Form with select values from proc
     Given 10 posts exist
     And an index configuration of:
@@ -215,4 +248,5 @@ Feature: Batch Actions
 
     When I check the 1st record
     And I follow "Batch Actions"
-    Then I should be show a select with name "type" with the values "a, b"
+    And I click "Action With Form"
+    And I should see the select "type" with options "a, b"

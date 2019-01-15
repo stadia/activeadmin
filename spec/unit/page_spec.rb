@@ -5,7 +5,6 @@ module ActiveAdmin
   RSpec.describe Page do
 
     it_should_behave_like "ActiveAdmin::Resource"
-    before { load_defaults! }
 
     let(:application){ ActiveAdmin::Application.new }
     let(:namespace){ Namespace.new(application, :admin) }
@@ -33,11 +32,8 @@ module ActiveAdmin
       end
 
       it "returns the singular, lowercase name" do
-        if RUBY_VERSION >= '2.4.0'
-          expect(config.resource_name.singular).to eq "chocolate i løve you!"
-        else
-          expect(config.resource_name.singular).to eq "chocolate i lØve you!"
-        end
+        expect(config.resource_name.singular)
+          .to eq "chocolate i l#{RUBY_VERSION >= '2.4.0' ? 'ø' : 'Ø'}ve you!"
       end
     end
 

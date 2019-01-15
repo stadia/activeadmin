@@ -1,5 +1,11 @@
 ---
 
+inherit_mode:
+  merge:
+    - Include
+
+require: rubocop-rspec
+
 AllCops:
   DisabledByDefault: true
   TargetRubyVersion: 2.3
@@ -7,21 +13,29 @@ AllCops:
   Exclude:
     - spec/rails/**/*
     - gemfiles/vendor/bundle/**/*
+    - vendor/bundle/**/*
 
   Include:
-    - "**/*.rake"
-    - "**/Gemfile"
-    - "gemfiles/*.gemfile"
-    - "**/Rakefile"
+    - gemfiles/*.gemfile
+    - .simplecov
 
   DisplayCopNames: true
 
   StyleGuideCopsOnly: false
 
-Lint/EndAlignment:
+Layout/EndAlignment:
+  Enabled: true
+
+Lint/ParenthesesAsGroupedExpression:
+  Enabled: true
+
+Layout/AccessModifierIndentation:
   Enabled: true
 
 Layout/CaseIndentation:
+  Enabled: true
+
+Layout/CommentIndentation:
   Enabled: true
 
 Layout/ElseAlignment:
@@ -36,9 +50,15 @@ Layout/EndOfLine:
 Layout/ExtraSpacing:
   Enabled: true
 
-Style/Encoding:
-  EnforcedStyle: never
+RSpec/HookArgument:
   Enabled: true
+
+Style/Encoding:
+  Enabled: true
+
+Style/FrozenStringLiteralComment:
+  Enabled: true
+  EnforcedStyle: never
 
 Style/HashSyntax:
   Enabled: true
@@ -49,7 +69,7 @@ Layout/IndentationConsistency:
 Layout/IndentationWidth:
   Enabled: true
 
-Style/PredicateName:
+Naming/PredicateName:
   Enabled: true
 
   NamePrefixBlacklist:
@@ -59,6 +79,9 @@ Style/PredicateName:
   NameWhitelist:
     - has_many
     - has_many_actions
+
+Style/TrailingCommaInArguments:
+  Enabled: true
 
 Layout/TrailingBlankLines:
   Enabled: true

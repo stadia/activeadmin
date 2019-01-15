@@ -1,10 +1,5 @@
 def ensure_user_created(email)
-  user = AdminUser.where(email: email).first_or_create(password: 'password', password_confirmation: 'password')
-
-  unless user.persisted?
-    raise "Could not create user #{email}: #{user.errors.full_messages}"
-  end
-  user
+  AdminUser.create_with(password: 'password', password_confirmation: 'password').find_or_create_by!(email: email)
 end
 
 Given /^(?:I am logged|log) out$/ do
@@ -16,7 +11,6 @@ Given /^I am logged in$/ do
   login_as ensure_user_created 'admin@example.com'
 end
 
-# only for @requires-reloading scenario
 Given /^I am logged in with capybara$/ do
   ensure_user_created 'admin@example.com'
   step 'log out'

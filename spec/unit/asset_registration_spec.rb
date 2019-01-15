@@ -9,9 +9,7 @@ RSpec.describe ActiveAdmin::AssetRegistration do
   end
 
   it "is deprecated" do
-    expect(ActiveAdmin::Deprecation)
-      .to receive(:warn)
-      .with(<<-MSG.strip_heredoc
+    expect(ActiveAdmin::Deprecation).to receive(:warn).with(<<-MSG.strip_heredoc
         The `register_stylesheet` config is deprecated and will be removed
         in v2. Import your "sample_styles.css" stylesheet in the active_admin.scss.
       MSG
@@ -19,9 +17,7 @@ RSpec.describe ActiveAdmin::AssetRegistration do
 
     register_stylesheet "sample_styles.css"
 
-    expect(ActiveAdmin::Deprecation)
-      .to receive(:warn)
-      .with(<<-MSG.strip_heredoc
+    expect(ActiveAdmin::Deprecation).to receive(:warn).with(<<-MSG.strip_heredoc
         The `register_javascript` config is deprecated and will be removed
         in v2. Import your "sample_scripts.js" javascript in the active_admin.js.
       MSG

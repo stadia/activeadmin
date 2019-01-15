@@ -40,6 +40,10 @@ RSpec.describe ActiveAdmin::Namespace do
         Admin.send(:remove_const, 'PostsController')
       end
 
+      after do
+        load_resources {}
+      end
+
       it "should not crash" do
         expect { ActiveAdmin.unload! }.not_to raise_error
       end
@@ -50,7 +54,9 @@ RSpec.describe ActiveAdmin::Namespace do
     let(:namespace){ ActiveAdmin::Namespace.new(application, :admin) }
 
     it "should inherit the site title from the application" do
-      ActiveAdmin::Namespace.setting :site_title, "Not the Same"
+      ActiveSupport::Deprecation.silence do
+        ActiveAdmin::Namespace.setting :site_title, "Not the Same"
+      end
       expect(namespace.site_title).to eq application.site_title
     end
 
