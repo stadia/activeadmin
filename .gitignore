@@ -4,6 +4,7 @@ coverage
 .yardoc
 .ruby-version
 pkg
+.idea
 
 ## Project (specific)
 .bundle

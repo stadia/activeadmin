@@ -15,7 +15,9 @@ module ActiveAdmin
         @priority = item.priority
         @submenu = nil
 
-        add_class "current" if item.current? assigns[:current_tab]
+        add_class "current active" if item.current? assigns[:current_tab]
+
+        @label = raw("#{label} <span class=\"fa arrow\" />") if item.items.any?
 
         if url
           text_node link_to label, url, item.html_options
@@ -25,7 +27,7 @@ module ActiveAdmin
 
         if item.items.any?
           add_class "has_nested"
-          @submenu = menu(item)
+          @submenu = menu(item, class: 'nav nav-second-level collapse')
         end
       end
 
