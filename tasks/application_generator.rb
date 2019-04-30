@@ -20,8 +20,11 @@ module ActiveAdmin
           --skip-bundle
           --skip-gemfile
           --skip-listen
+          --skip-spring
           --skip-turbolinks
           --skip-test-unit
+          --skip-coffee
+          --skip-webpack-install
         )
 
         command = ['bundle', 'exec', 'rails', 'new', app_dir, *args].join(' ')
@@ -37,7 +40,7 @@ module ActiveAdmin
     private
 
     def base_dir
-      @base_dir ||= rails_env == 'test' ? 'spec/rails' : '.test-rails-apps'
+      @base_dir ||= rails_env == 'test' ? 'tmp/rails' : '.test-rails-apps'
     end
 
     def app_dir

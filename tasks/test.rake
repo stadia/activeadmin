@@ -8,35 +8,42 @@ task :setup, [:rails_env, :template] do |_t, opts|
   ActiveAdmin::ApplicationGenerator.new(opts).generate
 end
 
-desc "Run the specs in parallel"
-task :spec do
-  sh("parallel_rspec --serialize-stdout --combine-stderr --verbose spec/")
-end
+task spec: :"spec:all"
 
 namespace :spec do
+  desc "Run all specs"
+  task all: [:regular, :filesystem_changes]
 
-  %i(unit request).each do |type|
-    desc "Run the #{type} specs in parallel"
-    task type do
-      sh("parallel_rspec --serialize-stdout --combine-stderr --verbose spec/#{type}")
-    end
+  desc "Run the standard specs in parallel"
+  task :regular do
+    sh("bin/parallel_rspec spec/")
   end
 
+  desc "Run the specs that change the filesystem sequentially"
+  task :filesystem_changes do
+    sh({ "RSPEC_FILESYSTEM_CHANGES" => "true" }, "bin/rspec")
+  end
 end
 
 desc "Run the cucumber scenarios in parallel"
-task cucumber: [:"cucumber:regular", :"cucumber:reloading"]
+task cucumber: :"cucumber:all"
 
 namespace :cucumber do
+  desc "Run all cucumber suites"
+  task all: [:regular, :filesystem_changes, :reloading]
 
   desc "Run the standard cucumber scenarios in parallel"
   task :regular do
-    sh("parallel_cucumber --serialize-stdout --combine-stderr --verbose features/")
+    sh("bin/parallel_cucumber features/")
+  end
+
+  desc "Run the cucumber scenarios that change the filesystem sequentially"
+  task :filesystem_changes do
+    sh("bin/cucumber --profile filesystem-changes")
   end
 
   desc "Run the cucumber scenarios that test reloading"
   task :reloading do
-    sh("cucumber --profile class-reloading")
+    sh("bin/cucumber --profile class-reloading")
   end
-
 end

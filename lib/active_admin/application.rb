@@ -68,7 +68,7 @@ module ActiveAdmin
 
     # Registers a brand new configuration for the given resource.
     def register(resource, options = {}, &block)
-      ns = options.fetch(:namespace){ default_namespace }
+      ns = options.fetch(:namespace) { default_namespace }
       namespace(ns).register resource, options, &block
     end
 
@@ -98,7 +98,7 @@ module ActiveAdmin
     # @&block The registration block.
     #
     def register_page(name, options = {}, &block)
-      ns = options.fetch(:namespace){ default_namespace }
+      ns = options.fetch(:namespace) { default_namespace }
       namespace(ns).register_page name, options, &block
     end
 
@@ -119,7 +119,7 @@ module ActiveAdmin
     def load!
       unless loaded?
         ActiveSupport::Notifications.publish BeforeLoadEvent, self # before_load hook
-        files.each{ |file| load file }                             # load files
+        files.each { |file| load file }                            # load files
         namespace(default_namespace)                               # init AA resources
         ActiveSupport::Notifications.publish AfterLoadEvent, self  # after_load hook
         @@loaded = true
@@ -127,12 +127,12 @@ module ActiveAdmin
     end
 
     def load(file)
-      DatabaseHitDuringLoad.capture{ super }
+      DatabaseHitDuringLoad.capture { super }
     end
 
     # Returns ALL the files to be loaded
     def files
-      load_paths.flatten.compact.uniq.flat_map{ |path| Dir["#{path}/**/*.rb"] }
+      load_paths.flatten.compact.uniq.flat_map { |path| Dir["#{path}/**/*.rb"] }
     end
 
     # Creates all the necessary routes for the ActiveAdmin configurations
@@ -171,9 +171,9 @@ module ActiveAdmin
     private
 
     def register_default_assets
-      stylesheets['active_admin.css'] = { media: 'screen' }
-      stylesheets['active_admin/print.css'] = { media: 'print' }
-      javascripts.add 'active_admin.js'
+      register_stylesheet 'active_admin.css', media: 'screen'
+      register_stylesheet 'active_admin/print.css', media: 'print'
+      register_javascript 'active_admin.js'
     end
 
     # Since app/admin is alphabetically before app/models, we have to remove it

@@ -11,7 +11,7 @@ AllCops:
   TargetRubyVersion: 2.3
 
   Exclude:
-    - spec/rails/**/*
+    - tmp/rails/**/*
     - gemfiles/vendor/bundle/**/*
     - vendor/bundle/**/*
 
@@ -44,16 +44,32 @@ Layout/ElseAlignment:
 Layout/EmptyLines:
   Enabled: true
 
+Layout/EmptyLinesAroundBlockBody:
+  Enabled: true
+
 Layout/EndOfLine:
   Enabled: true
 
 Layout/ExtraSpacing:
   Enabled: true
 
+Rails:
+  Enabled: true
+
+Rails/FilePath:
+  Enabled: true
+  EnforcedStyle: slashes
+
 RSpec/HookArgument:
   Enabled: true
 
+Style/Dir:
+  Enabled: true
+
 Style/Encoding:
+  Enabled: true
+
+Style/ExpandPathArguments:
   Enabled: true
 
 Style/FrozenStringLiteralComment:
@@ -93,6 +109,15 @@ Layout/SpaceAfterComma:
   Enabled: true
 
 Layout/SpaceAroundEqualsInParameterDefault:
+  Enabled: true
+
+Layout/SpaceBeforeBlockBraces:
+  Enabled: true
+
+Layout/SpaceInsideBlockBraces:
+  Enabled: true
+
+Layout/SpaceInsideHashLiteralBraces:
   Enabled: true
 
 Layout/SpaceInsideParens:

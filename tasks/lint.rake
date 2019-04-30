@@ -54,6 +54,28 @@ class TrailingWhitespaceLinter
 end
 
 #
+# Checks trailing blank lines
+#
+class TrailingBlankLinesLinter
+  include LinterMixin
+
+  def clean?(file)
+    File.read(file, encoding: Encoding::UTF_8)[-2..-1] != "\n\n"
+  end
+end
+
+#
+# Final new line linter
+#
+class MissingFinalNewLineLinter
+  include LinterMixin
+
+  def clean?(file)
+    File.read(file, encoding: Encoding::UTF_8)[-1] == "\n"
+  end
+end
+
+#
 # Checks trailing whitespace
 #
 class FixmeLinter
@@ -67,7 +89,7 @@ class FixmeLinter
 end
 
 desc "Lints ActiveAdmin code base"
-task lint: ["lint:rubocop", "lint:mdl", "lint:trailing_whitespace", "lint:fixme", "lint:rspec"]
+task lint: ["lint:rubocop", "lint:mdl", "lint:gherkin_lint", "lint:trailing_blank_lines", "lint:missing_final_new_line", "lint:trailing_whitespace", "lint:fixme", "lint:rspec"]
 
 namespace :lint do
   require "rubocop/rake_task"
@@ -79,6 +101,27 @@ namespace :lint do
     puts "Running mdl..."
 
     sh("mdl", "--git-recurse", ".")
+  end
+
+  desc "Checks gherkin code style with gherkin-lint"
+  task :gherkin_lint do
+    puts "Running gherkin-lint..."
+
+    sh("npx", "gherkin-lint")
+  end
+
+  desc "Check for unnecessary trailing blank lines across all repo files"
+  task :trailing_blank_lines do
+    puts "Checking for unnecessary trailing blank lines..."
+
+    TrailingBlankLinesLinter.new.run
+  end
+
+  desc "Check for missing final new lines across all repo files"
+  task :missing_final_new_line do
+    puts "Checking for missing final new lines..."
+
+    MissingFinalNewLineLinter.new.run
   end
 
   desc "Check for unnecessary trailing whitespace across all repo files"
@@ -100,8 +143,7 @@ namespace :lint do
     puts "Linting project files..."
 
     sh(
-      { "COVERAGE" => "true" },
-      "rspec",
+      "bin/rspec",
       "spec/gemfiles_spec.lint.rb",
       "spec/changelog_spec.lint.rb",
       "spec/i18n_spec.lint.rb"

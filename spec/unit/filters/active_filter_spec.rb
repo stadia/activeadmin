@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe ActiveAdmin::Filters::ActiveFilter do
-
   let(:namespace) do
     ActiveAdmin::Namespace.new(ActiveAdmin::Application.new, :admin)
   end
@@ -10,9 +9,9 @@ RSpec.describe ActiveAdmin::Filters::ActiveFilter do
     namespace.register(Post)
   end
 
-  let(:user){ User.create! first_name: "John", last_name: "Doe" }
-  let(:category){ Category.create! name: "Category" }
-  let(:post){ Post.create! title: "Hello World", category: category, author: user }
+  let(:user) { User.create! first_name: "John", last_name: "Doe" }
+  let(:category) { Category.create! name: "Category" }
+  let(:post) { Post.create! title: "Hello World", category: category, author: user }
 
   let(:search) do
     Post.ransack(title_equals: post.title)
@@ -54,7 +53,6 @@ RSpec.describe ActiveAdmin::Filters::ActiveFilter do
     it 'should pick predicate name translation' do
       expect(subject.predicate_name).to eq(Ransack::Translate.predicate('eq'))
     end
-
   end
 
   context 'search by polymorphic association' do
@@ -127,9 +125,7 @@ RSpec.describe ActiveAdmin::Filters::ActiveFilter do
       it 'should have valid label' do
         expect(subject.label).to eq("Category equals")
       end
-
     end
-
   end
 
   context 'search has no matching records' do
@@ -151,6 +147,13 @@ RSpec.describe ActiveAdmin::Filters::ActiveFilter do
 
       expect(subject.label).to eq("#{label} equals")
     end
+
+    it 'should use the filter label as the label prefix' do
+      label = proc { "#{user.first_name}'s Post Title" }
+      resource.add_filter(:title, label: label)
+
+      expect(subject.label).to eq("#{label.call} equals")
+    end
   end
 
   context "the association uses a different primary_key than the related class' primary_key" do
@@ -168,10 +171,10 @@ RSpec.describe ActiveAdmin::Filters::ActiveFilter do
       namespace.register(resource_klass)
     end
 
-    let(:user){ User.create! first_name: "John", last_name: "Doe" }
-    let!(:category){ Category.create! name: "Category" }
+    let(:user) { User.create! first_name: "John", last_name: "Doe" }
+    let!(:category) { Category.create! name: "Category" }
 
-    let(:post){ resource_klass.create! title: "Category", author: user }
+    let(:post) { resource_klass.create! title: "Category", author: user }
 
     let(:search) do
       resource_klass.ransack(title_equals: post.title)
