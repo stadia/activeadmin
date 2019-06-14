@@ -2,6 +2,18 @@
 
 ## Unreleased
 
+## 2.1.0 [☰](https://github.com/activeadmin/activeadmin/compare/v2.1.0..v2.0.0)
+
+### Bug Fixes
+
+* Ensure application gets reloaded only once. [#5740] by [@jscheid]
+* Crash when rendering comments from a custom controller block. [#5758] by [@deivid-rodriguez]
+* Switch `sass` dependency to `sassc-rails`, since `sass` is no longer supported and since it restores support for directly importing `css` files. [#5504] by [@deivid-rodriguez]
+
+### Removals
+
+* Support for ruby 2.3 has been removed. [#5751] by [@deivid-rodriguez]
+
 ## 2.0.0 [☰](https://github.com/activeadmin/activeadmin/compare/v2.0.0.rc2..v2.0.0)
 
 _No changes_.
@@ -12,19 +24,21 @@ _No changes_.
 
 #### Minor
 
-* Require arbre `~> 1.2, >= 1.2.1` [#5726] by [@ionut998], and [#5738] by [@deivid-rodriguez]
+* Require arbre `~> 1.2, >= 1.2.1`. [#5726] by [@ionut998], and [#5738] by [@deivid-rodriguez]
 
 ## 2.0.0.rc1 [☰](https://github.com/activeadmin/activeadmin/compare/v1.4.3..v2.0.0.rc1)
 
 ### Enhancements
 
-* Add your own content to the site `<head>`, like analytics [#5590] by [@buren]
+* Add your own content to the site `<head>`, like analytics. [#5590] by [@buren]
 
   ```ruby
   ActiveAdmin.setup do |config|
     config.head = ''.html_safe
   end
   ```
+
+* Consider authorization when displaying comments in show page. [#5555] by [@amiuhle]
 
 #### Minor
 
@@ -422,8 +436,10 @@ Please check [0-6-stable] for previous changes.
 [#5464]: https://github.com/activeadmin/activeadmin/pull/5464
 [#5486]: https://github.com/activeadmin/activeadmin/pull/5486
 [#5501]: https://github.com/activeadmin/activeadmin/pull/5501
+[#5504]: https://github.com/activeadmin/activeadmin/pull/5504
 [#5517]: https://github.com/activeadmin/activeadmin/pull/5517
 [#5537]: https://github.com/activeadmin/activeadmin/pull/5537
+[#5555]: https://github.com/activeadmin/activeadmin/pull/5555
 [#5583]: https://github.com/activeadmin/activeadmin/pull/5583
 [#5608]: https://github.com/activeadmin/activeadmin/pull/5608
 [#5611]: https://github.com/activeadmin/activeadmin/pull/5611
@@ -435,12 +451,16 @@ Please check [0-6-stable] for previous changes.
 [#5662]: https://github.com/activeadmin/activeadmin/pull/5662
 [#5726]: https://github.com/activeadmin/activeadmin/pull/5726
 [#5738]: https://github.com/activeadmin/activeadmin/pull/5738
+[#5740]: https://github.com/activeadmin/activeadmin/pull/5740
+[#5751]: https://github.com/activeadmin/activeadmin/pull/5751
+[#5758]: https://github.com/activeadmin/activeadmin/pull/5758
 
 [@5t111111]: https://github.com/5t111111
 [@aarek]: https://github.com/aarek
 [@ajw725]: https://github.com/ajw725
 [@alex-bogomolov]: https://github.com/alex-bogomolov
 [@amiel]: https://github.com/amiel
+[@amiuhle]: https://github.com/amiuhle
 [@andreslemik]: https://github.com/andreslemik
 [@blocknotes]: https://github.com/blocknotes
 [@bolshakov]: https://github.com/bolshakov
@@ -499,3 +519,4 @@ Please check [0-6-stable] for previous changes.
 [@chrp]: https://github.com/chrp
 [@bartoszkopinski]: https://github.com/bartoszkopinski
 [@panasyuk]: https://github.com/panasyuk
+[@jscheid]: https://github.com/jscheid
