@@ -22,7 +22,7 @@ module ActiveAdmin
       end
 
       def columns(*attrs)
-        attrs.each {|attr| column(attr) }
+        attrs.each { |attr| column(attr) }
       end
 
       def column(*args, &block)
@@ -147,7 +147,7 @@ module ActiveAdmin
           if @options.has_key?(:class)
             html_classes << @options.delete(:class)
           elsif @title.present?
-            html_classes << "col-#{ActiveAdmin::Dependency.rails.parameterize(@title.to_s)}"
+            html_classes << "col-#{@title.to_s.parameterize(separator: "_")}"
           end
           @html_class = html_classes.join(' ')
           @data = args[1] || args[0]
