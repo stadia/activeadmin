@@ -79,6 +79,9 @@ Style/FrozenStringLiteralComment:
 Style/HashSyntax:
   Enabled: true
 
+Style/ParallelAssignment:
+  Enabled: true
+
 Layout/IndentationConsistency:
   Enabled: true
 
@@ -109,6 +112,9 @@ Layout/SpaceAfterComma:
   Enabled: true
 
 Layout/SpaceAroundEqualsInParameterDefault:
+  Enabled: true
+
+Layout/SpaceAroundOperators:
   Enabled: true
 
 Layout/SpaceBeforeBlockBraces:

@@ -3,7 +3,8 @@ module ActiveAdmin
     module DisplayHelper
 
       DISPLAY_NAME_FALLBACK = -> {
-        name, klass = "", self.class
+        name = ""
+        klass = self.class
         name << klass.model_name.human         if klass.respond_to? :model_name
         name << " ##{send(klass.primary_key)}" if klass.respond_to? :primary_key
         name.present? ? name : to_s
@@ -15,7 +16,7 @@ module ActiveAdmin
       # Attempts to call any known display name methods on the resource.
       # See the setting in `application.rb` for the list of methods and their priority.
       def display_name(resource)
-        sanitize(render_in_context(resource, display_name_method_for(resource)).to_s) unless resource.nil?
+        ERB::Util.html_escape(render_in_context(resource, display_name_method_for(resource))) unless resource.nil?
       end
 
       # Looks up and caches the first available display name method.
