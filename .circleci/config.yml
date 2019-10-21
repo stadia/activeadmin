@@ -5,7 +5,7 @@ version: 2.1
 .install_rubygems: &install_rubygems
   run:
     name: Install a specific rubygems version
-    command: gem update --system 3.0.3
+    command: gem update --system 3.0.6
 
 .install_bundler: &install_bundler
   run:
@@ -30,12 +30,7 @@ version: 2.1
 .install_dependencies: &install_dependencies
   run:
     name: Install dependencies
-    command: bundle install --path /home/circleci/project/vendor/bundle --retry 3 --jobs 3 --verbose
-
-.install_chromedriver: &install_chromedriver
-  run:
-    name: Install chromedriver
-    command: bin/install_chromedriver.sh
+    command: bundle install --path /root/project/vendor/bundle --retry 3 --jobs 3
 
 .save_cache: &save_cache
   save_cache:
@@ -72,18 +67,18 @@ version: 2.1
     name: Upload coverage results to Code Climate
     command: |
       # The parts number should match the number of jobs under upload_coverage/requires
-      bin/test-reporter sum-coverage coverage/codeclimate.*.json --parts 20 --output coverage/codeclimate.total.json
+      bin/test-reporter sum-coverage coverage/codeclimate.*.json --parts 12 --output coverage/codeclimate.total.json
       bin/test-reporter upload-coverage --input coverage/codeclimate.total.json
 
 .save_test_app: &save_test_app
   persist_to_workspace:
-    root: tmp/rails
+    root: tmp/test_apps
     paths:
       - rails_*
 
 .restore_test_app_from_workspace: &restore_test_app_from_workspace
   attach_workspace:
-    at: tmp/rails
+    at: tmp/test_apps
 
 .restore_test_times: &restore_test_times
   restore_cache:
@@ -95,14 +90,14 @@ version: 2.1
   run:
     name: Run RSpec tests
     command: |
-      COVERAGE=true PARALLEL_TEST_PROCESSORS=4 bin/parallel_rspec spec/
+      COVERAGE=true PARALLEL_TEST_PROCESSORS=4 PARALLEL_TEST_HEARTBEAT_INTERVAL=3600 bin/parallel_rspec spec/
       COVERAGE=true RSPEC_FILESYSTEM_CHANGES=true bin/rspec
 
 .run_features: &run_features
   run:
     name: Run Cucumber features
     command: |
-      COVERAGE=true PARALLEL_TEST_PROCESSORS=4 bin/parallel_cucumber features/
+      COVERAGE=true PARALLEL_TEST_PROCESSORS=4 PARALLEL_TEST_HEARTBEAT_INTERVAL=3600 bin/parallel_cucumber features/
       COVERAGE=true bin/cucumber --profile filesystem-changes
       COVERAGE=true bin/cucumber --profile class-reloading
 
@@ -136,7 +131,6 @@ version: 2.1
   - *copy_current_gemfile
   - *restore_cache
   - *install_dependencies
-  - *install_chromedriver
   - *save_cache
   - *restore_test_app_from_workspace
   - *restore_test_times
@@ -164,7 +158,7 @@ version: 2.1
 jobs:
   setup_coverage:
     docker:
-      - image: circleci/ruby:2.6.3
+      - image: circleci/ruby:2.6.5
 
     steps:
       - run:
@@ -181,7 +175,7 @@ jobs:
 
   upload_coverage:
     docker:
-      - image: circleci/ruby:2.6.3
+      - image: circleci/ruby:2.6.5
         environment:
           CC_TEST_REPORTER_ID: 8d5fcf7abea6d56c625104a9d1a81140a588a7f546f4fa9de9bc6ffc8feaaf70
 
@@ -190,32 +184,21 @@ jobs:
       - *restore_coverage
       - *submit_coverage
 
-  testapp50:
-    docker:
-      - image: circleci/ruby:2.6.3-node
-        user: root
-
-    environment:
-      BUNDLE_GEMFILE: gemfiles/rails_50.gemfile
-
-    steps:
-      *test_app_steps
-
-  testapp51:
-    docker:
-      - image: circleci/ruby:2.6.3-node
-        user: root
-
-    environment:
-      BUNDLE_GEMFILE: gemfiles/rails_51.gemfile
-
-    steps:
-      *test_app_steps
-
   testapp52:
     docker:
-      - image: circleci/ruby:2.6.3-node
+      - image: circleci/ruby:2.6.5-node
         user: root
+
+    environment:
+      BUNDLE_GEMFILE: gemfiles/rails_52.gemfile
+
+    steps:
+      *test_app_steps
+
+  testapp60:
+    docker:
+    - image: circleci/ruby:2.6.5-node
+      user: root
 
     environment:
       BUNDLE_GEMFILE: Gemfile
@@ -223,20 +206,20 @@ jobs:
     steps:
       *test_app_steps
 
-  testapp60:
+  testapp60turbolinks:
     docker:
-    - image: circleci/ruby:2.6.3-node
+    - image: circleci/ruby:2.6.5-node
       user: root
 
     environment:
-      BUNDLE_GEMFILE: gemfiles/rails_60.gemfile
+      BUNDLE_GEMFILE: gemfiles/rails_60_turbolinks.gemfile
 
     steps:
       *test_app_steps
 
   lint_and_docs:
     docker:
-      - image: circleci/ruby:2.6.3-node
+      - image: circleci/ruby:2.6.5-node
         user: root
 
     environment:
@@ -257,158 +240,79 @@ jobs:
       - *format_coverage
       - *save_coverage
 
-  ruby24rails50:
-    docker:
-      - image: circleci/ruby:2.4.6-node-browsers
-        user: root
-
-    environment:
-      BUNDLE_GEMFILE: gemfiles/rails_50.gemfile
-
-    steps:
-      *test_steps
-
-  ruby24rails51:
-    docker:
-      - image: circleci/ruby:2.4.6-node-browsers
-        user: root
-
-    environment:
-      BUNDLE_GEMFILE: gemfiles/rails_51.gemfile
-
-    steps:
-      *test_steps
-
   ruby24rails52:
     docker:
-      - image: circleci/ruby:2.4.6-node-browsers
+      - image: circleci/ruby:2.4.8-node-browsers
         user: root
 
     environment:
-      BUNDLE_GEMFILE: Gemfile
-
-    steps:
-      *test_steps
-
-  ruby25rails50:
-    docker:
-      - image: circleci/ruby:2.5.5-node-browsers
-        user: root
-
-    environment:
-      BUNDLE_GEMFILE: gemfiles/rails_50.gemfile
-
-    steps:
-      *test_steps
-
-  ruby25rails51:
-    docker:
-      - image: circleci/ruby:2.5.5-node-browsers
-        user: root
-
-    environment:
-      BUNDLE_GEMFILE: gemfiles/rails_51.gemfile
+      BUNDLE_GEMFILE: gemfiles/rails_52.gemfile
 
     steps:
       *test_steps
 
   ruby25rails52:
     docker:
-      - image: circleci/ruby:2.5.5-node-browsers
+      - image: circleci/ruby:2.5.7-node-browsers
         user: root
 
     environment:
-      BUNDLE_GEMFILE: Gemfile
+      BUNDLE_GEMFILE: gemfiles/rails_52.gemfile
 
     steps:
       *test_steps
 
   ruby25rails60:
     docker:
-    - image: circleci/ruby:2.5.5-node-browsers
+    - image: circleci/ruby:2.5.7-node-browsers
       user: root
 
     environment:
-      BUNDLE_GEMFILE: gemfiles/rails_60.gemfile
-
-    steps:
-      *test_steps
-
-  ruby26rails50:
-    docker:
-      - image: circleci/ruby:2.6.3-node-browsers
-        user: root
-
-    environment:
-      BUNDLE_GEMFILE: gemfiles/rails_50.gemfile
-
-    steps:
-      *test_steps
-
-  ruby26rails51:
-    docker:
-      - image: circleci/ruby:2.6.3-node-browsers
-        user: root
-
-    environment:
-      BUNDLE_GEMFILE: gemfiles/rails_51.gemfile
+      BUNDLE_GEMFILE: Gemfile
 
     steps:
       *test_steps
 
   ruby26rails52:
     docker:
-      - image: circleci/ruby:2.6.3-node-browsers
+      - image: circleci/ruby:2.6.5-node-browsers
         user: root
 
     environment:
-      BUNDLE_GEMFILE: Gemfile
+      BUNDLE_GEMFILE: gemfiles/rails_52.gemfile
 
     steps:
       *test_steps
 
   ruby26rails60:
     docker:
-    - image: circleci/ruby:2.6.3-node-browsers
+    - image: circleci/ruby:2.6.5-node-browsers
       user: root
 
     environment:
-      BUNDLE_GEMFILE: gemfiles/rails_60.gemfile
+      BUNDLE_GEMFILE: Gemfile
 
     steps:
       *test_steps
 
-  jruby92rails50:
+  ruby26rails60turbolinks:
     docker:
-      - image: circleci/jruby:9.2.7.0-node-browsers
-        user: root
+    - image: circleci/ruby:2.6.5-node-browsers
+      user: root
 
     environment:
-      BUNDLE_GEMFILE: gemfiles/rails_50.gemfile
-      JRUBY_OPTS: -J-Xmx1024m --dev --debug
-
-    steps:
-      *test_steps
-
-  jruby92rails51:
-    docker:
-      - image: circleci/jruby:9.2.7.0-node-browsers
-        user: root
-
-    environment:
-      BUNDLE_GEMFILE: gemfiles/rails_51.gemfile
-      JRUBY_OPTS: -J-Xmx1024m --dev --debug
+      BUNDLE_GEMFILE: gemfiles/rails_60_turbolinks.gemfile
 
     steps:
       *test_steps
 
   jruby92rails52:
     docker:
-      - image: circleci/jruby:9.2.7.0-node-browsers
+      - image: circleci/jruby:9.2.8.0-node-browsers
         user: root
 
     environment:
-      BUNDLE_GEMFILE: Gemfile
+      BUNDLE_GEMFILE: gemfiles/rails_52.gemfile
       JRUBY_OPTS: -J-Xmx1024m --dev --debug
 
     steps:
@@ -416,11 +320,11 @@ jobs:
 
   jruby92rails60:
     docker:
-    - image: circleci/jruby:9.2.7.0-node-browsers
+    - image: circleci/jruby:9.2.8.0-node-browsers
       user: root
 
     environment:
-      BUNDLE_GEMFILE: gemfiles/rails_60.gemfile
+      BUNDLE_GEMFILE: Gemfile
       JRUBY_OPTS: -J-Xmx1024m --dev --debug
 
     steps:
@@ -446,14 +350,6 @@ workflows:
           requires:
             - setup_coverage
 
-      - testapp50:
-          requires:
-            - setup_coverage
-
-      - testapp51:
-          requires:
-            - setup_coverage
-
       - testapp52:
           requires:
             - setup_coverage
@@ -462,25 +358,13 @@ workflows:
           requires:
             - setup_coverage
 
-      - ruby24rails50:
+      - testapp60turbolinks:
           requires:
-            - testapp50
-
-      - ruby24rails51:
-          requires:
-            - testapp51
+            - setup_coverage
 
       - ruby24rails52:
           requires:
             - testapp52
-
-      - ruby25rails50:
-          requires:
-            - testapp50
-
-      - ruby25rails51:
-          requires:
-            - testapp51
 
       - ruby25rails52:
           requires:
@@ -490,14 +374,6 @@ workflows:
           requires:
             - testapp60
 
-      - ruby26rails50:
-          requires:
-            - testapp50
-
-      - ruby26rails51:
-          requires:
-            - testapp51
-
       - ruby26rails52:
           requires:
             - testapp52
@@ -506,13 +382,9 @@ workflows:
           requires:
             - testapp60
 
-      - jruby92rails50:
+      - ruby26rails60turbolinks:
           requires:
-            - testapp50
-
-      - jruby92rails51:
-          requires:
-            - testapp51
+            - testapp60turbolinks
 
       - jruby92rails52:
           requires:
@@ -526,26 +398,18 @@ workflows:
           requires:
             - lint_and_docs
 
-            - testapp50
-            - testapp51
             - testapp52
             - testapp60
+            - testapp60turbolinks
 
-            - ruby24rails50
-            - ruby24rails51
             - ruby24rails52
 
-            - ruby25rails50
-            - ruby25rails51
             - ruby25rails52
             - ruby25rails60
 
-            - ruby26rails50
-            - ruby26rails51
             - ruby26rails52
             - ruby26rails60
+            - ruby26rails60turbolinks
 
-            - jruby92rails50
-            - jruby92rails51
             - jruby92rails52
             - jruby92rails60

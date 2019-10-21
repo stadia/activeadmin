@@ -169,6 +169,30 @@ RSpec.describe ActiveAdmin::Filters::ActiveFilter do
       expect(subject.label).to eq("#{label.call} equals")
 >>>>>>> cbce3550d41e745fbf3c9160b34b5848712f48cc
     end
+
+    context 'when filter condition has a predicate' do
+      let(:search) do
+        Post.ransack(title_cont: "Hello")
+      end
+
+      it 'should use the filter label as the label prefix' do
+        label = "#{user.first_name}'s Post"
+        resource.add_filter(:title_cont, label: label)
+        expect(subject.label).to eq("#{label} contains")
+      end
+    end
+
+    context 'when filter condition has multiple fields' do
+      let(:search) do
+        Post.ransack(title_or_body_cont: "Hello World")
+      end
+
+      it 'should use the filter label as the label prefix' do
+        label = "#{user.first_name}'s Post"
+        resource.add_filter(:title_or_body_cont, label: label)
+        expect(subject.label).to eq("#{label} contains")
+      end
+    end
   end
 
   context "the association uses a different primary_key than the related class' primary_key" do
