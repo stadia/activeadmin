@@ -144,7 +144,7 @@ RSpec.describe ActiveAdmin::CSVBuilder do
     end
 
     it "should have proper separator" do
-      expect(builder.options).to eq({ col_sep: ";" })
+      expect(builder.options).to include(col_sep: ";")
     end
   end
 
@@ -174,7 +174,7 @@ RSpec.describe ActiveAdmin::CSVBuilder do
     end
 
     it "should have proper separator" do
-      expect(builder.options).to eq({ force_quotes: true })
+      expect(builder.options).to include(force_quotes: true)
     end
   end
 
@@ -303,13 +303,5 @@ RSpec.describe ActiveAdmin::CSVBuilder do
         expect(line).to include("__REPLACED__")
       end
     end
-  end
-
-  skip '#exec_columns'
-
-  describe '#build_row' do
-    xit 'renders non-strings'
-    xit 'encodes values correctly'
-    xit 'passes custom encoding options to String#encode!'
   end
 end

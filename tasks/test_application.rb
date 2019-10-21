@@ -9,6 +9,14 @@ module ActiveAdmin
       @template = opts[:template] || 'rails_template'
     end
 
+    def soft_generate
+      if File.exist? app_dir
+        puts "test app #{app_dir} already exists; skipping test app generation"
+      else
+        generate
+      end
+    end
+
     def generate
       FileUtils.mkdir_p base_dir
       args = %W(
@@ -23,6 +31,8 @@ module ActiveAdmin
         --skip-coffee
         --skip-webpack-install
       )
+
+      args << "--skip-turbolinks" unless turbolinks_app?
 
       command = ['bundle', 'exec', 'rails', 'new', app_dir, *args].join(' ')
 
@@ -48,17 +58,21 @@ module ActiveAdmin
     private
 
     def base_dir
-      @base_dir ||= rails_env == 'test' ? 'tmp/rails' : '.test-rails-apps'
+      @base_dir ||= "tmp/#{rails_env}_apps"
     end
 
     def app_name
-      return "rails_52" if main_app?
+      return "rails_60" if main_app?
 
       File.basename(gemfile, ".gemfile")
     end
 
     def main_app?
       expanded_gemfile == File.expand_path('Gemfile')
+    end
+
+    def turbolinks_app?
+      expanded_gemfile == File.expand_path('gemfiles/rails_60_turbolinks.gemfile')
     end
 
     def gemfile
