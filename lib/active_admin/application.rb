@@ -79,7 +79,7 @@ module ActiveAdmin
     def namespace(name)
       name ||= :root
 
-      namespace = namespaces[name] ||= begin
+      namespace = namespaces[name.to_sym] ||= begin
         namespace = Namespace.new(self, name)
         ActiveSupport::Notifications.publish ActiveAdmin::Namespace::RegisterEvent, namespace
         namespace

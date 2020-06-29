@@ -32,7 +32,7 @@ module ActiveAdmin
             end
 
             active_admin_namespace.meta_tags.each do |name, content|
-              text_node(tag(:meta, name: name, content: content))
+              text_node(meta(name: name, content: content))
             end
 
             active_admin_application.javascripts.each do |path|
@@ -84,8 +84,10 @@ module ActiveAdmin
 
         def build_flash_messages
           div class: 'flashes' do
-            flash_messages.each do |type, message|
-              div message, class: "flash flash_#{type}"
+            flash_messages.each do |type, messages|
+              [*messages].each do |message|
+                div message, class: "flash flash_#{type}"
+              end
             end
           end
         end

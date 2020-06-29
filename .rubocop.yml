@@ -15,11 +15,12 @@ AllCops:
   Exclude:
     - tmp/development_apps/**/*
     - tmp/test_apps/**/*
-    - gemfiles/vendor/bundle/**/*
+    - gemfiles/rails_52/vendor/bundle/**/*
+    - gemfiles/rails_60_turbolinks/vendor/bundle/**/*
     - vendor/bundle/**/*
 
   Include:
-    - gemfiles/*.gemfile
+    - gemfiles/*/Gemfile
     - .simplecov
 
   DisplayCopNames: true
@@ -91,18 +92,18 @@ Layout/IndentationWidth:
 Naming/PredicateName:
   Enabled: true
 
-  NamePrefixBlacklist:
+  ForbiddenPrefixes:
     - is_
     - have_
 
-  NameWhitelist:
+  AllowedMethods:
     - has_many
     - has_many_actions
 
 Style/TrailingCommaInArguments:
   Enabled: true
 
-Layout/TrailingBlankLines:
+Layout/TrailingEmptyLines:
   Enabled: true
 
 Layout/TrailingWhitespace:

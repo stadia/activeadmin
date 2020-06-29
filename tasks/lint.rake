@@ -26,7 +26,7 @@ module LinterMixin
   private
 
   def applicable_files
-    Open3.capture2("git grep -Il ''")[0].split.reject { |file| file =~ %r{vendor/} }
+    Open3.capture2("git grep -Il ''")[0].split.reject { |file| file =~ %r{vendor/|app/assets/javascripts/active_admin/base.js} }
   end
 
   def failure_message_for(offenses)
@@ -88,8 +88,25 @@ class FixmeLinter
   end
 end
 
+#
+# Checks sass-rails directives
+#
+class SassRailsLinter
+  include LinterMixin
+
+  def applicable_files
+    Dir["app/assets/stylesheets/**/*.scss"]
+  end
+
+  def clean?(file)
+    relative_path = Pathname.new(__FILE__).relative_path_from(Pathname.new(File.dirname(__dir__))).to_s
+
+    file == relative_path || File.read(file, encoding: Encoding::UTF_8) !~ /(asset-url|asset-path|image-url|image-path|asset-data-url)/
+  end
+end
+
 desc "Lints ActiveAdmin code base"
-task lint: ["lint:rubocop", "lint:mdl", "lint:gherkin_lint", "lint:trailing_blank_lines", "lint:missing_final_new_line", "lint:trailing_whitespace", "lint:fixme", "lint:rspec"]
+task lint: ["lint:rubocop", "lint:mdl", "lint:gherkin", "lint:trailing_blank_lines", "lint:missing_final_new_line", "lint:trailing_whitespace", "lint:fixme", "lint:sass_rails", "lint:rspec"]
 
 namespace :lint do
   require "rubocop/rake_task"
@@ -103,11 +120,12 @@ namespace :lint do
     sh("mdl", "--git-recurse", ".")
   end
 
-  desc "Checks gherkin code style with gherkin-lint"
-  task :gherkin_lint do
-    puts "Running gherkin-lint..."
+  desc "Checks gherkin code style"
+  task :gherkin do
+    puts "Linting gherkin code..."
 
-    sh("npx", "gherkin-lint")
+    sh("bin/yarn", "install")
+    sh("bin/yarn", "gherkin-lint")
   end
 
   desc "Check for unnecessary trailing blank lines across all repo files"
@@ -136,6 +154,13 @@ namespace :lint do
     puts "Checking for FIXME strings..."
 
     FixmeLinter.new.run
+  end
+
+  desc "Check for sass-rails directives to ensure webpacker compatibility"
+  task :sass_rails do
+    puts "Checking for sass-rails directives..."
+
+    SassRailsLinter.new.run
   end
 
   desc "RSpec specs for linting project files"

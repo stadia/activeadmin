@@ -2,12 +2,49 @@
 
 ## Unreleased
 
+### Enhancements
+
+* Extend menu to allow for nested submenus. [#5994] by [@taralbass]
+
+## 2.6.1 [☰](https://github.com/activeadmin/activeadmin/compare/v2.6.0..v2.6.1)
+
 ### Bug Fixes
 
+* Fix some ruby 2.7 warnings about keyword args. [#6000] by [@vcsjones]
+* Missing `create_another` translation in Vietnamese. [#6002] by [@imcvampire]
+* Using "destroy" for user facing message is too robotic, prefer "delete". [#6047] by [@vfonic]
+* Typo in confirmation message for comment deletion. [#6047] by [@vfonic]
+
+## 2.6.0 [☰](https://github.com/activeadmin/activeadmin/compare/v2.5.0..v2.6.0)
+
+### Enhacements
+
+* Display multiple flash messages in separate elements. [#5929] by [@mirelon]
+* Make delete confirmation messages in French & Spanish gender-neutral. [#5946] by [@cprodhomme]
+
+### Bug Fixes
+
+* Export ModalDialog component to re-enable client side usage. [#5956] by [@sgara]
+* Use default ActionView options instead of default Formtastic options for DateRangeInput [#5957] by [@mirelon]
+* Fix i18n key in docs example to translate scopes. [#5943] by [@adler99]
+
+## 2.5.0 [☰](https://github.com/activeadmin/activeadmin/compare/v2.4.0..v2.5.0)
+
+### Enhancements
+
+* Azerbaijani translation. [#5078] by [@orkhan]
+
+### Bug Fixes
+
+* Convert namespace to sym to prevent duplicate namespaces such as :foo and 'foo'. [#5931] by [@westonganger]
 * Use filter label when condition has a predicate. [#5886] by [@ko-lem]
 * Fix error when routing with array containing symbol. [#5870] by [@jwesorick]
+* Fix error when there is a model named `Tag` and `meta_tags` have been configured. [#5895] by [@micred], [@FabioRos] and [@deivid-rodriguez]
+* Allow specifying custom `input_html` for `DateRangeInput`. [#5867] by [@mirelon]
+* Adjust `#main_content` right margin to take into account possible custom values of `$sidebar-width` and `$section-padding`. [#5887] by [@guigs]
+* Improved polymorphic routes generation to avoid problems when multiple `belongs_to` are defined. [#5938] by [@leio10]
 
-### Removals
+### Dependency Changes
 
 * Support for Rails 5.0 and Rails 5.1 has been dropped. [#5877] by [@deivid-rodriguez]
 
@@ -16,8 +53,8 @@
 ### Enhancements
 
 * Make optimization to not use expensive COUNT queries also work for decorated actions. [#5811] by [@irmela]
-* Render a text filter instead of a select for large associations (opt-in) [#5548] by [@DanielHeath]
-* Improve German translations [#5874] by [@juril33t]
+* Render a text filter instead of a select for large associations (opt-in). [#5548] by [@DanielHeath]
+* Improve German translations. [#5874] by [@juril33t]
 
 ## 2.3.1 [☰](https://github.com/activeadmin/activeadmin/compare/v2.3.0..v2.3.1)
 
@@ -28,8 +65,6 @@
 ## 2.3.0 [☰](https://github.com/activeadmin/activeadmin/compare/v2.2.0..v2.3.0)
 
 ### Enhancements
-
-#### Minor
 
 * Bump minimum ransack requirement to make sure everyone gets a version that works ok with all supported versions of Rails. [#5831] by [@deivid-rodriguez]
 
@@ -45,14 +80,12 @@
 
 ### Enhancements
 
-#### Minor
-
 * The `status_tag` component now supports different labels for `false` and `nil` boolean cases through the locale. Both default to display "No" for backwards compatibility. [#5794] by [@javierjulio]
 * Add Macedonian locale. [#5710] by [@violeta-p]
 
 ### Bug Fixes
 
-* Fix pundit policy retrieving for static pages when the pundit namespace is :active_admin. [#5777] by [@kwent]
+* Fix pundit policy retrieving for static pages when the pundit namespace is `:active_admin`. [#5777] by [@kwent]
 * Fix show page title not being properly escaped if title's content included HTML. [#5802] by [@deivid-rodriguez]
 * Revert [21b6138f] from [#5740] since it actually caused the performance in development to regress. [#5801] by [@deivid-rodriguez]
 
@@ -64,7 +97,7 @@
 * Crash when rendering comments from a custom controller block. [#5758] by [@deivid-rodriguez]
 * Switch `sass` dependency to `sassc-rails`, since `sass` is no longer supported and since it restores support for directly importing `css` files. [#5504] by [@deivid-rodriguez]
 
-### Removals
+### Dependency Changes
 
 * Support for ruby 2.3 has been removed. [#5751] by [@deivid-rodriguez]
 
@@ -75,8 +108,6 @@ _No changes_.
 ## 2.0.0.rc2 [☰](https://github.com/activeadmin/activeadmin/compare/v2.0.0.rc1..v2.0.0.rc2)
 
 ### Enhancements
-
-#### Minor
 
 * Require arbre `~> 1.2, >= 1.2.1`. [#5726] by [@ionut998], and [#5738] by [@deivid-rodriguez]
 
@@ -93,9 +124,6 @@ _No changes_.
   ```
 
 * Consider authorization when displaying comments in show page. [#5555] by [@amiuhle]
-
-#### Minor
-
 * Add better support for rendering lists. [#5370] by [@dkniffin]
 * Undeprecate `config.register_stylesheet` and `config.register_javascript` for lack of better solution for including external assets. It might be reevaluated in the future. [#5662] by [@deivid-rodriguez]
 
@@ -112,7 +140,7 @@ _No changes_.
 * Sidebar title internationalization. [#5417] by [@WaKeMaTTa]
 * `filter` labels not allowing a `Proc` to be passed. [#5418] by [@WaKeMaTTa]
 
-### Removals
+### Dependency Changes
 
 * Rails 4.2 support has been dropped. [#5104] by [@javierjulio] and [@deivid-rodriguez]
 * Dependency on coffee-rails has been removed. [#5081] by [@javierjulio]
@@ -147,8 +175,6 @@ _No changes_.
 ## 1.4.0 [☰](https://github.com/activeadmin/activeadmin/compare/v1.3.1..v1.4.0)
 
 ### Enhancements
-
-#### Minor
 
 * Add missing I18n for comments. [#5458], [#5461] by [@mauriciopasquier]
 * Fix batch_actions.delete_confirmation translation in zh-CN.yml. [#5453] by [@ShallmentMo]
@@ -187,8 +213,6 @@ _No changes_.
 
 ### Enhancements
 
-#### Major
-
 * Rails 5.2 support [#5343] by [@varyonic], [#5399], [#5401] by [@zorab47]
 
 ## 1.2.1 [☰](https://github.com/activeadmin/activeadmin/compare/v1.2.0..v1.2.1)
@@ -200,8 +224,6 @@ _No changes_.
 ## 1.2.0 [☰](https://github.com/activeadmin/activeadmin/compare/v1.1.0..v1.2.0)
 
 ### Enhancements
-
-#### Minor
 
 * Do not display pagination info when there are no comments. [#5119] by [@alex-bogomolov]
 * Revert generated config files to pluralized. [#5120] by [@varyonic], [#5137] by [@deivid-rodriguez]
@@ -233,7 +255,7 @@ _No changes_.
 * Fixed [#5043]. Do not crash in sidebar rendering when a default scope is not specified. [#5044] by [@Fivell]
 * Fixed [#3894]. Make tab's component work with non-ascii titles. [#5046] by [@Fivell]
 
-### Removals
+### Dependency Changes
 
 * Ruby 2.1 support has been dropped. [#5003] by [@deivid-rodriguez]
 * Replaced `sass-rails` with `sass` dependency. [#5037] by [@javierjulio]
@@ -271,8 +293,6 @@ _No changes_.
 
 ### Enhancements
 
-#### Minor
-
 * Support proc as an input_html option value when declaring filters. [#5029] by [@Fivell]
 * Base localization support, better associations handling for active filters sidebar. [#4951] by [@Fivell]
 * Allow AA scopes to return paginated collections. [#4996] by [@Fivell]
@@ -296,16 +316,11 @@ _No changes_.
 
 ### Enhancements
 
-#### Major
-
 * Migration from Metasearch to Ransack. [#1979] by [@seanlinsley]
 * Rails 4 support. [#2326] by many people :heart:
 * Rails 4.2 support. [#3731] by [@gonzedge] and [@timoschilling]
 * Rails 5 support. [#4254] by [@seanlinsley]
 * Rails 5.1 support. [#4882] by [@varyonic]
-
-#### Minor
-
 * "Create another" checkbox for the new resource page. [#4477] by [@bolshakov]
 * Page supports belongs_to. [#4759] by [@Fivell] and [@zorab47]
 * Support for custom sorting strategies. [#4768] by [@Fivell]
@@ -436,6 +451,7 @@ Please check [0-6-stable] for previous changes.
 [#5052]: https://github.com/activeadmin/activeadmin/pull/5052
 [#5060]: https://github.com/activeadmin/activeadmin/pull/5060
 [#5069]: https://github.com/activeadmin/activeadmin/pull/5069
+[#5078]: https://github.com/activeadmin/activeadmin/pull/5078
 [#5081]: https://github.com/activeadmin/activeadmin/pull/5081
 [#5088]: https://github.com/activeadmin/activeadmin/pull/5088
 [#5093]: https://github.com/activeadmin/activeadmin/pull/5093
@@ -528,9 +544,25 @@ Please check [0-6-stable] for previous changes.
 [#5877]: https://github.com/activeadmin/activeadmin/pull/5877
 [#5886]: https://github.com/activeadmin/activeadmin/pull/5886
 [#5870]: https://github.com/activeadmin/activeadmin/pull/5870
+[#5894]: https://github.com/activeadmin/activeadmin/pull/5894
+[#5895]: https://github.com/activeadmin/activeadmin/pull/5895
+[#5867]: https://github.com/activeadmin/activeadmin/pull/5867
+[#5887]: https://github.com/activeadmin/activeadmin/pull/5887
+[#5931]: https://github.com/activeadmin/activeadmin/pull/5931
+[#5938]: https://github.com/activeadmin/activeadmin/pull/5938
+[#5929]: https://github.com/activeadmin/activeadmin/pull/5929
+[#5943]: https://github.com/activeadmin/activeadmin/pull/5943
+[#5946]: https://github.com/activeadmin/activeadmin/pull/5946
+[#5956]: https://github.com/activeadmin/activeadmin/pull/5956
+[#5957]: https://github.com/activeadmin/activeadmin/pull/5957
+[#6000]: https://github.com/activeadmin/activeadmin/pull/6000
+[#6002]: https://github.com/activeadmin/activeadmin/pull/6002
+[#6047]: https://github.com/activeadmin/activeadmin/pull/6047
+[#5994]: https://github.com/activeadmin/activeadmin/pull/5994
 
 [@5t111111]: https://github.com/5t111111
 [@aarek]: https://github.com/aarek
+[@adler99]: https://github.com/adler99
 [@ajw725]: https://github.com/ajw725
 [@alex-bogomolov]: https://github.com/alex-bogomolov
 [@amiel]: https://github.com/amiel
@@ -543,6 +575,7 @@ Please check [0-6-stable] for previous changes.
 [@chancancode]: https://github.com/chancancode
 [@chrp]: https://github.com/chrp
 [@chumakoff]: https://github.com/chumakoff
+[@cprodhomme]: https://github.com/cprodhomme
 [@craigmcnamara]: https://github.com/craigmcnamara
 [@DanielHeath]: https://github.com/DanielHeath
 [@deivid-rodriguez]: https://github.com/deivid-rodriguez
@@ -553,11 +586,14 @@ Please check [0-6-stable] for previous changes.
 [@drn]: https://github.com/drn
 [@eikes]: https://github.com/eikes
 [@f1sherman]: https://github.com/f1sherman
+[@FabioRos]: https://github.com/FabioRos
 [@faucct]: https://github.com/faucct
 [@Fivell]: https://github.com/Fivell
 [@glebtv]: https://github.com/glebtv
 [@gonzedge]: https://github.com/gonzedge
+[@guigs]: https://github.com/guigs
 [@HappyKadaver]: https://github.com/HappyKadaver
+[@imcvampire]: https://github.com/imcvampire
 [@innparusu95]: https://github.com/innparusu95
 [@ionut998]: https://github.com/ionut998
 [@irmela]: https://github.com/irmela
@@ -578,8 +614,11 @@ Please check [0-6-stable] for previous changes.
 [@markstory]: https://github.com/markstory
 [@mauriciopasquier]: https://github.com/mauriciopasquier
 [@mconiglio]: https://github.com/mconiglio
+[@micred]: https://github.com/micred
+[@mirelon]: https://github.com/mirelon
 [@ndbroadbent]: https://github.com/ndbroadbent
 [@Nguyenanh]: https://github.com/Nguyenanh
+[@orkhan]: https://github.com/orkhan
 [@panasyuk]: https://github.com/panasyuk
 [@PChambino]: https://github.com/PChambino
 [@potatosalad]: https://github.com/potatosalad
@@ -594,13 +633,17 @@ Please check [0-6-stable] for previous changes.
 [@shouya]: https://github.com/shouya
 [@stefsava]: https://github.com/stefsava
 [@stereoscott]: https://github.com/stereoscott
+[@taralbass]: https://github.com/taralbass
 [@tiagotex]: https://github.com/tiagotex
 [@timoschilling]: https://github.com/timoschilling
 [@TimPetricola]: https://github.com/TimPetricola
 [@varyonic]: https://github.com/varyonic
+[@vcsjones]: https://github.com/vcsjones
+[@vfonic]: https://github.com/vfonic
 [@violeta-p]: https://github.com/violeta-p
 [@WaKeMaTTa]: https://github.com/WaKeMaTTa
 [@wasifhossain]: https://github.com/wasifhossain
+[@westonganger]: https://github.com/westonganger
 [@Wowu]: https://github.com/Wowu
 [@wspurgin]: https://github.com/wspurgin
 [@zorab47]: https://github.com/zorab47
