@@ -44,7 +44,7 @@ module ActiveAdmin
           end
 
           def input_html
-            input_html_options[:class] = input_html_options[:class].nil? ? 'form-control' : "#{input_html_options[:class]} form-control"
+            input_html_options[:class] = input_html_options[:class].blank? ? 'form-control' : "#{input_html_options[:class]} form-control"
             builder.text_field current_filter, input_html_options
           end
 
