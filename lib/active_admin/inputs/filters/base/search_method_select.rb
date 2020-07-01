@@ -37,14 +37,14 @@ module ActiveAdmin
 
           def to_html
             input_wrapping do
-              label_html  << # your label
+              label_html << # your label
               select_html << # the dropdown that holds the available search methods
-              input_html     # your input field
+              input_html # your input field
             end
           end
 
           def input_html
-            (input_html_options[:class] ||= '') << ' form-control'
+            input_html_options[:class] = input_html_options[:class].nil? ? 'form-control' : "#{input_html_options[:class]} form-control"
             builder.text_field current_filter, input_html_options
           end
 
