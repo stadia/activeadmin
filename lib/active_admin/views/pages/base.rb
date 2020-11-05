@@ -53,9 +53,11 @@ module ActiveAdmin
             div id: "wrapper" do
               build_unsupported_browser
               header active_admin_namespace, current_menu
-              title_bar title, action_items_for_action
-              build_page_content
-              footer active_admin_namespace
+              div id: "page-wrapper", class: "container-fluid" do
+                title_bar title, action_items_for_action
+                build_page_content
+              end
+              # footer active_admin_namespace
             end
           end
         end
@@ -77,9 +79,9 @@ module ActiveAdmin
 
         def build_page_content
           build_flash_messages
-          div id: "active_admin_content", class: (skip_sidebar? ? "without_sidebar" : "with_sidebar") do
+          div id: "active_admin_content", class: (skip_sidebar? ? "without_sidebar row" : "with_sidebar row") do
             build_main_content_wrapper
-            sidebar sidebar_sections_for_action, id: 'sidebar' unless skip_sidebar?
+            sidebar sidebar_sections_for_action, id: 'sidebar', class: 'col-lg-2' unless skip_sidebar?
           end
         end
 
@@ -100,7 +102,7 @@ module ActiveAdmin
 
         def build_main_content_wrapper
           div id: "main_content_wrapper" do
-            div id: "main_content" do
+            div id: "main_content", class: (skip_sidebar? ? 'col-lg-12' : 'col-lg-10') do
               main_content
             end
           end
