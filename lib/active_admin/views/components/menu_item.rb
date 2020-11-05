@@ -18,7 +18,7 @@ module ActiveAdmin
         add_class "current" if item.current? assigns[:current_tab]
 
         if url
-          text_node link_to label, url, item.html_options
+          text_node link_to label, url, **item.html_options
         else
           span label, item.html_options
         end
@@ -30,7 +30,7 @@ module ActiveAdmin
       end
 
       def tag_name
-        'li'
+        "li"
       end
 
       # Sorts by priority first, then alphabetically by label if needed.
@@ -44,14 +44,14 @@ module ActiveAdmin
       end
 
       def to_s
-        visible? ? super : ''
+        visible? ? super : ""
       end
 
       private
 
       # URL is not nil, empty, or '#'
       def real_url?
-        url && url.present? && url != '#'
+        url && url.present? && url != "#"
       end
     end
   end

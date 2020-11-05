@@ -1,4 +1,4 @@
-require 'uri'
+require "uri"
 require File.expand_path(File.join(__dir__, "..", "support", "paths"))
 
 module WithinHelpers
@@ -78,17 +78,25 @@ When /^I (check|uncheck) "([^"]*)"$/ do |action, field|
 end
 
 Then /^I should( not)? see( the element)? "([^"]*)"$/ do |negate, is_css, text|
-  should = negate ? :not_to        : :to
-  have   = is_css ? have_css(text) : have_content(text)
+  should = negate ? :not_to : :to
+  have = is_css ? have_css(text) : have_content(text)
   expect(page).send should, have
 end
 
-Then /^the "([^"]*)" field(?: within (.*))? should( not)? contain "([^"]*)"$/ do |field, parent, negate, value|
+Then /^I should see the select "([^"]*)" with options "([^"]+)"?$/ do |label, with_options|
+  expect(page).to have_select(label, with_options: with_options.split(", "))
+end
+
+Then /^I should see the field "([^"]*)" of type "([^"]+)"?$/ do |label, of_type|
+  expect(page).to have_field(label, type: of_type)
+end
+
+Then /^the "([^"]*)" field(?: within (.*))? should contain "([^"]*)"$/ do |field, parent, value|
   with_scope(parent) do
     field = find_field(field)
-    value = field.tag_name == 'textarea' ? field.text : field.value
+    value = field.tag_name == "textarea" ? field.text : field.value
 
-    expect(value).send negate ? :not_to : :to, match(/#{value}/)
+    expect(value).to match(/#{value}/)
   end
 end
 

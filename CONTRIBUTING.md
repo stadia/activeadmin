@@ -115,22 +115,6 @@ checks as the rest of the project. `bin/rake lint` will give you feedback in
 this regard. You can check & fix style issues by running each linter
 individually. Run `bin/rake -T lint` to see the available linters.
 
-### Add a changelog entry
-
-If your PR includes user-observable changes, you'll be asked to add a changelog
-entry following the existing changelog format.
-
-The changelog format is the following:
-
-* One line per PR describing your fix or enhancement.
-* Entries end with a dot, followed by "[#pr-number] by [@github-username]".
-* Entries are added under the "Unreleased" section at the top of the file, under
-  the "Bug Fixes" or "Enhancements" subsection.
-* References to github usernames and pull requests use [shortcut reference
-  links].
-* Your github username reference definition is included in the correct
-  alphabetical position at the bottom of the file.
-
 ### Make a Pull Request
 
 At this point, you should switch back to your master branch and make sure it's
@@ -190,12 +174,12 @@ met.
 
 Maintainers need to do the following to push out a release:
 
-* Make sure all pull requests are in and that changelog is current
 * Switch to the master branch and make sure it's up to date.
 * Make sure you have [chandler] properly configured. Chandler is used to
   automatically submit github release notes from the changelog right after
   pushing the gem to rubygems.
 * Run one of `bin/rake release:prepare_{prerelease,prepatch,patch,preminor,minor,premajor,major}`, push the result and create a PR.
+* Review and merge the PR. The generated changelog in the PR should include all user visible changes you intend to ship.
 * Run `bin/rake release` from the target branch once the PR is merged.
 
 [chandler]: https://github.com/mattbrictson/chandler#2-configure-credentials
@@ -204,7 +188,7 @@ Maintainers need to do the following to push out a release:
 [fork Active Admin]: https://help.github.com/articles/fork-a-repo
 [make a pull request]: https://help.github.com/articles/creating-a-pull-request
 [git rebasing]: http://git-scm.com/book/en/Git-Branching-Rebasing
-[interactive rebase]: https://help.github.com/articles/interactive-rebase
+[interactive rebase]: https://help.github.com/en/github/using-git/about-git-rebase
 [shortcut reference links]: https://github.github.com/gfm/#shortcut-reference-link
 [Rollup]: https://rollupjs.org/guide/en/#quick-start
 [Yarn]: https://yarnpkg.com/en/docs/install

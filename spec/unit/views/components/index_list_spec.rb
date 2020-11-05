@@ -1,13 +1,13 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe ActiveAdmin::Views::IndexList do
   describe "#index_list_renderer" do
     let(:index_classes) { [ActiveAdmin::Views::IndexAsTable, ActiveAdmin::Views::IndexAsBlock] }
 
-    let(:collection) {
-      Post.create(title: 'First Post', starred: true)
+    let(:collection) do
+      Post.create(title: "First Post", starred: true)
       Post.where(nil)
-    }
+    end
 
     let(:helpers) do
       helpers = mock_action_view
@@ -24,9 +24,9 @@ RSpec.describe ActiveAdmin::Views::IndexList do
       end
     end
 
-    describe '#tag_name' do
+    describe "#tag_name" do
       subject { super().tag_name }
-      it { is_expected.to eq 'ul' }
+      it { is_expected.to eq "ul" }
     end
 
     it "should contain the names of available indexes in links" do

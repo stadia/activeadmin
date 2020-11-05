@@ -10,8 +10,8 @@ module ActiveAdmin
       end
 
       def build(&block)
-        @menu = ul(class: 'nav nav-tabs', role: "tablist")
-        @tabs_content = div(class: 'tab-content')
+        @menu = ul(class: "nav nav-tabs", role: "tablist")
+        @tabs_content = div(class: "tab-content")
       end
 
       def build_menu_item(title, options, &block)
@@ -32,7 +32,7 @@ module ActiveAdmin
 
       def fragmentize(string)
         result = string.parameterize
-        result = URI.encode(string) if result.blank?
+        result = CGI.escape(string) if result.blank?
         result
       end
     end

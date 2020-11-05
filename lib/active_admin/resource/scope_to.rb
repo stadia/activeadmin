@@ -38,10 +38,10 @@ module ActiveAdmin
         options = args.extract_options!
         method = args.first
 
-        scope_to_config[:method]              = block || method
-        scope_to_config[:association_method]  = options[:association_method]
-        scope_to_config[:if]                  = options[:if]
-        scope_to_config[:unless]              = options[:unless]
+        scope_to_config[:method] = block || method
+        scope_to_config[:association_method] = options[:association_method]
+        scope_to_config[:if] = options[:if]
+        scope_to_config[:unless] = options[:unless]
 
       end
 
@@ -55,10 +55,10 @@ module ActiveAdmin
 
       def scope_to_config
         @scope_to_config ||= {
-          method:             nil,
+          method: nil,
           association_method: nil,
-          if:                 nil,
-          unless:             nil
+          if: nil,
+          unless: nil
         }
       end
 

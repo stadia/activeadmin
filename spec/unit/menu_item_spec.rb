@@ -1,6 +1,6 @@
-require 'rails_helper'
-require 'active_admin/menu'
-require 'active_admin/menu_item'
+require "rails_helper"
+require "active_admin/menu"
+require "active_admin/menu_item"
 
 module ActiveAdmin
   RSpec.describe MenuItem do
@@ -37,7 +37,7 @@ module ActiveAdmin
 
       it "should accept new children" do
         item = MenuItem.new label: "Dashboard"
-        item.add            label: "My Child Dashboard"
+        item.add label: "My Child Dashboard"
         expect(item.items.first).to be_a MenuItem
         expect(item.items.first.label).to eq "My Child Dashboard"
       end
@@ -59,7 +59,7 @@ module ActiveAdmin
       end
 
       it "should give access to the menu item as an array" do
-        expect(item['Blog'].label).to eq 'Blog'
+        expect(item["Blog"].label).to eq "Blog"
       end
 
       it "children should hold a reference to their parent" do

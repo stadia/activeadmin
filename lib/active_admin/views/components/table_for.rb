@@ -4,18 +4,18 @@ module ActiveAdmin
       builder_method :table_for
 
       def tag_name
-        'table'
+        "table"
       end
 
       def build(obj, *attrs)
-        options         = attrs.extract_options!
-        @sortable       = options.delete(:sortable)
-        @collection     = obj.respond_to?(:each) && !obj.is_a?(Hash) ? obj : [obj]
+        options = attrs.extract_options!
+        @sortable = options.delete(:sortable)
+        @collection = obj.respond_to?(:each) && !obj.is_a?(Hash) ? obj : [obj]
         @resource_class = options.delete(:i18n)
         @resource_class ||= @collection.klass if @collection.respond_to? :klass
 
-        @columns        = []
-        @row_class      = options.delete(:row_class)
+        @columns = []
+        @row_class = options.delete(:row_class)
 
         build_table
         super(options)
@@ -29,7 +29,7 @@ module ActiveAdmin
       def column(*args, &block)
         options = default_options.merge(args.extract_options!)
         title = args[0]
-        data  = args[1] || args[0]
+        data = args[1] || args[0]
 
         col = Column.new(title, data, @resource_class, options, &block)
         @columns << col
@@ -65,12 +65,12 @@ module ActiveAdmin
       end
 
       def build_table_header(col)
-        classes  = Arbre::HTML::ClassList.new
+        classes = Arbre::HTML::ClassList.new
         sort_key = sortable? && col.sortable? && col.sort_key
-        params   = request.query_parameters.except :page, :order, :commit, :format
+        params = request.query_parameters.except :page, :order, :commit, :format
 
-        classes << 'sortable'                         if sort_key
-        classes << "sorted-#{current_sort[1]}"        if sort_key && current_sort[0] == sort_key
+        classes << "sortable" if sort_key
+        classes << "sorted-#{current_sort[1]}" if sort_key && current_sort[0] == sort_key
         classes << col.html_class
 
         if sort_key
@@ -86,13 +86,13 @@ module ActiveAdmin
         @tbody = tbody do
           # Build enough rows for our collection
           @collection.each do |elem|
-            classes = [helpers.cycle('odd', 'even')]
+            classes = [helpers.cycle("odd", "even")]
 
             if @row_class
               classes << @row_class.call(elem)
             end
 
-            tr(class: classes.flatten.join(' '), id: dom_id_for(elem))
+            tr(class: classes.flatten.join(" "), id: dom_id_for(elem))
           end
         end
       end
@@ -126,8 +126,8 @@ module ActiveAdmin
       # 'desc' it will return 'asc'
       def order_for_sort_key(sort_key)
         current_key, current_order = current_sort
-        return 'desc' unless current_key == sort_key
-        current_order == 'desc' ? 'asc' : 'desc'
+        return "desc" unless current_key == sort_key
+        current_order == "desc" ? "asc" : "desc"
       end
 
       def default_options
@@ -138,7 +138,7 @@ module ActiveAdmin
 
       class Column
 
-        attr_accessor :title, :data , :html_class
+        attr_accessor :title, :data, :html_class
 
         def initialize(*args, &block)
           @options = args.extract_options!
@@ -150,7 +150,7 @@ module ActiveAdmin
           elsif @title.present?
             html_classes << "col-#{@title.to_s.parameterize(separator: "_")}"
           end
-          @html_class = html_classes.join(' ')
+          @html_class = html_classes.join(" ")
           @data = args[1] || args[0]
           @data = block if block
           @resource_class = args[2]

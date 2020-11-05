@@ -14,7 +14,7 @@ module ActiveAdmin
         end
 
         def main_content
-          I18n.t('active_admin.main_content', model: title).html_safe
+          I18n.t("active_admin.main_content", model: title).html_safe
         end
 
         private
@@ -28,7 +28,8 @@ module ActiveAdmin
             text_node(active_admin_namespace.head)
 
             active_admin_application.stylesheets.each do |style, options|
-              text_node stylesheet_link_tag(style, options).html_safe
+              stylesheet_tag = active_admin_namespace.use_webpacker ? stylesheet_pack_tag(style, **options) : stylesheet_link_tag(style, **options)
+              text_node(stylesheet_tag.html_safe) if stylesheet_tag
             end
 
             active_admin_namespace.meta_tags.each do |name, content|
@@ -36,7 +37,8 @@ module ActiveAdmin
             end
 
             active_admin_application.javascripts.each do |path|
-              text_node(javascript_include_tag(path))
+              javascript_tag = active_admin_namespace.use_webpacker ? javascript_pack_tag(path) : javascript_include_tag(path)
+              text_node(javascript_tag)
             end
 
             if active_admin_namespace.favicon
@@ -62,9 +64,9 @@ module ActiveAdmin
         def body_classes
           Arbre::HTML::ClassList.new [
             params[:action],
-            params[:controller].tr('/', '_'),
-            'active_admin', 'logged_in',
-            active_admin_namespace.name.to_s + '_namespace'
+            params[:controller].tr("/", "_"),
+            "active_admin", "logged_in",
+            active_admin_namespace.name.to_s + "_namespace"
           ]
         end
 
@@ -78,12 +80,12 @@ module ActiveAdmin
           build_flash_messages
           div id: "active_admin_content", class: (skip_sidebar? ? "without_sidebar" : "with_sidebar") do
             build_main_content_wrapper
-            sidebar sidebar_sections_for_action, id: 'sidebar' unless skip_sidebar?
+            sidebar sidebar_sections_for_action, id: "sidebar" unless skip_sidebar?
           end
         end
 
         def build_flash_messages
-          div class: 'flashes' do
+          div class: "flashes" do
             flash_messages.each do |type, messages|
               [*messages].each do |message|
                 div message, class: "flash flash_#{type}"

@@ -1,4 +1,4 @@
-require 'active_admin/dynamic_settings_node'
+require "active_admin/dynamic_settings_node"
 
 module ActiveAdmin
   class NamespaceSettings < DynamicSettingsNode
@@ -26,10 +26,10 @@ module ActiveAdmin
     # Set a favicon
     register :favicon, false
 
-    # Additional meta tags to place in head of logged in pages.
+    # Additional meta tags to place in head of logged in pages
     register :meta_tags, {}
 
-    # Additional meta tags to place in head of logged out pages.
+    # Additional meta tags to place in head of logged out pages
     register :meta_tags_for_logged_out_pages, { robots: "noindex, nofollow" }
 
     # The view factory to use to generate all the view classes. Take
@@ -56,10 +56,10 @@ module ActiveAdmin
     # Whether filters are enabled
     register :filters, true
 
-    # The namespace root.
-    register :root_to, 'dashboard#index'
+    # The namespace root
+    register :root_to, "dashboard#index"
 
-    # Options that a passed to root_to.
+    # Options that are passed to root_to
     register :root_to_options, {}
 
     # Options passed to the routes, i.e. { path: '/custom' }
@@ -73,7 +73,7 @@ module ActiveAdmin
     register :create_another, false
 
     # Default CSV options
-    register :csv_options, { col_sep: ',', byte_order_mark: "\xEF\xBB\xBF" }
+    register :csv_options, { col_sep: ",", byte_order_mark: "\xEF\xBB\xBF" }
 
     # Default Download Links options
     register :download_links, true
@@ -102,7 +102,7 @@ module ActiveAdmin
     ]
 
     # Set flash message keys that shouldn't show in ActiveAdmin
-    register :flash_keys_to_except, ['timedout']
+    register :flash_keys_to_except, ["timedout"]
 
     # Include association filters by default
     register :include_default_association_filters, true
@@ -118,6 +118,9 @@ module ActiveAdmin
         :title,
         :email,
     ]
-    register :filter_method_for_large_association, '_starts_with'
+    register :filter_method_for_large_association, "_starts_with"
+
+    # Switch between asset pipeline and webpacker assets
+    register :use_webpacker, false
   end
 end

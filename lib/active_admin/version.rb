@@ -1,3 +1,3 @@
 module ActiveAdmin
-  VERSION = '2.6.1'
+  VERSION = "2.8.1"
 end

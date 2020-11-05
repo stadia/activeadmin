@@ -11,7 +11,7 @@
 //= require_self
 
 (function(global, factory) {
-  typeof exports === "object" && typeof module !== "undefined" ? factory(exports, require("jquery"), require("jquery-ui/ui/widgets/datepicker"), require("jquery-ui/ui/widgets/dialog"), require("jquery-ui/ui/widgets/sortable"), require("jquery-ui/ui/widgets/tabs"), require("jquery-ui/ui/widget"), require("jquery-ujs")) : typeof define === "function" && define.amd ? define([ "exports", "jquery", "jquery-ui/ui/widgets/datepicker", "jquery-ui/ui/widgets/dialog", "jquery-ui/ui/widgets/sortable", "jquery-ui/ui/widgets/tabs", "jquery-ui/ui/widget", "jquery-ujs" ], factory) : (global = global || self, 
+  typeof exports === "object" && typeof module !== "undefined" ? factory(exports, require("jquery"), require("jquery-ui/ui/widgets/datepicker"), require("jquery-ui/ui/widgets/dialog"), require("jquery-ui/ui/widgets/sortable"), require("jquery-ui/ui/widgets/tabs"), require("jquery-ui/ui/widget"), require("jquery-ujs")) : typeof define === "function" && define.amd ? define([ "exports", "jquery", "jquery-ui/ui/widgets/datepicker", "jquery-ui/ui/widgets/dialog", "jquery-ui/ui/widgets/sortable", "jquery-ui/ui/widgets/tabs", "jquery-ui/ui/widget", "jquery-ujs" ], factory) : (global = typeof globalThis !== "undefined" ? globalThis : global || self, 
   factory(global.ActiveAdmin = {}));
 })(this, function(exports) {
   "use strict";
@@ -27,18 +27,17 @@
   function ModalDialog(message, inputs, callback) {
     var html = '<form id="dialog_confirm" title="' + message + '"><ul>';
     for (var name in inputs) {
-      var elem, opts, wrapper;
+      var opts, wrapper;
       var type = inputs[name];
       if (/^(datepicker|checkbox|text|number)$/.test(type)) {
         wrapper = "input";
       } else if (type === "textarea") {
         wrapper = "textarea";
       } else if ($.isArray(type)) {
-        var _ref = [ "select", "option", type, "" ];
+        var _ref = [ "select", type, "" ];
         wrapper = _ref[0];
-        elem = _ref[1];
-        opts = _ref[2];
-        type = _ref[3];
+        opts = _ref[1];
+        type = _ref[2];
       } else {
         throw new Error("Unsupported input type: {" + name + ": " + type + "}");
       }
@@ -46,29 +45,28 @@
       html += "<li>\n      <label>" + (name.charAt(0).toUpperCase() + name.slice(1)) + "</label>\n      <" + wrapper + ' name="' + name + '" class="' + klass + '" type="' + type + '">' + (opts ? function() {
         var result = [];
         opts.forEach(function(v) {
-          var $elem = $("<" + elem + "/>");
+          var $elem = $("<option></option>");
           if ($.isArray(v)) {
             $elem.text(v[0]).val(v[1]);
           } else {
             $elem.text(v);
           }
-          result.push($elem.wrap("<div>").parent().html());
+          result.push($elem.wrap("<div></div>").parent().html());
         });
         return result;
       }().join("") : "") + ("</" + wrapper + ">") + "</li>";
       var _ref2 = [];
       wrapper = _ref2[0];
-      elem = _ref2[1];
-      opts = _ref2[2];
-      type = _ref2[3];
-      klass = _ref2[4];
+      opts = _ref2[1];
+      type = _ref2[2];
+      klass = _ref2[3];
     }
     html += "</ul></form>";
     var form = $(html).appendTo("body");
     $("body").trigger("modal_dialog:before_open", [ form ]);
     form.dialog({
       modal: true,
-      open: function open(event, ui) {
+      open: function open(_event, _ui) {
         $("body").trigger("modal_dialog:after_open", [ form ]);
       },
       dialogClass: "active_admin_dialog",
@@ -136,7 +134,7 @@
       this._bind();
     }
     var _proto = CheckboxToggler.prototype;
-    _proto.option = function option(key, value) {};
+    _proto.option = function option(_key, _value) {};
     _proto._init = function _init() {
       if (!this.container) {
         throw new Error("Container element not found");
@@ -159,7 +157,7 @@
         return _this._didChangeToggleAllCheckbox();
       });
     };
-    _proto._didChangeCheckbox = function _didChangeCheckbox(checkbox) {
+    _proto._didChangeCheckbox = function _didChangeCheckbox(_checkbox) {
       var numChecked = this.checkboxes.filter(":checked").length;
       var allChecked = numChecked === this.checkboxes.length;
       var someChecked = numChecked > 0 && numChecked < this.checkboxes.length;
@@ -464,7 +462,7 @@
     return PerPage;
   }();
   (function($) {
-    $(document).on("change", ".pagination_per_page > select", function(event) {
+    $(document).on("change", ".pagination_per_page > select", function(_event) {
       PerPage._jQueryInterface.call($(this), "update");
     });
     $.fn["perPage"] = PerPage._jQueryInterface;

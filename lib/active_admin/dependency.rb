@@ -1,27 +1,27 @@
 module ActiveAdmin
   module Dependency
     module Requirements
-      DEVISE = '>= 4.0', '< 5'
+      DEVISE = ">= 4.0", "< 5"
     end
 
     # Provides a clean interface to check for gem dependencies at runtime.
     #
-    # ActiveAdmin::Dependency.draper
-    # => #<ActiveAdmin::Dependency::Matcher for draper 1.2.1>
+    # ActiveAdmin::Dependency.rails
+    # => #<ActiveAdmin::Dependency::Matcher for rails 6.0.3.2>
     #
-    # ActiveAdmin::Dependency.draper?
+    # ActiveAdmin::Dependency.rails?
     # => true
     #
-    # ActiveAdmin::Dependency.draper? '>= 1.5.0'
+    # ActiveAdmin::Dependency.rails? '>= 6.1'
     # => false
     #
-    # ActiveAdmin::Dependency.draper? '= 1.2.1'
+    # ActiveAdmin::Dependency.rails? '= 6.0.3.2'
     # => true
     #
-    # ActiveAdmin::Dependency.draper? '~> 1.2.0'
+    # ActiveAdmin::Dependency.rails? '~> 6.0.3'
     # => true
     #
-    # ActiveAdmin::Dependency.rails? '>= 4.2.7', '<= 5.0.2'
+    # ActiveAdmin::Dependency.rails? '>= 6.0.3', '<= 6.1.0'
     # => true
     #
     # ActiveAdmin::Dependency.rails! '5'
@@ -42,9 +42,9 @@ module ActiveAdmin
     # => false
     #
     def self.method_missing(name, *args)
-      if name[-1] == '?'
+      if name[-1] == "?"
         Matcher.new(name[0..-2]).match? args
-      elsif name[-1] == '!'
+      elsif name[-1] == "!"
         Matcher.new(name[0..-2]).match! args
       else
         Matcher.new name.to_s
@@ -91,7 +91,7 @@ module ActiveAdmin
       end
 
       def inspect
-        info = spec ? "#{spec.name} #{spec.version}" : '(missing)'
+        info = spec ? "#{spec.name} #{spec.version}" : "(missing)"
         "<ActiveAdmin::Dependency::Matcher for #{info}>"
       end
     end

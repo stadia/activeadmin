@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe "Breadcrumbs" do
   include ActiveAdmin::ViewHelpers
@@ -9,12 +9,16 @@ RSpec.describe "Breadcrumbs" do
 
     actions = ActiveAdmin::BaseController::ACTIVE_ADMIN_ACTIONS
 
-    let(:user)        { double display_name: 'Jane Doe' }
-    let(:user_config) { double find_resource: user, resource_name: double(route_key: 'users'),
-                               defined_actions: actions }
-    let(:post)        { double display_name: 'Hello World' }
-    let(:post_config) { double find_resource: post, resource_name: double(route_key: 'posts'),
-                               defined_actions: actions, belongs_to_config: double(target: user_config) }
+    let(:user) { double display_name: "Jane Doe" }
+    let(:user_config) do
+      double find_resource: user, resource_name: double(route_key: "users"),
+             defined_actions: actions
+    end
+    let(:post) { double display_name: "Hello World" }
+    let(:post_config) do
+      double find_resource: post, resource_name: double(route_key: "posts"),
+             defined_actions: actions, belongs_to_config: double(target: user_config)
+    end
 
     let :active_admin_config do
       post_config
@@ -31,14 +35,15 @@ RSpec.describe "Breadcrumbs" do
     end
 
     context "when path 'admin/users'" do
-      let(:path) { 'admin/users' }
+      let(:path) { "admin/users" }
 
-      it 'should have one item' do
+      it "should have one item" do
         expect(trail.size).to eq 1
       end
-      it 'should have a link to /admin' do
-        expect(trail[0][:name]).to eq 'Admin'
-        expect(trail[0][:path]).to eq '/admin'
+
+      it "should have a link to /admin" do
+        expect(trail[0][:name]).to eq "Admin"
+        expect(trail[0][:path]).to eq "/admin"
       end
     end
 
@@ -48,6 +53,7 @@ RSpec.describe "Breadcrumbs" do
       it "should have one item" do
         expect(trail.size).to eq 1
       end
+
       it "should have a link to /admin" do
         expect(trail[0][:name]).to eq "Admin"
         expect(trail[0][:path]).to eq "/admin"
@@ -60,10 +66,12 @@ RSpec.describe "Breadcrumbs" do
       it "should have 2 items" do
         expect(trail.size).to eq 2
       end
+
       it "should have a link to /admin" do
         expect(trail[0][:name]).to eq "Admin"
         expect(trail[0][:path]).to eq "/admin"
       end
+
       it "should have a link to /admin/users" do
         expect(trail[1][:name]).to eq "Users"
         expect(trail[1][:path]).to eq "/admin/users"
@@ -76,10 +84,12 @@ RSpec.describe "Breadcrumbs" do
       it "should have 3 items" do
         expect(trail.size).to eq 3
       end
+
       it "should have a link to /admin" do
         expect(trail[0][:name]).to eq "Admin"
         expect(trail[0][:path]).to eq "/admin"
       end
+
       it "should have a link to /admin/users" do
         expect(trail[1][:name]).to eq "Users"
         expect(trail[1][:path]).to eq "/admin/users"
@@ -107,10 +117,12 @@ RSpec.describe "Breadcrumbs" do
       it "should have 3 items" do
         expect(trail.size).to eq 3
       end
+
       it "should have a link to /admin" do
         expect(trail[0][:name]).to eq "Admin"
         expect(trail[0][:path]).to eq "/admin"
       end
+
       it "should have a link to /admin/users" do
         expect(trail[1][:name]).to eq "Users"
         expect(trail[1][:path]).to eq "/admin/users"
@@ -126,7 +138,7 @@ RSpec.describe "Breadcrumbs" do
 
       context "when User.find(4e24d6249ccf967313000000) does exist" do
         before do
-          display_name = double(display_name: 'Hello :)')
+          display_name = double(display_name: "Hello :)")
           allow(user_config).to receive(:find_resource).and_return(display_name)
         end
         it "should have a link to /admin/users/4e24d6249ccf967313000000 using display name" do
@@ -142,10 +154,12 @@ RSpec.describe "Breadcrumbs" do
       it "should have 3 items" do
         expect(trail.size).to eq 3
       end
+
       it "should have a link to /admin" do
         expect(trail[0][:name]).to eq "Admin"
         expect(trail[0][:path]).to eq "/admin"
       end
+
       it "should have a link to /admin/users" do
         expect(trail[1][:name]).to eq "Users"
         expect(trail[1][:path]).to eq "/admin/users"
@@ -161,7 +175,7 @@ RSpec.describe "Breadcrumbs" do
 
       context "when User.find(2b2f0fc2-9a0d-41b8-b39d-aa21963aaee4) does exist" do
         before do
-          display_name = double(display_name: 'Hello :)')
+          display_name = double(display_name: "Hello :)")
           allow(user_config).to receive(:find_resource).and_return(display_name)
         end
         it "should have a link to /admin/users/2b2f0fc2-9a0d-41b8-b39d-aa21963aaee4 using display name" do
@@ -177,18 +191,22 @@ RSpec.describe "Breadcrumbs" do
       it "should have 4 items" do
         expect(trail.size).to eq 4
       end
+
       it "should have a link to /admin" do
         expect(trail[0][:name]).to eq "Admin"
         expect(trail[0][:path]).to eq "/admin"
       end
+
       it "should have a link to /admin/users" do
         expect(trail[1][:name]).to eq "Users"
         expect(trail[1][:path]).to eq "/admin/users"
       end
+
       it "should have a link to /admin/users/1" do
         expect(trail[2][:name]).to eq "Jane Doe"
         expect(trail[2][:path]).to eq "/admin/users/1"
       end
+
       it "should have a link to /admin/users/1/posts" do
         expect(trail[3][:name]).to eq "Posts"
         expect(trail[3][:path]).to eq "/admin/users/1/posts"
@@ -201,22 +219,27 @@ RSpec.describe "Breadcrumbs" do
       it "should have 5 items" do
         expect(trail.size).to eq 5
       end
+
       it "should have a link to /admin" do
         expect(trail[0][:name]).to eq "Admin"
         expect(trail[0][:path]).to eq "/admin"
       end
+
       it "should have a link to /admin/users" do
         expect(trail[1][:name]).to eq "Users"
         expect(trail[1][:path]).to eq "/admin/users"
       end
+
       it "should have a link to /admin/users/1" do
         expect(trail[2][:name]).to eq "Jane Doe"
         expect(trail[2][:path]).to eq "/admin/users/1"
       end
+
       it "should have a link to /admin/users/1/posts" do
         expect(trail[3][:name]).to eq "Posts"
         expect(trail[3][:path]).to eq "/admin/users/1/posts"
       end
+
       it "should have a link to /admin/users/1/posts/1" do
         expect(trail[4][:name]).to eq "Hello World"
         expect(trail[4][:path]).to eq "/admin/users/1/posts/1"
@@ -224,23 +247,28 @@ RSpec.describe "Breadcrumbs" do
     end
 
     context "when the 'show' action is disabled" do
-      let(:post_config) { double find_resource: post, resource_name: double(route_key: 'posts'),
-                                 defined_actions: actions - [:show], # this is the change
-                                 belongs_to_config: double(target: user_config) }
+      let(:post_config) do
+        double find_resource: post, resource_name: double(route_key: "posts"),
+               defined_actions: actions - [:show], # this is the change
+               belongs_to_config: double(target: user_config)
+      end
 
       let(:path) { "/admin/posts/1/edit" }
 
       it "should have 3 items" do
         expect(trail.size).to eq 3
       end
+
       it "should have a link to /admin" do
         expect(trail[0][:name]).to eq "Admin"
         expect(trail[0][:path]).to eq "/admin"
       end
+
       it "should have a link to /admin/posts" do
         expect(trail[1][:name]).to eq "Posts"
         expect(trail[1][:path]).to eq "/admin/posts"
       end
+
       it "should not link to the show view for the post" do
         expect(trail[2]).to eq "Hello World"
       end
