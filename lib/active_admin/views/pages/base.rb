@@ -4,6 +4,7 @@ module ActiveAdmin
       class Base < Arbre::HTML::Document
 
         def build(*args)
+          set_attribute :lang, I18n.locale
           build_active_admin_head
           build_page
         end
@@ -52,11 +53,9 @@ module ActiveAdmin
             div id: "wrapper" do
               build_unsupported_browser
               header active_admin_namespace, current_menu
-              div id: "page-wrapper", class: "container-fluid" do
-                title_bar title, action_items_for_action
-                build_page_content
-              end
-              # footer active_admin_namespace
+              title_bar title, action_items_for_action
+              build_page_content
+              footer active_admin_namespace
             end
           end
         end
@@ -78,30 +77,32 @@ module ActiveAdmin
 
         def build_page_content
           build_flash_messages
-          div id: "active_admin_content", class: (skip_sidebar? ? "without_sidebar row" : "with_sidebar row") do
+          div id: "active_admin_content", class: (skip_sidebar? ? "without_sidebar" : "with_sidebar") do
             build_main_content_wrapper
-            sidebar sidebar_sections_for_action, id: 'sidebar', class: 'col-lg-2' unless skip_sidebar?
+            sidebar sidebar_sections_for_action, id: 'sidebar' unless skip_sidebar?
           end
         end
 
         def build_flash_messages
-          return if flash_messages.empty?
-
           div class: 'flashes row' do
-            flash_messages.each do |type, message|
-              div class: "flash flash_#{type} alert alert-dismissible col-xs-12", role: 'alert' do
-                button class: 'close', 'data-dismiss' => 'alert', 'aria-label' => 'close', type: 'button' do
-                  span 'x', 'aria-hidden' => 'true'
+            flash_messages.each do |type, messages|
+              [*messages].each do |message|
+                div class: "flash flash_#{type} alert alert-dismissible col-xs-12", role: 'alert' do
+                  button class: 'close', 'data-dismiss' => 'alert', 'aria-label' => 'close', type: 'button' do
+                    span 'x', 'aria-hidden' => 'true'
+                  end
+                  text_node message
                 end
-                text_node message
               end
             end
           end
         end
 
         def build_main_content_wrapper
-          div id: "main_content", class: (skip_sidebar? ? 'col-lg-12' : 'col-lg-10') do
-            main_content
+          div id: "main_content_wrapper" do
+            div id: "main_content" do
+              main_content
+            end
           end
         end
 

@@ -2,6 +2,28 @@
 
 ## Unreleased
 
+## 2.6.1 [☰](https://github.com/activeadmin/activeadmin/compare/v2.6.0..2.6.1)
+
+### Bug Fixes
+
+* Fix some ruby 2.7 warnings about keyword args. [#6000] by [@vcsjones]
+* Missing `create_another` translation in Vietnamese. [#6002] by [@imcvampire]
+* Using "destroy" for user facing message is too robotic, prefer "delete". [#6047] by [@vfonic]
+* Typo in confirmation message for comment deletion. [#6047] by [@vfonic]
+
+## 2.6.0 [☰](https://github.com/activeadmin/activeadmin/compare/v2.5.0..v2.6.0)
+
+### Enhacements
+
+* Display multiple flash messages in separate elements. [#5929] by [@mirelon]
+* Make delete confirmation messages in French & Spanish gender-neutral. [#5946] by [@cprodhomme]
+
+### Bug Fixes
+
+* Export ModalDialog component to re-enable client side usage. [#5956] by [@sgara]
+* Use default ActionView options instead of default Formtastic options for DateRangeInput [#5957] by [@mirelon]
+* Fix i18n key in docs example to translate scopes. [#5943] by [@adler99]
+
 ## 2.5.0 [☰](https://github.com/activeadmin/activeadmin/compare/v2.4.0..v2.5.0)
 
 ### Enhancements
@@ -13,7 +35,7 @@
 * Convert namespace to sym to prevent duplicate namespaces such as :foo and 'foo'. [#5931] by [@westonganger]
 * Use filter label when condition has a predicate. [#5886] by [@ko-lem]
 * Fix error when routing with array containing symbol. [#5870] by [@jwesorick]
-* Fix error when there is a model named `Tag` and `meta_tags` have been configured. [#5893] by [@micred], [@FabioRos] and [@deivid-rodriguez]
+* Fix error when there is a model named `Tag` and `meta_tags` have been configured. [#5895] by [@micred], [@FabioRos] and [@deivid-rodriguez]
 * Allow specifying custom `input_html` for `DateRangeInput`. [#5867] by [@mirelon]
 * Adjust `#main_content` right margin to take into account possible custom values of `$sidebar-width` and `$section-padding`. [#5887] by [@guigs]
 * Improved polymorphic routes generation to avoid problems when multiple `belongs_to` are defined. [#5938] by [@leio10]
@@ -518,14 +540,24 @@ Please check [0-6-stable] for previous changes.
 [#5877]: https://github.com/activeadmin/activeadmin/pull/5877
 [#5886]: https://github.com/activeadmin/activeadmin/pull/5886
 [#5870]: https://github.com/activeadmin/activeadmin/pull/5870
-[#5893]: https://github.com/activeadmin/activeadmin/pull/5893
+[#5894]: https://github.com/activeadmin/activeadmin/pull/5894
+[#5895]: https://github.com/activeadmin/activeadmin/pull/5895
 [#5867]: https://github.com/activeadmin/activeadmin/pull/5867
 [#5887]: https://github.com/activeadmin/activeadmin/pull/5887
 [#5931]: https://github.com/activeadmin/activeadmin/pull/5931
 [#5938]: https://github.com/activeadmin/activeadmin/pull/5938
+[#5929]: https://github.com/activeadmin/activeadmin/pull/5929
+[#5943]: https://github.com/activeadmin/activeadmin/pull/5943
+[#5946]: https://github.com/activeadmin/activeadmin/pull/5946
+[#5956]: https://github.com/activeadmin/activeadmin/pull/5956
+[#5957]: https://github.com/activeadmin/activeadmin/pull/5957
+[#6000]: https://github.com/activeadmin/activeadmin/pull/6000
+[#6002]: https://github.com/activeadmin/activeadmin/pull/6002
+[#6047]: https://github.com/activeadmin/activeadmin/pull/6047
 
 [@5t111111]: https://github.com/5t111111
 [@aarek]: https://github.com/aarek
+[@adler99]: https://github.com/adler99
 [@ajw725]: https://github.com/ajw725
 [@alex-bogomolov]: https://github.com/alex-bogomolov
 [@amiel]: https://github.com/amiel
@@ -538,6 +570,7 @@ Please check [0-6-stable] for previous changes.
 [@chancancode]: https://github.com/chancancode
 [@chrp]: https://github.com/chrp
 [@chumakoff]: https://github.com/chumakoff
+[@cprodhomme]: https://github.com/cprodhomme
 [@craigmcnamara]: https://github.com/craigmcnamara
 [@DanielHeath]: https://github.com/DanielHeath
 [@deivid-rodriguez]: https://github.com/deivid-rodriguez
@@ -555,6 +588,7 @@ Please check [0-6-stable] for previous changes.
 [@gonzedge]: https://github.com/gonzedge
 [@guigs]: https://github.com/guigs
 [@HappyKadaver]: https://github.com/HappyKadaver
+[@imcvampire]: https://github.com/imcvampire
 [@innparusu95]: https://github.com/innparusu95
 [@ionut998]: https://github.com/ionut998
 [@irmela]: https://github.com/irmela
@@ -598,6 +632,8 @@ Please check [0-6-stable] for previous changes.
 [@timoschilling]: https://github.com/timoschilling
 [@TimPetricola]: https://github.com/TimPetricola
 [@varyonic]: https://github.com/varyonic
+[@vcsjones]: https://github.com/vcsjones
+[@vfonic]: https://github.com/vfonic
 [@violeta-p]: https://github.com/violeta-p
 [@WaKeMaTTa]: https://github.com/WaKeMaTTa
 [@wasifhossain]: https://github.com/wasifhossain
