@@ -121,6 +121,12 @@ Layout/SpaceAroundOperators:
 Layout/SpaceBeforeBlockBraces:
   Enabled: true
 
+Layout/SpaceBeforeComma:
+  Enabled: true
+
+Layout/SpaceBeforeFirstArg:
+  Enabled: true
+
 Layout/SpaceInsideBlockBraces:
   Enabled: true
 

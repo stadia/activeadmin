@@ -30,7 +30,7 @@ namespace :docs do
     end
   end
 
-  def docs_syncronized?
+  def docs_synchronized?
     # Do not print diff and yield whether exit code was zero
     sh('git diff --quiet docs/3-index-pages') do |outcome, _|
       return if outcome
@@ -40,7 +40,7 @@ namespace :docs do
 
       raise <<-MSG.strip_heredoc
         The docs/3-index-pages directory is out of sync.
-        Run rake generate_cops_documentation and commit the results.
+        Run `bin/rake docs:build` and commit the results.
       MSG
     end
   end
@@ -57,6 +57,6 @@ namespace :docs do
     index_types = views.children.select { |obj| obj.name.to_s =~ /^IndexAs/ }
     write_docstrings_to "docs/3-index-pages", index_types
 
-    docs_syncronized? if ENV["CI"]
+    docs_synchronized? if ENV["CI"]
   end
 end

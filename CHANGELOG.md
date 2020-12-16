@@ -2,7 +2,20 @@
 
 ## Unreleased
 
-## 2.6.1 [☰](https://github.com/activeadmin/activeadmin/compare/v2.6.0..2.6.1)
+## 2.7.0 [☰](https://github.com/activeadmin/activeadmin/compare/v2.6.1..v2.7.0)
+
+### Enhancements
+
+* Extend menu to allow for nested submenus. [#5994] by [@taralbass]
+* Add Webpacker compatibility with opt-in config switch and installation generator. [#5855] by [@sgara]
+
+### Bug Fixes
+
+* Fix scopes renderer when resource has only optional scopes and their conditions are false. [#6149] by [@Looooong]
+* Fix some missing wrapper markup in "logged out" layout. [#6086] by [@irmela]
+* Fix some typos in Vietnamese translation. [#6099] by [@giapnhdev]
+
+## 2.6.1 [☰](https://github.com/activeadmin/activeadmin/compare/v2.6.0..v2.6.1)
 
 ### Bug Fixes
 
@@ -13,7 +26,7 @@
 
 ## 2.6.0 [☰](https://github.com/activeadmin/activeadmin/compare/v2.5.0..v2.6.0)
 
-### Enhacements
+### Enhancements
 
 * Display multiple flash messages in separate elements. [#5929] by [@mirelon]
 * Make delete confirmation messages in French & Spanish gender-neutral. [#5946] by [@cprodhomme]
@@ -536,6 +549,7 @@ Please check [0-6-stable] for previous changes.
 [#5548]: https://github.com/activeadmin/activeadmin/pull/5548
 [#5842]: https://github.com/activeadmin/activeadmin/pull/5842
 [#5854]: https://github.com/activeadmin/activeadmin/pull/5854
+[#5855]: https://github.com/activeadmin/activeadmin/pull/5855
 [#5874]: https://github.com/activeadmin/activeadmin/pull/5874
 [#5877]: https://github.com/activeadmin/activeadmin/pull/5877
 [#5886]: https://github.com/activeadmin/activeadmin/pull/5886
@@ -554,6 +568,10 @@ Please check [0-6-stable] for previous changes.
 [#6000]: https://github.com/activeadmin/activeadmin/pull/6000
 [#6002]: https://github.com/activeadmin/activeadmin/pull/6002
 [#6047]: https://github.com/activeadmin/activeadmin/pull/6047
+[#5994]: https://github.com/activeadmin/activeadmin/pull/5994
+[#6149]: https://github.com/activeadmin/activeadmin/pull/6149
+[#6086]: https://github.com/activeadmin/activeadmin/pull/6086
+[#6099]: https://github.com/activeadmin/activeadmin/pull/6099
 
 [@5t111111]: https://github.com/5t111111
 [@aarek]: https://github.com/aarek
@@ -584,6 +602,7 @@ Please check [0-6-stable] for previous changes.
 [@FabioRos]: https://github.com/FabioRos
 [@faucct]: https://github.com/faucct
 [@Fivell]: https://github.com/Fivell
+[@giapnhdev]: https://github.com/giapnhdev
 [@glebtv]: https://github.com/glebtv
 [@gonzedge]: https://github.com/gonzedge
 [@guigs]: https://github.com/guigs
@@ -606,6 +625,7 @@ Please check [0-6-stable] for previous changes.
 [@Kris-LIBIS]: https://github.com/Kris-LIBIS
 [@kwent]: https://github.com/kwent
 [@leio10]: https://github.com/leio10
+[@Looooong]: https://github.com/Looooong
 [@markstory]: https://github.com/markstory
 [@mauriciopasquier]: https://github.com/mauriciopasquier
 [@mconiglio]: https://github.com/mconiglio
@@ -628,6 +648,7 @@ Please check [0-6-stable] for previous changes.
 [@shouya]: https://github.com/shouya
 [@stefsava]: https://github.com/stefsava
 [@stereoscott]: https://github.com/stereoscott
+[@taralbass]: https://github.com/taralbass
 [@tiagotex]: https://github.com/tiagotex
 [@timoschilling]: https://github.com/timoschilling
 [@TimPetricola]: https://github.com/TimPetricola

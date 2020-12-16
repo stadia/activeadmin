@@ -15,6 +15,8 @@ group :development, :test do
   gem "rails", "~> 6.0.0", github: "rails/rails", branch: "6-0-stable", ref: "3ed7c5864ff4ac349848722fbf682a657eebddbf"
   gem "activerecord-jdbcsqlite3-adapter", "~> 60.0", platform: :jruby
 
+  gem "webpacker", "~> 4.0"
+
   gem "formtastic", github: "justinfrench/formtastic"
 end
 
@@ -36,25 +38,4 @@ group :test do
   gem "sqlite3", "~> 1.4", platform: :mri
 end
 
-group :release do
-  gem 'chandler', '0.9.0' # Github releases from changelog
-end
-
-group :lint do
-  # Code style
-  gem 'rubocop', '0.80.1'
-  gem 'rubocop-rspec', '~> 1.30'
-  gem 'rubocop-rails', '~> 2.3'
-  gem 'mdl', '0.6.0'
-
-  # Translations
-  gem 'i18n-tasks'
-  gem 'i18n-spec'
-end
-
-group :docs do
-  gem 'yard'     # Documentation generator
-  gem 'kramdown' # Markdown implementation (for yard)
-end
-
-gemspec path: "."
+gemspec path: "../.."
