@@ -21,6 +21,10 @@ module ActiveAdmin
         end
       end
 
+      def tag_name
+        'nav'
+      end
+
     end
   end
 end
