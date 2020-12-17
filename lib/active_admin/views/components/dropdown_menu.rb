@@ -35,30 +35,29 @@ module ActiveAdmin
         super(options)
       end
 
-      def item(*args)
+      def item(*args, **kwargs)
         within @menu do
-          li link_to(*args)
+          li link_to(*args, **kwargs)
         end
       end
 
       private
 
       def build_button(name, button_options)
-        button_options[:class] ||= ''
-        button_options[:class] << ' btn btn-default dropdown-toggle'
-
-        button_options[:href] = '#'
+        button_options[:class] ||= ""
+        button_options[:class] << " dropdown_menu_button btn btn-default dropdown-toggle"
+        button_options[:href] = "#"
 
         a name, button_options
       end
 
       def build_menu(options)
-        options[:class] ||= ''
-        options[:class] << ' dropdown_menu_list dropdown-menu'
+        options[:class] ||= ""
+        options[:class] << " dropdown_menu_list dropdown-menu"
 
         # menu_list = nil
         #
-        # div class: 'dropdown_menu_list_wrapper' do
+        # div class: "dropdown_menu_list_wrapper" do
         #   menu_list = ul(options)
         # end
         #

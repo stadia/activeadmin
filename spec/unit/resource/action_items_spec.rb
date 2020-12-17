@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe ActiveAdmin::Resource::ActionItems do
   let(:resource) do
@@ -30,7 +30,7 @@ RSpec.describe ActiveAdmin::Resource::ActionItems do
       expect(resource.action_items.first.html_class).to eq("action_item test")
     end
 
-    it 'should be ordered by priority' do
+    it "should be ordered by priority" do
       resource.add_action_item :first, priority: 0 do
         # Empty ...
       end
@@ -58,9 +58,9 @@ RSpec.describe ActiveAdmin::Resource::ActionItems do
 
     it "should return only relevant action items" do
       expect(resource.action_items_for(:index).size).to eq 1
-      expect {
+      expect do
         resource.action_items_for(:index).first.call
-      }.to raise_exception(StandardError)
+      end.to raise_exception(StandardError)
     end
   end
 
@@ -69,7 +69,7 @@ RSpec.describe ActiveAdmin::Resource::ActionItems do
       expect(resource.action_items.size).to eq 3
     end
 
-    it 'can be removed by name' do
+    it "can be removed by name" do
       resource.remove_action_item :new
       expect(resource.action_items.size).to eq 2
     end

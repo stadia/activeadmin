@@ -5,7 +5,7 @@ version: 2.1
 .install_rubygems: &install_rubygems
   run:
     name: Install a specific rubygems version
-    command: gem update --system 3.1.2
+    command: gem update --system 3.1.4
 
 .install_bundler: &install_bundler
   run:
@@ -30,7 +30,9 @@ version: 2.1
 .install_dependencies: &install_dependencies
   run:
     name: Install dependencies
-    command: bundle install --path /root/project/vendor/bundle --retry 3 --jobs 3
+    command: |
+      bundle config set --local path /root/project/vendor/bundle
+      bundle install --jobs 3
 
 .save_gems: &save_gems
   save_cache:
@@ -54,7 +56,9 @@ version: 2.1
 .format_coverage: &format_coverage
   run:
     name: Format coverage
-    command: bin/test-reporter format-coverage --output coverage/codeclimate.$CIRCLE_JOB.json
+    command: |
+      bin/prepare_coverage
+      bin/test-reporter format-coverage --output coverage/codeclimate.$CIRCLE_JOB.json
 
 .save_coverage: &save_coverage
   persist_to_workspace:
@@ -157,14 +161,14 @@ version: 2.1
 jobs:
   setup_coverage:
     docker:
-      - image: circleci/ruby:2.6.5
+      - image: circleci/ruby:2.7.1
 
     steps:
       - run:
           name: Download Code Climate test-reporter
           command: |
             mkdir bin
-            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-0.6.3-linux-amd64 > bin/test-reporter
+            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-0.8.0-linux-amd64 > bin/test-reporter
             chmod +x  bin/test-reporter
 
       - persist_to_workspace:
@@ -174,7 +178,7 @@ jobs:
 
   upload_coverage:
     docker:
-      - image: circleci/ruby:2.6.5
+      - image: circleci/ruby:2.7.1
         environment:
           CC_TEST_REPORTER_ID: 8d5fcf7abea6d56c625104a9d1a81140a588a7f546f4fa9de9bc6ffc8feaaf70
 
@@ -185,7 +189,7 @@ jobs:
 
   testapp52:
     docker:
-      - image: circleci/ruby:2.6.5-node
+      - image: circleci/ruby:2.7.1-node
         user: root
 
     environment:
@@ -196,8 +200,8 @@ jobs:
 
   testapp60:
     docker:
-    - image: circleci/ruby:2.6.5-node
-      user: root
+      - image: circleci/ruby:2.7.1-node
+        user: root
 
     environment:
       BUNDLE_GEMFILE: Gemfile
@@ -207,8 +211,8 @@ jobs:
 
   testapp60turbolinks:
     docker:
-    - image: circleci/ruby:2.6.5-node
-      user: root
+      - image: circleci/ruby:2.7.1-node
+        user: root
 
     environment:
       BUNDLE_GEMFILE: gemfiles/rails_60_turbolinks/Gemfile
@@ -218,8 +222,8 @@ jobs:
 
   testapp60webpacker:
     docker:
-    - image: circleci/ruby:2.6.5-node
-      user: root
+      - image: circleci/ruby:2.7.1-node
+        user: root
 
     environment:
       BUNDLE_GEMFILE: gemfiles/rails_60_webpacker/Gemfile
@@ -229,7 +233,7 @@ jobs:
 
   lint_and_docs:
     docker:
-      - image: circleci/ruby:2.6.5-node
+      - image: circleci/ruby:2.7.1-node
         user: root
 
     environment:
@@ -250,20 +254,9 @@ jobs:
       - *format_coverage
       - *save_coverage
 
-  ruby24rails52:
-    docker:
-      - image: circleci/ruby:2.4.8-node-browsers
-        user: root
-
-    environment:
-      BUNDLE_GEMFILE: gemfiles/rails_52/Gemfile
-
-    steps:
-      *test_steps
-
   ruby25rails52:
     docker:
-      - image: circleci/ruby:2.5.7-node-browsers
+      - image: circleci/ruby:2.5.8-node-browsers@sha256:772449521f5bdc456b3da1226d4070c46b53868a7b7b41f4de2318f1358c8fe6
         user: root
 
     environment:
@@ -274,8 +267,8 @@ jobs:
 
   ruby25rails60:
     docker:
-    - image: circleci/ruby:2.5.7-node-browsers
-      user: root
+      - image: circleci/ruby:2.5.8-node-browsers@sha256:772449521f5bdc456b3da1226d4070c46b53868a7b7b41f4de2318f1358c8fe6
+        user: root
 
     environment:
       BUNDLE_GEMFILE: Gemfile
@@ -285,7 +278,7 @@ jobs:
 
   ruby26rails52:
     docker:
-      - image: circleci/ruby:2.6.5-node-browsers
+      - image: circleci/ruby:2.6.6-node-browsers@sha256:6fecbb049a4a8a561566a0dd976a617443d14346a17e6d12d83db882684273e1
         user: root
 
     environment:
@@ -296,8 +289,8 @@ jobs:
 
   ruby26rails60:
     docker:
-    - image: circleci/ruby:2.6.5-node-browsers
-      user: root
+      - image: circleci/ruby:2.6.6-node-browsers@sha256:6fecbb049a4a8a561566a0dd976a617443d14346a17e6d12d83db882684273e1
+        user: root
 
     environment:
       BUNDLE_GEMFILE: Gemfile
@@ -307,8 +300,8 @@ jobs:
 
   ruby26rails60turbolinks:
     docker:
-    - image: circleci/ruby:2.6.5-node-browsers
-      user: root
+      - image: circleci/ruby:2.6.6-node-browsers@sha256:6fecbb049a4a8a561566a0dd976a617443d14346a17e6d12d83db882684273e1
+        user: root
 
     environment:
       BUNDLE_GEMFILE: gemfiles/rails_60_turbolinks/Gemfile
@@ -318,8 +311,8 @@ jobs:
 
   ruby26rails60webpacker:
     docker:
-    - image: circleci/ruby:2.6.5-node-browsers
-      user: root
+      - image: circleci/ruby:2.6.6-node-browsers@sha256:6fecbb049a4a8a561566a0dd976a617443d14346a17e6d12d83db882684273e1
+        user: root
 
     environment:
       BUNDLE_GEMFILE: gemfiles/rails_60_webpacker/Gemfile
@@ -329,7 +322,7 @@ jobs:
 
   ruby27rails52:
     docker:
-      - image: circleci/ruby:2.7.0-node-browsers
+      - image: circleci/ruby:2.7.1-node-browsers@sha256:94789a1524fa16521f6397f05ff9d4569c102ae4479135ee3f78e3b4d25c1b0e
         user: root
 
     environment:
@@ -340,8 +333,8 @@ jobs:
 
   ruby27rails60:
     docker:
-    - image: circleci/ruby:2.7.0-node-browsers
-      user: root
+      - image: circleci/ruby:2.7.1-node-browsers@sha256:94789a1524fa16521f6397f05ff9d4569c102ae4479135ee3f78e3b4d25c1b0e
+        user: root
 
     environment:
       BUNDLE_GEMFILE: Gemfile
@@ -351,8 +344,8 @@ jobs:
 
   ruby27rails60turbolinks:
     docker:
-    - image: circleci/ruby:2.7.0-node-browsers
-      user: root
+      - image: circleci/ruby:2.7.1-node-browsers@sha256:94789a1524fa16521f6397f05ff9d4569c102ae4479135ee3f78e3b4d25c1b0e
+        user: root
 
     environment:
       BUNDLE_GEMFILE: gemfiles/rails_60_turbolinks/Gemfile
@@ -362,8 +355,8 @@ jobs:
 
   ruby27rails60webpacker:
     docker:
-    - image: circleci/ruby:2.7.0-node-browsers
-      user: root
+      - image: circleci/ruby:2.7.1-node-browsers@sha256:94789a1524fa16521f6397f05ff9d4569c102ae4479135ee3f78e3b4d25c1b0e
+        user: root
 
     environment:
       BUNDLE_GEMFILE: gemfiles/rails_60_webpacker/Gemfile
@@ -373,7 +366,7 @@ jobs:
 
   jruby92rails52:
     docker:
-      - image: circleci/jruby:9.2.11.0-node-browsers
+      - image: circleci/jruby:9.2.13.0-node-browsers@sha256:7c1a2e5d083dbcbfd29c48ebaff1cbd6812824747570746577566dcf4685bb02
         user: root
 
     environment:
@@ -385,8 +378,8 @@ jobs:
 
   jruby92rails60:
     docker:
-    - image: circleci/jruby:9.2.11.0-node-browsers
-      user: root
+      - image: circleci/jruby:9.2.13.0-node-browsers@sha256:7c1a2e5d083dbcbfd29c48ebaff1cbd6812824747570746577566dcf4685bb02
+        user: root
 
     environment:
       BUNDLE_GEMFILE: Gemfile
@@ -430,10 +423,6 @@ workflows:
       - testapp60webpacker:
           requires:
             - setup_coverage
-
-      - ruby24rails52:
-          requires:
-            - testapp52
 
       - ruby25rails52:
           requires:
@@ -491,8 +480,6 @@ workflows:
             - testapp60
             - testapp60turbolinks
             - testapp60webpacker
-
-            - ruby24rails52
 
             - ruby25rails52
             - ruby25rails60

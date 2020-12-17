@@ -1,5 +1,5 @@
-require 'rails_helper'
-require File.expand_path('config_shared_examples', __dir__)
+require "rails_helper"
+require File.expand_path("config_shared_examples", __dir__)
 
 module ActiveAdmin
   RSpec.describe Resource do
@@ -22,6 +22,7 @@ module ActiveAdmin
       it "should return the resource's table name" do
         expect(config.resource_table_name).to eq '"categories"'
       end
+
       context "when the :as option is given" do
         it "should return the resource's table name" do
           expect(config(as: "My Category").resource_table_name).to eq '"categories"'
@@ -35,21 +36,22 @@ module ActiveAdmin
       end
     end
 
-    describe '#decorator_class' do
-      it 'returns nil by default' do
+    describe "#decorator_class" do
+      it "returns nil by default" do
         expect(config.decorator_class).to eq nil
       end
-      context 'when a decorator is defined' do
+
+      context "when a decorator is defined" do
         around do |example|
           with_resources_during(example) { resource }
         end
 
         let(:resource) { namespace.register(Post) { decorate_with PostDecorator } }
-        specify '#decorator_class_name should return PostDecorator' do
-          expect(resource.decorator_class_name).to eq '::PostDecorator'
+        specify "#decorator_class_name should return PostDecorator" do
+          expect(resource.decorator_class_name).to eq "::PostDecorator"
         end
 
-        it 'returns the decorator class' do
+        it "returns the decorator class" do
           expect(resource.decorator_class).to eq PostDecorator
         end
       end
@@ -59,6 +61,7 @@ module ActiveAdmin
       it "should return a namespaced controller name" do
         expect(config.controller_name).to eq "Admin::CategoriesController"
       end
+
       context "when non namespaced controller" do
         let(:namespace) { ActiveAdmin::Namespace.new(application, :root) }
         it "should return a non namespaced controller name" do
@@ -139,6 +142,7 @@ module ActiveAdmin
             expect(@resource.controller.new.send(:method_for_association_chain)).to eq :categories
           end
         end
+
         context "when passing in the method as an option" do
           before do
             @resource = application.register Category do
@@ -185,7 +189,7 @@ module ActiveAdmin
         expect(config.scopes.first.show_count).to eq true
       end
 
-      context 'when show_count disabled' do
+      context "when show_count disabled" do
         it "should add a scope show_count = false" do
           namespace.scopes_show_count = false
           config.scope :published
@@ -241,50 +245,50 @@ module ActiveAdmin
       end
     end
 
-    describe '#find_resource' do
+    describe "#find_resource" do
       let(:post) { double }
 
       around do |example|
         with_resources_during(example) { resource }
       end
 
-      context 'without a decorator' do
+      context "without a decorator" do
         let(:resource) { namespace.register(Post) }
 
-        it 'can find the resource' do
+        it "can find the resource" do
           allow(Post).to receive(:find_by).with("id" => "12345") { post }
-          expect(resource.find_resource('12345')).to eq post
+          expect(resource.find_resource("12345")).to eq post
         end
       end
 
-      context 'with a decorator' do
+      context "with a decorator" do
         let(:resource) { namespace.register(Post) { decorate_with PostDecorator } }
 
-        it 'decorates the resource' do
+        it "decorates the resource" do
           allow(Post).to receive(:find_by).with("id" => "12345") { post }
-          expect(resource.find_resource('12345')).to eq PostDecorator.new(post)
+          expect(resource.find_resource("12345")).to eq PostDecorator.new(post)
         end
 
-        it 'does not decorate a not found resource' do
+        it "does not decorate a not found resource" do
           allow(Post).to receive(:find_by).with("id" => "54321") { nil }
-          expect(resource.find_resource('54321')).to equal nil
+          expect(resource.find_resource("54321")).to equal nil
         end
       end
 
-      context 'when using a nonstandard primary key' do
+      context "when using a nonstandard primary key" do
         let(:resource) { namespace.register(Post) }
 
         before do
-          allow(Post).to receive(:primary_key).and_return 'something_else'
+          allow(Post).to receive(:primary_key).and_return "something_else"
           allow(Post).to receive(:find_by).with("something_else" => "55555") { post }
         end
 
-        it 'can find the post by the custom primary key' do
-          expect(resource.find_resource('55555')).to eq post
+        it "can find the post by the custom primary key" do
+          expect(resource.find_resource("55555")).to eq post
         end
       end
 
-      context 'when using controller finder' do
+      context "when using controller finder" do
         let(:resource) do
           namespace.register(Post) do
             controller do
@@ -297,22 +301,22 @@ module ActiveAdmin
           Admin.send(:remove_const, :"PostsController")
         end
 
-        it 'can find the post by controller finder' do
-          allow(Post).to receive(:find_by_title!).with('title-name').and_return(post)
+        it "can find the post by controller finder" do
+          allow(Post).to receive(:find_by_title!).with("title-name").and_return(post)
 
-          expect(resource.find_resource('title-name')).to eq post
+          expect(resource.find_resource("title-name")).to eq post
         end
       end
     end
 
     describe "delegation" do
-      let(:controller) {
+      let(:controller) do
         Class.new do
           def method_missing(name, *args, &block)
             "called #{name}"
           end
         end.new
-      }
+      end
       let(:resource) { ActiveAdmin::ResourceDSL.new(double) }
 
       before do

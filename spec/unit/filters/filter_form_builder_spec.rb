@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe ActiveAdmin::Filters::ViewHelper do
   # Setup an ActionView::Base object which can be used for
@@ -18,7 +18,9 @@ RSpec.describe ActiveAdmin::Filters::ViewHelper do
 
   def render_filter(search, filters)
     render_arbre_component({ filter_args: [search, filters] }, helpers) do
-      text_node active_admin_filters_form_for *assigns[:filter_args]
+      args = assigns[:filter_args]
+      kwargs = args.pop if args.last.is_a?(Hash)
+      text_node active_admin_filters_form_for *args, **kwargs
     end.to_s
   end
 
@@ -48,7 +50,7 @@ RSpec.describe ActiveAdmin::Filters::ViewHelper do
     end
 
     describe "label as proc" do
-      let(:body) { filter :title, label: proc { 'Title from proc' } }
+      let(:body) { filter :title, label: proc { "Title from proc" } }
 
       it "should render proper label" do
         expect(body).to have_selector("label", text: "Title from proc")
@@ -56,7 +58,7 @@ RSpec.describe ActiveAdmin::Filters::ViewHelper do
     end
 
     describe "input html as proc" do
-      let(:body) { filter :title, as: :select, input_html: proc { { 'data-ajax-url': '/' } } }
+      let(:body) { filter :title, as: :select, input_html: proc { { 'data-ajax-url': "/" } } }
 
       it "should render proper label" do
         expect(body).to have_selector('select[data-ajax-url="/"]')
@@ -88,7 +90,7 @@ RSpec.describe ActiveAdmin::Filters::ViewHelper do
     end
 
     it "should translate the label for text field" do
-      with_translation activerecord: { attributes: { post: { title: 'Name' } } } do
+      with_translation activerecord: { attributes: { post: { title: "Name" } } } do
         expect(body).to have_selector("label", text: "Name")
       end
     end
@@ -129,6 +131,17 @@ RSpec.describe ActiveAdmin::Filters::ViewHelper do
     end
   end
 
+  describe "string attribute ended with ransack predicate" do
+    let(:scope) { User.ransack }
+    let(:body) { filter :reason_of_sign_in }
+
+    it "should generate a select options" do
+      expect(body).to have_selector("option[value=reason_of_sign_in_starts_with]")
+      expect(body).to have_selector("option[value=reason_of_sign_in_ends_with]")
+      expect(body).to have_selector("option[value=reason_of_sign_in_contains]")
+    end
+  end
+
   describe "text attribute" do
     let(:body) { filter :body }
 
@@ -152,8 +165,8 @@ RSpec.describe ActiveAdmin::Filters::ViewHelper do
       end
 
       it "should remove original ordering to prevent PostgreSQL error" do
-        expect(scope.object.klass).to receive(:reorder).with('title asc') {
-          m = double distinct: double(pluck: ['A Title'])
+        expect(scope.object.klass).to receive(:reorder).with("title asc") {
+          m = double distinct: double(pluck: ["A Title"])
           expect(m.distinct).to receive(:pluck).with :title
           m
         }
@@ -168,13 +181,16 @@ RSpec.describe ActiveAdmin::Filters::ViewHelper do
     it "should generate a date greater than" do
       expect(body).to have_selector("input.datepicker[name='q[published_date_gteq]']")
     end
+
     it "should generate a date less than" do
       expect(body).to have_selector("input.datepicker[name='q[published_date_lteq]']")
     end
+
     it "should generate two inputs with different ids" do
       ids = body.find_css("input.datepicker").to_a.map { |n| n[:id] }
       expect(ids).to contain_exactly("q_published_date_lteq", "q_published_date_gteq")
     end
+
     it "should generate one label without for attribute" do
       label = body.find_css("label")
       expect(label.length).to be(1)
@@ -182,7 +198,7 @@ RSpec.describe ActiveAdmin::Filters::ViewHelper do
     end
 
     context "with input_html" do
-      let(:body) { filter :published_date, input_html: { 'autocomplete': 'off' } }
+      let(:body) { filter :published_date, input_html: { 'autocomplete': "off" } }
 
       it "should generate provided input html for both ends of date range" do
         expect(body).to have_selector("input.datepicker[name='q[published_date_gteq]'][autocomplete=off]")
@@ -191,7 +207,7 @@ RSpec.describe ActiveAdmin::Filters::ViewHelper do
     end
 
     context "with input_html overriding the defaults" do
-      let(:body) { filter :published_date, input_html: { 'class': 'custom_class' } }
+      let(:body) { filter :published_date, input_html: { 'class': "custom_class" } }
 
       it "should override the default attribute values for both ends of date range" do
         expect(body).to have_selector("input.custom_class[name='q[published_date_gteq]']")
@@ -206,12 +222,13 @@ RSpec.describe ActiveAdmin::Filters::ViewHelper do
     it "should generate a date greater than" do
       expect(body).to have_selector("input.datepicker[name='q[created_at_gteq_datetime]']")
     end
+
     it "should generate a date less than" do
       expect(body).to have_selector("input.datepicker[name='q[created_at_lteq_datetime]']")
     end
 
     context "with input_html" do
-      let(:body) { filter :created_at, input_html: { 'autocomplete': 'off' } }
+      let(:body) { filter :created_at, input_html: { 'autocomplete': "off" } }
 
       it "should generate provided input html for both ends of date range" do
         expect(body).to have_selector("input.datepicker[name='q[created_at_gteq_datetime]'][autocomplete=off]")
@@ -220,7 +237,7 @@ RSpec.describe ActiveAdmin::Filters::ViewHelper do
     end
 
     context "with input_html overriding the defaults" do
-      let(:body) { filter :created_at, input_html: { 'class': 'custom_class' } }
+      let(:body) { filter :created_at, input_html: { 'class': "custom_class" } }
 
       it "should override the default attribute values for both ends of date range" do
         expect(body).to have_selector("input.custom_class[name='q[created_at_gteq_datetime]']")
@@ -236,15 +253,19 @@ RSpec.describe ActiveAdmin::Filters::ViewHelper do
       it "should generate a select option for equal to" do
         expect(body).to have_selector("option[value=id_equals]", text: "Equals")
       end
+
       it "should generate a select option for greater than" do
         expect(body).to have_selector("option[value=id_greater_than]", text: "Greater than")
       end
+
       it "should generate a select option for less than" do
         expect(body).to have_selector("option[value=id_less_than]", text: "Less than")
       end
+
       it "should generate a text field for input" do
         expect(body).to have_selector("input[name='q[id_equals]']")
       end
+
       it "should select the option which is currently being filtered" do
         scope = Post.ransack id_greater_than: 1
         body = Capybara.string(render_filter scope, id: {})
@@ -273,16 +294,18 @@ RSpec.describe ActiveAdmin::Filters::ViewHelper do
       it "should generate a select" do
         expect(body).to have_selector("select[name='q[starred_eq]']")
       end
+
       it "should set the default text to 'Any'" do
         expect(body).to have_selector("option[value='']", text: "Any")
       end
+
       it "should create an option for true and false" do
         expect(body).to have_selector("option[value=true]", text: "Yes")
         expect(body).to have_selector("option[value=false]", text: "No")
       end
 
       it "should translate the label for boolean field" do
-        with_translation activerecord: { attributes: { post: { starred: 'Faved' } } } do
+        with_translation activerecord: { attributes: { post: { starred: "Faved" } } } do
           expect(body).to have_selector("label", text: "Faved")
         end
       end
@@ -294,9 +317,11 @@ RSpec.describe ActiveAdmin::Filters::ViewHelper do
       it "should generate a select" do
         expect(body).to have_selector("select[name='q[title_present]']")
       end
+
       it "should set the default text to 'Any'" do
         expect(body).to have_selector("option[value='']", text: "Any")
       end
+
       it "should create an option for true and false" do
         expect(body).to have_selector("option[value=true]", text: "Yes")
         expect(body).to have_selector("option[value=false]", text: "No")
@@ -326,9 +351,11 @@ RSpec.describe ActiveAdmin::Filters::ViewHelper do
       it "should generate a select" do
         expect(body).to have_selector("select[name='q[author_id_eq]']")
       end
+
       it "should set the default text to 'Any'" do
         expect(body).to have_selector("option[value='']", text: "Any")
       end
+
       it "should create an option for each related object" do
         expect(body).to have_selector("option[value='#{@john.id}']", text: "John Doe")
         expect(body).to have_selector("option[value='#{@jane.id}']", text: "Jane Doe")
@@ -336,7 +363,7 @@ RSpec.describe ActiveAdmin::Filters::ViewHelper do
 
       context "with a proc" do
         let :body do
-          filter :title, as: :select, collection: proc { ['Title One', 'Title Two'] }
+          filter :title, as: :select, collection: proc { ["Title One", "Title Two"] }
         end
 
         it "should use call the proc as the collection" do
@@ -352,7 +379,7 @@ RSpec.describe ActiveAdmin::Filters::ViewHelper do
     end
 
     context "when given the name of relationship with a primary key other than id" do
-      let(:resource_klass) {
+      let(:resource_klass) do
         Class.new(Post) do
           belongs_to :kategory, class_name: "Category", primary_key: :name, foreign_key: :title
 
@@ -360,7 +387,7 @@ RSpec.describe ActiveAdmin::Filters::ViewHelper do
             "SuperPost"
           end
         end
-      }
+      end
 
       let(:scope) do
         resource_klass.ransack
@@ -392,7 +419,7 @@ RSpec.describe ActiveAdmin::Filters::ViewHelper do
 
     context "when using a custom foreign key" do
       let(:scope) { Post.ransack }
-      let(:body)  { filter :category }
+      let(:body) { filter :category }
       it "should ignore that foreign key and let Ransack handle it" do
         expect(Post.reflect_on_association(:category).foreign_key).to eq :custom_category_id
         expect(body).to have_selector("select[name='q[category_id_eq]']")
@@ -457,30 +484,33 @@ RSpec.describe ActiveAdmin::Filters::ViewHelper do
 
   describe "conditional display" do
     [:if, :unless].each do |verb|
-      should   = verb == :if ? "should" : "shouldn't"
-      if_true  = verb == :if ? :to      : :to_not
-      if_false = verb == :if ? :to_not  : :to
+      should = verb == :if ? "should" : "shouldn't"
+      if_true = verb == :if ? :to : :to_not
+      if_false = verb == :if ? :to_not : :to
       context "with #{verb.inspect} proc" do
         it "#{should} be displayed if true" do
           body = filter :body, verb => proc { true }
           expect(body).send if_true, have_selector("input[name='q[body_contains]']")
         end
+
         it "#{should} be displayed if false" do
           body = filter :body, verb => proc { false }
           expect(body).send if_false, have_selector("input[name='q[body_contains]']")
         end
+
         it "should still be hidden on the second render" do
           filters = { body: { verb => proc { verb == :unless } } }
           2.times do
-            body = filter scope, filters
+            body = Capybara.string(render_filter scope, filters)
             expect(body).not_to have_selector("input[name='q[body_contains]']")
           end
         end
+
         it "should successfully keep rendering other filters after one is hidden" do
           filters = { body: { verb => proc { verb == :unless } }, author: {} }
-          body    = Capybara.string(render_filter scope, filters)
+          body = Capybara.string(render_filter scope, filters)
           expect(body).not_to have_selector("input[name='q[body_contains]']")
-          expect(body).to     have_selector("select[name='q[author_id_eq]']")
+          expect(body).to have_selector("select[name='q[author_id_eq]']")
         end
       end
     end
@@ -495,7 +525,7 @@ RSpec.describe ActiveAdmin::Filters::ViewHelper do
     end
 
     it "should work as select" do
-      body = filter :custom_title_searcher, as: :select, collection: ['foo']
+      body = filter :custom_title_searcher, as: :select, collection: ["foo"]
       expect(body).to have_selector("select[name='q[custom_title_searcher_eq]']")
     end
 
@@ -541,6 +571,7 @@ RSpec.describe ActiveAdmin::Filters::ViewHelper do
         body = filter :author
         expect(body).to have_selector("option", text: "Any")
       end
+
       it "should be able to be disabled" do
         body = filter :author, include_blank: false
         expect(body).to_not have_selector("option", text: "Any")
@@ -552,6 +583,7 @@ RSpec.describe ActiveAdmin::Filters::ViewHelper do
         body = filter :author, multiple: true
         expect(body).to_not have_selector("option", text: "Any")
       end
+
       it "should be able to be enabled" do
         body = filter :author, multiple: true, include_blank: true
         expect(body).to have_selector("option", text: "Any")

@@ -1,6 +1,6 @@
 ActiveAdmin::Dependency.pundit!
 
-require 'pundit'
+require "pundit"
 
 # Add a setting to the application to configure the pundit default policy
 ActiveAdmin::Application.inheritable_setting :pundit_default_policy, nil
@@ -31,7 +31,7 @@ module ActiveAdmin
 
     def retrieve_policy(subject)
       case subject
-      when nil   then Pundit.policy!(user, namespace(resource))
+      when nil then Pundit.policy!(user, namespace(resource))
       when Class then Pundit.policy!(user, namespace(subject.new))
       else Pundit.policy!(user, namespace(subject))
       end
@@ -46,9 +46,9 @@ module ActiveAdmin
     def format_action(action, subject)
       # https://github.com/varvet/pundit/blob/master/lib/generators/pundit/install/templates/application_policy.rb
       case action
-      when Auth::CREATE  then :create?
-      when Auth::UPDATE  then :update?
-      when Auth::READ    then subject.is_a?(Class) ? :index? : :show?
+      when Auth::CREATE then :create?
+      when Auth::UPDATE then :update?
+      when Auth::READ then subject.is_a?(Class) ? :index? : :show?
       when Auth::DESTROY then subject.is_a?(Class) ? :destroy_all? : :destroy?
       else "#{action}?"
       end

@@ -1,4 +1,4 @@
-require 'active_admin/resource'
+require "active_admin/resource"
 
 module ActiveAdmin
   class Resource
@@ -46,7 +46,7 @@ module ActiveAdmin
       end
 
       def to_param
-        :"#{@target_name}_id"
+        (@options[:param] || "#{@target_name}_id").to_sym
       end
     end
   end

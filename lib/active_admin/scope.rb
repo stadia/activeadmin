@@ -45,17 +45,17 @@ module ActiveAdmin
         @scope_block = block
       end
 
-      @localizer        = options[:localizer]
-      @show_count       = options.fetch(:show_count, true)
-      @display_if_block = options[:if]      || proc { true }
-      @default_block    = options[:default] || proc { false }
-      @group            = options[:group].try(:to_sym)
+      @localizer = options[:localizer]
+      @show_count = options.fetch(:show_count, true)
+      @display_if_block = options[:if] || proc { true }
+      @default_block = options[:default] || proc { false }
+      @group = options[:group].try(:to_sym)
     end
 
     def name
       case @name
       when String then @name
-      when Symbol then @localizer ? @localizer.t(@name, scope: 'scopes') : @name.to_s.titleize
+      when Symbol then @localizer ? @localizer.t(@name, scope: "scopes") : @name.to_s.titleize
       else @name
       end
     end

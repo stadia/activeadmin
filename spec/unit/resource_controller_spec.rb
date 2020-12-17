@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe ActiveAdmin::ResourceController do
   let(:controller) { Admin::PostsController.new }
@@ -43,14 +43,17 @@ RSpec.describe ActiveAdmin::ResourceController do
         expect(controller).to receive(:call_before_create).with(resource)
         controller.send :create_resource, resource
       end
+
       it "should call the before save callback" do
         expect(controller).to receive(:call_before_save).with(resource)
         controller.send :create_resource, resource
       end
+
       it "should call the after save callback" do
         expect(controller).to receive(:call_after_save).with(resource)
         controller.send :create_resource, resource
       end
+
       it "should call the after create callback" do
         expect(controller).to receive(:call_after_create).with(resource)
         controller.send :create_resource, resource
@@ -70,14 +73,17 @@ RSpec.describe ActiveAdmin::ResourceController do
         expect(controller).to receive(:call_before_update).with(resource)
         controller.send :update_resource, resource, attributes
       end
+
       it "should call the before save callback" do
         expect(controller).to receive(:call_before_save).with(resource)
         controller.send :update_resource, resource, attributes
       end
+
       it "should call the after save callback" do
         expect(controller).to receive(:call_after_save).with(resource)
         controller.send :update_resource, resource, attributes
       end
+
       it "should call the after create callback" do
         expect(controller).to receive(:call_after_update).with(resource)
         controller.send :update_resource, resource, attributes
@@ -152,9 +158,9 @@ RSpec.describe "A specific resource controller", type: :controller do
     end
   end
 
-  describe 'retrieving the resource' do
+  describe "retrieving the resource" do
     let(:post) { Post.new title: "An incledibly unique Post Title" }
-    let(:http_params) { { id: '1' } }
+    let(:http_params) { { id: "1" } }
 
     before do
       allow(Post).to receive(:find).and_return(post)
@@ -168,25 +174,41 @@ RSpec.describe "A specific resource controller", type: :controller do
       expect(subject).to be_kind_of(Post)
     end
 
-    context 'with a decorator' do
+    context "with a decorator" do
       let(:config) { controller.class.active_admin_config }
-      before { config.decorator_class_name = '::PostDecorator' }
-      it 'returns a PostDecorator' do
-        expect(subject).to be_kind_of(PostDecorator)
+
+      context "with a Draper decorator" do
+        before { config.decorator_class_name = "::PostDecorator" }
+
+        it "returns a PostDecorator" do
+          expect(subject).to be_kind_of(PostDecorator)
+        end
+
+        it "returns a PostDecorator that wraps the post" do
+          expect(subject.title).to eq post.title
+        end
       end
 
-      it 'returns a PostDecorator that wraps the post' do
-        expect(subject.title).to eq post.title
+      context "with a PORO decorator" do
+        before { config.decorator_class_name = "::PostPoroDecorator" }
+
+        it "returns a PostDecorator" do
+          expect(subject).to be_kind_of(PostPoroDecorator)
+        end
+
+        it "returns a PostDecorator that wraps the post" do
+          expect(subject.title).to eq post.title
+        end
       end
     end
   end
 
-  describe 'retrieving the resource collection' do
+  describe "retrieving the resource collection" do
     let(:config) { controller.class.active_admin_config }
     before do
       Post.create!(title: "An incledibly unique Post Title")
       config.decorator_class_name = nil
-      request = double 'Request', format: 'application/json'
+      request = double "Request", format: "application/json"
       allow(controller).to receive(:params) { {} }
       allow(controller).to receive(:request) { request }
     end
@@ -201,15 +223,15 @@ RSpec.describe "A specific resource controller", type: :controller do
       expect(subject.first).to be_kind_of(Post)
     end
 
-    context 'with a decorator' do
-      before { config.decorator_class_name = 'PostDecorator' }
+    context "with a decorator" do
+      before { config.decorator_class_name = "PostDecorator" }
 
-      it 'returns a collection decorator using PostDecorator' do
+      it "returns a collection decorator using PostDecorator" do
         expect(subject).to be_a Draper::CollectionDecorator
         expect(subject.decorator_class).to eq PostDecorator
       end
 
-      it 'returns a collection decorator that wraps the post' do
+      it "returns a collection decorator that wraps the post" do
         expect(subject.first.title).to eq Post.first.title
       end
     end
@@ -264,9 +286,9 @@ RSpec.describe "A specific resource controller", type: :controller do
       end
 
       it "should raise an error" do
-        expect {
+        expect do
           controller.batch_action
-        }.to raise_error("Couldn't find batch action \"derp\"")
+        end.to raise_error("Couldn't find batch action \"derp\"")
       end
     end
 
@@ -278,9 +300,9 @@ RSpec.describe "A specific resource controller", type: :controller do
       end
 
       it "should raise an error" do
-        expect {
+        expect do
           controller.batch_action
-        }.to raise_error("Couldn't find batch action \"\"")
+        end.to raise_error("Couldn't find batch action \"\"")
       end
     end
   end

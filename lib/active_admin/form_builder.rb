@@ -22,7 +22,7 @@ module ActiveAdmin
 
     def cancel_link(url = { action: "index" }, html_options = {}, li_attrs = {})
       li_attrs[:class] ||= "cancel"
-      li_content = template.link_to I18n.t('active_admin.cancel'), url, html_options
+      li_content = template.link_to I18n.t("active_admin.cancel"), url, html_options
       template.content_tag(:li, li_content, li_attrs)
     end
 
@@ -47,7 +47,7 @@ module ActiveAdmin
       @assoc = assoc
       @options = extract_custom_settings!(options.dup)
       @options.reverse_merge!(for: assoc)
-      @options[:class] = [options[:class], "inputs has_many_fields"].compact.join(' ')
+      @options[:class] = [options[:class], "inputs has_many_fields"].compact.join(" ")
 
       if sortable_column
         @options[:for] = [assoc, sorted_children(sortable_column)]
@@ -69,7 +69,7 @@ module ActiveAdmin
     def extract_custom_settings!(options)
       @heading = options.key?(:heading) ? options.delete(:heading) : default_heading
       @sortable_column = options.delete(:sortable)
-      @sortable_start  = options.delete(:sortable_start) || 0
+      @sortable_start = options.delete(:sortable_start) || 0
       @new_record = options.key?(:new_record) ? options.delete(:new_record) : true
       @destroy_option = options.delete(:allow_destroy)
       options
@@ -93,7 +93,7 @@ module ActiveAdmin
       contents = without_wrapper { inputs(options, &form_block) }
       contents ||= "".html_safe
 
-      js = new_record ? js_for_has_many(options[:class], &form_block) : ''
+      js = new_record ? js_for_has_many(options[:class], &form_block) : ""
       contents << js
     end
 
@@ -107,19 +107,20 @@ module ActiveAdmin
     def has_many_actions(form_builder, contents)
       if form_builder.object.new_record?
         contents << template.content_tag(:li) do
-          template.link_to I18n.t('active_admin.has_many_remove'), "#", class: 'button has_many_remove'
+          template.link_to I18n.t("active_admin.has_many_remove"), "#", class: "button has_many_remove"
         end
       elsif allow_destroy?(form_builder.object)
-        form_builder.input(:_destroy, as: :boolean,
-                            wrapper_html: { class: 'has_many_delete' },
-                            label: I18n.t('active_admin.has_many_delete'))
+        form_builder.input(
+          :_destroy, as: :boolean,
+                     wrapper_html: { class: "has_many_delete" },
+                     label: I18n.t("active_admin.has_many_delete"))
       end
 
       if sortable_column
         form_builder.input sortable_column, as: :hidden
 
-        contents << template.content_tag(:li, class: 'handle') do
-          I18n.t('active_admin.move')
+        contents << template.content_tag(:li, class: "handle") do
+          I18n.t("active_admin.move")
         end
       end
 
@@ -156,27 +157,28 @@ module ActiveAdmin
 
     # Capture the ADD JS
     def js_for_has_many(class_string, &form_block)
-      assoc_name       = assoc_klass.model_name
-      placeholder      = "NEW_#{assoc_name.to_s.underscore.upcase.gsub(/\//, '_')}_RECORD"
+      assoc_name = assoc_klass.model_name
+      placeholder = "NEW_#{assoc_name.to_s.underscore.upcase.gsub(/\//, '_')}_RECORD"
       opts = {
         for: [assoc, assoc_klass.new],
         class: class_string,
         for_options: { child_index: placeholder }
       }
       html = template.capture { __getobj__.send(:inputs_for_nested_attributes, opts, &form_block) }
-      text = new_record.is_a?(String) ? new_record : I18n.t('active_admin.has_many_new', model: assoc_name.human)
+      text = new_record.is_a?(String) ? new_record : I18n.t("active_admin.has_many_new", model: assoc_name.human)
 
-      template.link_to text, '#', class: "button has_many_add", data: {
+      template.link_to text, "#", class: "button has_many_add", data: {
         html: CGI.escapeHTML(html).html_safe, placeholder: placeholder
       }
     end
 
     def wrap_div_or_li(html)
-      template.content_tag(already_in_an_inputs_block ? :li : :div,
-                           html,
-                           class: "has_many_container #{assoc}",
-                           'data-sortable' => sortable_column,
-                           'data-sortable-start' => sortable_start)
+      template.content_tag(
+        already_in_an_inputs_block ? :li : :div,
+        html,
+        class: "has_many_container #{assoc}",
+        "data-sortable" => sortable_column,
+        "data-sortable-start" => sortable_start)
     end
   end
 end

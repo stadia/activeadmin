@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe MethodOrProcHelper do
   let(:receiver) { double }
@@ -21,25 +21,25 @@ RSpec.describe MethodOrProcHelper do
     it "should exec a proc in the context" do
       test_proc = Proc.new { raise "Success" if receiver_in_context }
 
-      expect {
+      expect do
         context.call_method_or_exec_proc(test_proc)
-      }.to raise_error("Success")
+      end.to raise_error("Success")
     end
   end
 
   describe "#call_method_or_proc_on" do
-    [:hello, 'hello'].each do |key|
+    [:hello, "hello"].each do |key|
       context "when a #{key.class}" do
         it "should call the method on the receiver" do
-          expect(receiver).to receive(key).and_return 'hello'
+          expect(receiver).to receive(key).and_return "hello"
 
-          expect(context.call_method_or_proc_on(receiver, key)).to eq 'hello'
+          expect(context.call_method_or_proc_on(receiver, key)).to eq "hello"
         end
 
         it "should receive additional arguments" do
-          expect(receiver).to receive(key).with(:world).and_return 'hello world'
+          expect(receiver).to receive(key).with(:world).and_return "hello world"
 
-          expect(context.call_method_or_proc_on(receiver, key, :world)).to eq 'hello world'
+          expect(context.call_method_or_proc_on(receiver, key, :world)).to eq "hello world"
         end
       end
     end
@@ -50,9 +50,9 @@ RSpec.describe MethodOrProcHelper do
           raise "Success!" if arg == receiver_in_context
         end
 
-        expect {
+        expect do
           context.call_method_or_proc_on(receiver, test_proc)
-        }.to raise_error("Success!")
+        end.to raise_error("Success!")
       end
 
       it "should receive additional arguments" do
@@ -60,9 +60,9 @@ RSpec.describe MethodOrProcHelper do
           raise "Success!" if arg1 == receiver_in_context && arg2 == "Hello"
         end
 
-        expect {
+        expect do
           context.call_method_or_proc_on(receiver, test_proc, "Hello")
-        }.to raise_error("Success!")
+        end.to raise_error("Success!")
       end
     end
 
@@ -74,9 +74,9 @@ RSpec.describe MethodOrProcHelper do
           raise "Success!" if arg == receiver && obj_not_in_context
         end
 
-        expect {
+        expect do
           context.call_method_or_proc_on(receiver, test_proc, exec: false)
-        }.to raise_error("Success!")
+        end.to raise_error("Success!")
       end
     end
   end

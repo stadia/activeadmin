@@ -1,8 +1,8 @@
-require 'rails_helper'
-require 'active_admin/view_helpers/active_admin_application_helper'
-require 'active_admin/view_helpers/auto_link_helper'
-require 'active_admin/view_helpers/display_helper'
-require 'active_admin/view_helpers/method_or_proc_helper'
+require "rails_helper"
+require "active_admin/view_helpers/active_admin_application_helper"
+require "active_admin/view_helpers/auto_link_helper"
+require "active_admin/view_helpers/display_helper"
+require "active_admin/view_helpers/method_or_proc_helper"
 
 RSpec.describe "#auto_link" do
   let(:view_klass) do
@@ -46,14 +46,14 @@ RSpec.describe "#auto_link" do
 
     it "should return a link with the display name of the object" do
       expect(linked_post).to \
-          match(%r{<a href="/admin/posts/\d+">Hello World</a>})
+        match(%r{<a href="/admin/posts/\d+">Hello World</a>})
     end
 
     it "should keep locale in the url if present" do
-      expect(view).to receive(:url_options).and_return(locale: 'en')
+      expect(view).to receive(:url_options).and_return(locale: "en")
 
       expect(linked_post).to \
-          match(%r{<a href="/admin/posts/\d+\?locale=en">Hello World</a>})
+        match(%r{<a href="/admin/posts/\d+\?locale=en">Hello World</a>})
     end
 
     context "but the user doesn't have access" do
@@ -80,7 +80,7 @@ RSpec.describe "#auto_link" do
     end
 
     it "should keep locale in the url if present" do
-      expect(view).to receive(:url_options).and_return(locale: 'en')
+      expect(view).to receive(:url_options).and_return(locale: "en")
 
       expect(linked_post).to \
         match(%r{<a href="/admin/posts/\d+/edit\?locale=en">Hello World</a>})

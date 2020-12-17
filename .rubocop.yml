@@ -10,7 +10,7 @@ require:
 
 AllCops:
   DisabledByDefault: true
-  TargetRubyVersion: 2.4
+  TargetRubyVersion: 2.5
 
   Exclude:
     - tmp/development_apps/**/*
@@ -30,13 +30,22 @@ AllCops:
 Layout/EndAlignment:
   Enabled: true
 
+Layout/HashAlignment:
+  Enabled: true
+
 Lint/ParenthesesAsGroupedExpression:
   Enabled: true
 
 Layout/AccessModifierIndentation:
   Enabled: true
 
+Layout/ArgumentAlignment:
+  Enabled: true
+
 Layout/CaseIndentation:
+  Enabled: true
+
+Layout/ClosingParenthesisIndentation:
   Enabled: true
 
 Layout/CommentIndentation:
@@ -55,13 +64,44 @@ Layout/EndOfLine:
   Enabled: true
 
 Layout/ExtraSpacing:
+  AllowForAlignment: false
   Enabled: true
+
+Layout/FirstArgumentIndentation:
+  Enabled: true
+
+Layout/FirstHashElementIndentation:
+  Enabled: true
+  EnforcedStyle: consistent
+
+Layout/FirstMethodArgumentLineBreak:
+  Enabled: true
+
+Layout/FirstParameterIndentation:
+  Enabled: true
+
+Layout/ParameterAlignment:
+  Enabled: true
+  EnforcedStyle: with_fixed_indentation
+
+Layout/IndentationStyle:
+  Enabled: true
+  EnforcedStyle: spaces
 
 Rails/FilePath:
   Enabled: true
   EnforcedStyle: slashes
 
+RSpec/EmptyLineAfterExample:
+  Enabled: true
+
+RSpec/EmptyLineAfterExampleGroup:
+  Enabled: true
+
 RSpec/HookArgument:
+  Enabled: true
+
+Style/BlockDelimiters:
   Enabled: true
 
 Style/Dir:
@@ -99,6 +139,10 @@ Naming/PredicateName:
   AllowedMethods:
     - has_many
     - has_many_actions
+
+Style/StringLiterals:
+  Enabled: true
+  EnforcedStyle: double_quotes
 
 Style/TrailingCommaInArguments:
   Enabled: true

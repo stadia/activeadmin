@@ -1,6 +1,6 @@
-require 'rails_helper'
+require "rails_helper"
 
-require 'active_admin/abstract_view_factory'
+require "active_admin/abstract_view_factory"
 
 RSpec.describe ActiveAdmin::AbstractViewFactory do
   let(:view_factory) { ActiveAdmin::AbstractViewFactory.new }
@@ -51,6 +51,7 @@ RSpec.describe ActiveAdmin::AbstractViewFactory do
     it "should generate a getter method" do
       expect(view_factory.my_default_view_class).to eq view
     end
+
     it "should be settable view a setter method and not change default" do
       view_factory.my_default_view_class = "Some Obj"
       expect(view_factory.my_default_view_class).to eq "Some Obj"

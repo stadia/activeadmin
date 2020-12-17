@@ -1,6 +1,6 @@
 {
   "name": "@activeadmin/activeadmin",
-  "version": "2.7.0",
+  "version": "2.8.1",
   "description": "The administration framework for Ruby on Rails.",
   "main": "app/assets/javascripts/active_admin/base.js",
   "files": [
@@ -25,18 +25,19 @@
     "@babel/core": "^7.6.2",
     "@babel/preset-env": "^7.6.2",
     "common-tags": "^1.8.0",
-    "eslint": "^6.4.0",
+    "eslint": "^7.2.0",
     "eslint-plugin-import": "^2.18.2",
     "gherkin-lint": "^3.3.6",
-    "rollup": "^1.21.4",
+    "rollup": "^2.26.11",
     "rollup-plugin-babel": "^4.3.3",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-node-resolve": "^5.2.0",
-    "rollup-plugin-uglify": "^6.0.3"
+    "rollup-plugin-terser": "^7.0.0"
   },
   "scripts": {
     "gherkin-lint": "gherkin-lint",
     "build": "rollup --config rollup.config.js",
+    "eslint": "eslint .",
     "prepublishOnly": "rm -rf src && cp -R app/javascript/active_admin src && cp -R app/assets/stylesheets/active_admin src/scss"
   },
   "dependencies": {

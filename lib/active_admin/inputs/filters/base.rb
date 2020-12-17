@@ -25,7 +25,7 @@ module ActiveAdmin
 
         def wrapper_html_options
           opts = super
-          (opts[:class] ||= '') << " filter_form_field filter_#{as} form-group"
+          (opts[:class] ||= "") << " filter_form_field filter_#{as} form-group"
           opts
         end
 

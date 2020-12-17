@@ -15,7 +15,7 @@ module ActiveAdmin
         end
 
         def main_content
-          I18n.t('active_admin.main_content', model: title).html_safe
+          I18n.t("active_admin.main_content", model: title).html_safe
         end
 
         private
@@ -29,7 +29,7 @@ module ActiveAdmin
             text_node(active_admin_namespace.head)
 
             active_admin_application.stylesheets.each do |style, options|
-              stylesheet_tag = active_admin_namespace.use_webpacker ? stylesheet_pack_tag(style, options) : stylesheet_link_tag(style, options)
+              stylesheet_tag = active_admin_namespace.use_webpacker ? stylesheet_pack_tag(style, **options) : stylesheet_link_tag(style, **options)
               text_node(stylesheet_tag.html_safe) if stylesheet_tag
             end
 
@@ -67,9 +67,9 @@ module ActiveAdmin
         def body_classes
           Arbre::HTML::ClassList.new [
             params[:action],
-            params[:controller].tr('/', '_'),
-            'active_admin', 'logged_in',
-            active_admin_namespace.name.to_s + '_namespace'
+            params[:controller].tr("/", "_"),
+            "active_admin", "logged_in",
+            active_admin_namespace.name.to_s + "_namespace"
           ]
         end
 
@@ -83,12 +83,12 @@ module ActiveAdmin
           build_flash_messages
           div id: "active_admin_content", class: (skip_sidebar? ? "without_sidebar row" : "with_sidebar row") do
             build_main_content_wrapper
-            sidebar sidebar_sections_for_action, id: 'sidebar', class: 'col-lg-2' unless skip_sidebar?
+            sidebar sidebar_sections_for_action, id: "sidebar", class: "col-lg-2" unless skip_sidebar?
           end
         end
 
         def build_flash_messages
-          div class: 'flashes row' do
+          div class: "flashes row" do
             flash_messages.each do |type, messages|
               [*messages].each do |message|
                 div class: "flash flash_#{type} alert alert-dismissible col-xs-12", role: 'alert' do
