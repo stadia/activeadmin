@@ -14,12 +14,12 @@ task :local do
 
   if argv.any?
     # If it's a rails command, auto add the rails script
-    if %w(generate console server dbconsole g c s runner).include?(argv[0]) || argv[0] =~ /db:/
+    if %w(generate console server dbconsole g c s routes runner).include?(argv[0]) || argv[0] =~ /db:/
       argv.unshift("rails")
     end
 
     command = ["bundle", "exec", *argv].join(" ")
-    env = { "BUNDLE_GEMFILE" => test_application.expanded_gemfile }
+    env = { "BUNDLE_GEMFILE" => test_application.expanded_gemfile, "RAILS_ENV" => "development" }
 
     Dir.chdir(test_application.app_dir) do
       Bundler.with_original_env { Kernel.exec(env, command) }

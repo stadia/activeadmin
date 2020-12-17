@@ -33,23 +33,12 @@ After "@debug" do |scenario|
   # :nocov:
 end
 
-require "capybara/dsl"
-
-World(Capybara::DSL)
-
-After do
-  Capybara.reset_sessions!
-end
-
-Before do
-  Capybara.use_default_driver
-end
-
-Before "@javascript" do
-  Capybara.current_driver = Capybara.javascript_driver
-end
-
 require "capybara/cuprite"
+
+Capybara.register_driver(:cuprite) do |app|
+  Capybara::Cuprite::Driver.new(app, process_timeout: 30, timeout: 30)
+end
+
 Capybara.javascript_driver = :cuprite
 
 Capybara.server = :webrick
