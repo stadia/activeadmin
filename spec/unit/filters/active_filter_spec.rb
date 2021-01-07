@@ -158,8 +158,6 @@ RSpec.describe ActiveAdmin::Filters::ActiveFilter do
       resource.add_filter(:title, label: label)
 
       expect(subject.label).to eq("#{label} equals")
-<<<<<<< HEAD
-=======
     end
 
     it "should use the filter label as the label prefix" do
@@ -167,7 +165,6 @@ RSpec.describe ActiveAdmin::Filters::ActiveFilter do
       resource.add_filter(:title, label: label)
 
       expect(subject.label).to eq("#{label.call} equals")
->>>>>>> cbce3550d41e745fbf3c9160b34b5848712f48cc
     end
 
     context "when filter condition has a predicate" do
