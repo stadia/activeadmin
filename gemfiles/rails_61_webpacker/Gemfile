@@ -21,11 +21,11 @@ group :development, :test do
 end
 
 group :test do
-  gem "cuprite", "0.11"
+  gem "cuprite", "0.12"
   gem "capybara", "~> 3.14"
   gem "db-query-matchers", "0.10.0"
 
-  gem "simplecov", "0.21.1", require: false # Test coverage generator. Go to /coverage/ after running tests
+  gem "simplecov", "0.21.2", require: false # Test coverage generator. Go to /coverage/ after running tests
   gem "cucumber-rails", "~> 2.0", require: false
   gem "cucumber"
   gem "database_cleaner"
