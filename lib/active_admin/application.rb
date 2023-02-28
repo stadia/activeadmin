@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require "active_admin/router"
 require "active_admin/application_settings"
 require "active_admin/namespace_settings"
@@ -81,7 +82,7 @@ module ActiveAdmin
 
       namespace = namespaces[name.to_sym] ||= begin
         namespace = Namespace.new(self, name)
-        ActiveSupport::Notifications.publish ActiveAdmin::Namespace::RegisterEvent, namespace
+        ActiveSupport::Notifications.instrument ActiveAdmin::Namespace::RegisterEvent, namespace
         namespace
       end
 
@@ -117,10 +118,10 @@ module ActiveAdmin
     # To reload everything simply call `ActiveAdmin.unload!`
     def load!
       unless loaded?
-        ActiveSupport::Notifications.publish BeforeLoadEvent, self # before_load hook
+        ActiveSupport::Notifications.instrument BeforeLoadEvent, self # before_load hook
         files.each { |file| load file } # load files
         namespace(default_namespace) # init AA resources
-        ActiveSupport::Notifications.publish AfterLoadEvent, self # after_load hook
+        ActiveSupport::Notifications.instrument AfterLoadEvent, self # after_load hook
         @@loaded = true
       end
     end
@@ -150,13 +151,13 @@ module ActiveAdmin
 
     # Adds before, around and after filters to all controllers.
     # Example usage:
-    #   ActiveAdmin.before_filter :authenticate_admin!
+    #   ActiveAdmin.before_action :authenticate_admin!
     #
     AbstractController::Callbacks::ClassMethods.public_instance_methods.
-      select { |m| m.match(/(filter|action)/) }.each do |name|
+      select { |m| m.match(/_action\z/) }.each do |name|
       define_method name do |*args, &block|
-        controllers_for_filters.each do |controller|
-          controller.public_send name, *args, &block
+        ActiveSupport.on_load(:active_admin_controller) do
+          public_send name, *args, &block
         end
       end
     end
@@ -170,8 +171,7 @@ module ActiveAdmin
     private
 
     def register_default_assets
-      register_stylesheet "active_admin.css", media: "screen"
-      register_stylesheet "active_admin/print.css", media: "print"
+      register_stylesheet "active_admin.css", media: "all"
       register_javascript "active_admin.js"
     end
 

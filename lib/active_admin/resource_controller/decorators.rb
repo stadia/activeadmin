@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module ActiveAdmin
   class ResourceController < BaseController
     module Decorators
@@ -56,8 +57,6 @@ module ActiveAdmin
           name = "#{collection_decorator.name} of #{decorator} + ActiveAdmin"
           @cache[name] ||= wrap! collection_decorator, name
         end
-
-        private
 
         def self.wrap!(parent, name)
           ::Class.new parent do

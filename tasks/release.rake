@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require "chandler/tasks"
 require_relative "release_manager"
 
@@ -43,4 +44,4 @@ namespace :release do
   end
 end
 
-task "release", [:remote] => ["build", "release:guard_clean", "release:source_control_push", "chandler:push", "release:npm_push", "release:rubygem_push"]
+task(:release).enhance ["chandler:push", "release:npm_push"]

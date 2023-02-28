@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require "active_admin/resource_collection"
 
 module ActiveAdmin
@@ -71,7 +72,7 @@ module ActiveAdmin
       reset_menu!
 
       # Dispatch a registration event
-      ActiveSupport::Notifications.publish ActiveAdmin::Resource::RegisterEvent, config
+      ActiveSupport::Notifications.instrument ActiveAdmin::Resource::RegisterEvent, config
 
       # Return the config
       config

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require "active_support/core_ext"
 require "set"
 
@@ -8,7 +9,6 @@ require "formtastic"
 require "formtastic_i18n"
 require "inherited_resources"
 require "jquery-rails"
-require "sassc-rails"
 require "arbre"
 
 require "active_admin/helpers/i18n"
@@ -113,7 +113,7 @@ module ActiveAdmin
     private
 
     def wrap_block_for_active_support_notifications block
-      proc { |event, *args| block.call *args }
+      proc { |_name, _start, _finish, _id, payload| block.call payload }
     end
 
   end

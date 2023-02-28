@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module NavigationHelpers
   # Maps a name to a path. Used by the
   #
@@ -46,6 +47,9 @@ module NavigationHelpers
 
     when /^the last post's edit page$/
       edit_admin_post_path(Post.last)
+
+    when /^the last author's show page$/
+      admin_user_path(User.last)
 
     # Add more mappings here.
     # Here is an example that pulls values out of the Regexp:

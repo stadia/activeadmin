@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module ActiveAdmin
   # Exception class to raise when there is an authorized access
   # exception thrown. The exception has a few goodies that may
@@ -44,8 +45,6 @@ module ActiveAdmin
     rescue *database_error_classes => exception
       raise new exception
     end
-
-    private
 
     def self.database_error_classes
       @classes ||= []

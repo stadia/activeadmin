@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require "rails_helper"
 
 class DefaultPolicy < ApplicationPolicy
@@ -88,6 +89,34 @@ RSpec.describe ActiveAdmin::PunditAdapter do
     it "uses the resource when no subject given" do
       expect(Pundit).to receive(:policy!).with(anything, resource).and_return(DefaultPolicy::Scope.new(double, double))
       auth.authorized?(:index)
+    end
+
+    context "when model name contains policy namespace name" do
+      include_context "capture stderr"
+
+      before do
+        allow(ActiveAdmin.application).to receive(:pundit_policy_namespace).and_return :pub
+        namespace.register(Publisher)
+        ActiveSupport::Deprecation.behavior = :stderr
+      end
+
+      after do
+        ActiveSupport::Deprecation.behavior = :raise
+      end
+
+      it "looks for a namespaced policy" do
+        expect(Pundit).to receive(:policy!).with(anything, [:pub, Publisher]).and_return(DefaultPolicy.new(double, double))
+        auth.authorized?(:read, Publisher)
+      end
+
+      it "fallbacks to the policy without namespace" do
+        expect(Pundit).to receive(:policy!).with(anything, [:pub, Publisher]).and_raise(Pundit::NotDefinedError)
+        expect(Pundit).to receive(:policy).with(anything, Publisher).and_return(DefaultPolicy.new(double, double))
+
+        auth.authorized?(:read, Publisher)
+
+        expect($stderr.string).to include("ActiveAdmin was unable to find policy Pub::DefaultPolicy. DefaultPolicy will be used instead.")
+      end
     end
 
     context "when Pundit is unable to find policy scope" do

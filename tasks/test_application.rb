@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require "fileutils"
 
 module ActiveAdmin
@@ -33,6 +34,7 @@ module ActiveAdmin
       )
 
       args << "--skip-turbolinks" unless turbolinks_app?
+      args << "--skip-sprockets" if webpacker_app?
 
       command = ["bundle", "exec", "rails", "new", app_dir, *args].join(" ")
 
@@ -62,7 +64,7 @@ module ActiveAdmin
     end
 
     def app_name
-      return "rails_60" if main_app?
+      return "rails_70" if main_app?
 
       File.basename(File.dirname(gemfile))
     end
@@ -72,7 +74,11 @@ module ActiveAdmin
     end
 
     def turbolinks_app?
-      expanded_gemfile == File.expand_path("gemfiles/rails_60_turbolinks/Gemfile")
+      expanded_gemfile == File.expand_path("gemfiles/rails_61_turbolinks/Gemfile")
+    end
+
+    def webpacker_app?
+      expanded_gemfile == File.expand_path("gemfiles/rails_61_webpacker/Gemfile")
     end
 
     def gemfile

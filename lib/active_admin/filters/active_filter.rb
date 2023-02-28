@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module ActiveAdmin
   module Filters
 
@@ -112,8 +113,6 @@ module ActiveAdmin
         @predicate_association = find_predicate_association unless defined?(@predicate_association)
         @predicate_association
       end
-
-      private
 
       def find_predicate_association
         condition_attribute.klass.reflect_on_all_associations.

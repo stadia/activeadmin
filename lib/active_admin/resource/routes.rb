@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module ActiveAdmin
   class Resource
     module Routes
@@ -41,8 +42,6 @@ module ActiveAdmin
 
         config[:route_collection_name] == config[:route_instance_name]
       end
-
-      private
 
       class RouteBuilder
         def initialize(resource)

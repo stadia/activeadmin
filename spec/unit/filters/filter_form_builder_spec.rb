@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require "rails_helper"
 
 RSpec.describe ActiveAdmin::Filters::ViewHelper do
@@ -90,7 +91,7 @@ RSpec.describe ActiveAdmin::Filters::ViewHelper do
     end
 
     it "should translate the label for text field" do
-      with_translation activerecord: { attributes: { post: { title: "Name" } } } do
+      with_translation %i[activerecord attributes post title], "Name" do
         expect(body).to have_selector("label", text: "Name")
       end
     end
@@ -305,7 +306,7 @@ RSpec.describe ActiveAdmin::Filters::ViewHelper do
       end
 
       it "should translate the label for boolean field" do
-        with_translation activerecord: { attributes: { post: { starred: "Faved" } } } do
+        with_translation %i[activerecord attributes post starred], "Faved" do
           expect(body).to have_selector("label", text: "Faved")
         end
       end
@@ -421,7 +422,7 @@ RSpec.describe ActiveAdmin::Filters::ViewHelper do
       let(:scope) { Post.ransack }
       let(:body) { filter :category }
       it "should ignore that foreign key and let Ransack handle it" do
-        expect(Post.reflect_on_association(:category).foreign_key).to eq :custom_category_id
+        expect(Post.reflect_on_association(:category).foreign_key.to_sym).to eq :custom_category_id
         expect(body).to have_selector("select[name='q[category_id_eq]']")
       end
     end

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module ActiveAdmin
   module Dependency
     module Requirements
@@ -56,7 +57,7 @@ module ActiveAdmin
     end
 
     def self.supports_zeitwerk?
-      rails >= "6.0.0.beta3" && RUBY_ENGINE != "jruby"
+      RUBY_ENGINE != "jruby"
     end
 
     class Matcher

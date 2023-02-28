@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 source "https://rubygems.org"
 
 group :development, :test do
@@ -7,54 +8,48 @@ group :development, :test do
 
   gem "cancancan"
   gem "pundit"
-  gem "jruby-openssl", "~> 0.10.1", platform: :jruby
 
-  gem "draper", "~> 4.0"
+  gem "draper"
   gem "devise"
 
-  gem "rails", "~> 6.0.0"
-  gem "activerecord-jdbcsqlite3-adapter", "~> 60.0", platform: :jruby
+  gem "rails", "~> 7.0.0"
+
+  gem "net-smtp" # The mail gem, depended on transitively, does not specify this dependency
 
   gem "sprockets-rails"
-  gem "sprockets", github: "rails/sprockets", ref: "2d6b1a8bde0cf870c14a2d193fa9a9be09ef99fc"
-
-  gem "formtastic", "~> 4.0.rc1"
+  gem "sassc-rails"
 end
 
 group :test do
-  gem "cuprite", "0.11"
-  gem "capybara", "~> 3.14"
-  gem "db-query-matchers", "0.10.0"
+  gem "cuprite"
+  gem "capybara"
+  gem "webrick"
 
-  gem "simplecov", "0.19.0", require: false # Test coverage generator. Go to /coverage/ after running tests
-  gem "cucumber-rails", "~> 2.0", require: false
+  gem "simplecov", require: false # Test coverage generator. Go to /coverage/ after running tests
+  gem "cucumber-rails", require: false
   gem "cucumber"
   gem "database_cleaner"
   gem "jasmine"
-  gem "jasmine-core", "2.99.2" # last release with Ruby 2.2 support.
+  gem "jasmine-core"
   gem "launchy"
-  gem "parallel_tests", "~> 3.0"
+  gem "parallel_tests"
   gem "rails-i18n" # Provides default i18n for many languages
   gem "rspec-rails"
-  gem "rspec", github: "rspec/rspec", ref: "3e6c0fb9c9ec68eddd409cfe7b3eb077b390b302"
-  gem "rspec-core", github: "rspec/rspec-core", ref: "119282ec3dde5295b337322fc53301c32d0bf7ec"
-  gem "rspec-mocks", github: "rspec/rspec-mocks", ref: "1728885f65b25a9676c5ce54133ef8a1283e2e0d"
-  gem "rspec-support", github: "rspec/rspec-support", ref: "6553911974ee93855008f8ff41c26cea6652d74d"
-  gem "rspec-expectations", github: "rspec/rspec-expectations", ref: "eb1787f0e1a5ec2c2650048ee60a45d4c9738d78"
-  gem "sqlite3", "~> 1.4", platform: :mri
+  gem "sqlite3", platform: :mri
 end
 
 group :release do
-  gem "chandler", "0.9.0" # Github releases from changelog
-  gem "octokit", "~> 4.18"
+  gem "chandler" # Github releases from changelog
+  gem "octokit"
 end
 
 group :lint do
   # Code style
-  gem "rubocop", "0.92.0"
-  gem "rubocop-rspec", "~> 1.30"
-  gem "rubocop-rails", "~> 2.3"
-  gem "mdl", "0.11.0"
+  gem "rubocop"
+  gem "rubocop-packaging"
+  gem "rubocop-rspec"
+  gem "rubocop-rails"
+  gem "mdl"
 
   # Translations
   gem "i18n-tasks"
