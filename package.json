@@ -1,11 +1,13 @@
 {
   "name": "@activeadmin/activeadmin",
-  "version": "2.12.0",
+  "version": "4.0.0-beta7",
   "description": "The administration framework for Ruby on Rails.",
-  "main": "app/assets/javascripts/active_admin/base.js",
+  "main": "dist/active_admin.js",
+  "type": "module",
   "files": [
-    "app/assets/javascripts/active_admin/*.js",
-    "src/**/*"
+    "dist/**/*.js",
+    "plugin.js",
+    "vendor/javascript/*.js"
   ],
   "repository": {
     "type": "git",
@@ -13,6 +15,7 @@
   },
   "keywords": [
     "administration",
+    "administrative",
     "rails"
   ],
   "author": "David Rodríguez <deivid.rodriguez@riseup.net>",
@@ -20,29 +23,23 @@
   "bugs": {
     "url": "https://github.com/activeadmin/activeadmin/issues"
   },
-  "homepage": "htts://activeadmin.info",
+  "homepage": "https://activeadmin.info",
   "devDependencies": {
-    "@babel/core": "",
-    "@babel/preset-env": "",
-    "common-tags": "",
-    "eslint": "",
-    "eslint-plugin-import": "",
-    "gherkin-lint": "",
-    "rollup": "",
-    "rollup-plugin-babel": "",
-    "rollup-plugin-commonjs": "",
-    "rollup-plugin-node-resolve": "",
-    "rollup-plugin-terser": ""
+    "@rollup/plugin-alias": "^5.1.0",
+    "eslint": "^8.52.0",
+    "gherkin-lint": "^4.2.2",
+    "rollup": "^4.9.4",
+    "tailwindcss": "^3.3.5"
   },
   "scripts": {
     "gherkin-lint": "gherkin-lint",
-    "build": "rollup --config rollup.config.js",
     "eslint": "eslint .",
-    "prepublishOnly": "rm -rf src && cp -R app/javascript/active_admin src && cp -R app/assets/stylesheets/active_admin src/scss"
+    "prebuild": "rm -rf dist",
+    "build": "rollup --config rollup.config.js",
+    "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "jquery": "^3.4.1",
-    "jquery-ui": "^1.12.1",
-    "jquery-ujs": "^1.2.2"
+    "@rails/ujs": "7.1.2",
+    "flowbite": "2.3.0"
   }
 }
