@@ -2,6 +2,59 @@
 
 ## Unreleased
 
+## 2.14.0 [☰](https://github.com/activeadmin/activeadmin/compare/v2.13.1..v2.14.0)
+
+### Enhancements
+
+* Add csp_meta_tag to layout. [#7986] by [@javierjulio]
+* Update config.register_javascript with options support. [#7002] by [@lanzhiheng]
+* Use `csrf_meta_tags` in place of singular version. [#7985] by [@javierjulio]
+* Allow different new and edit rules in authorization adapters. [#6535] by [@timwis]
+
+### Bug Fixes
+
+* Fix form layout for hints and checkboxes. [#7772] by [@JewelSam]
+* Update filters disabled error to include specific action. [#6195] by [@javawizard]
+* Fix Comments controller destroy declaration. [#6482] by [@bliof]
+* Stop pagination elements from overflowing outside of panel container. [#7599] by [@ray-curran]
+
+### Translation Improvements
+
+* Update vi locale with more translations. [#7984] by [@rs-phunt]
+* Update zh-CN locale with multiple corrections. [#7944] by [@hfl]
+* Fix typo in Vietnamese locale for filter text. [#7920] by [@tvziet]
+* Improve French translation. [#7653] by [@cprodhomme]
+
+### Documentation
+
+* Add more documentation about PORO decorator requirements. [#7556] by [@sanfrecce-osaka]
+* Add Load Paths docs to the active_admin.rb template. [#7541] by [@gabo-cs]
+
+### Performance
+
+* Removes docs from exported gem. [#7013] by [@brunoarueira]
+
+## 2.13.1 [☰](https://github.com/activeadmin/activeadmin/compare/v2.13.0..v2.13.1)
+
+### Bug Fixes
+
+* Honor load paths order when loading admin files. [#7488] by [@tf]
+* Fix passing expected hash payload argument. [#7487] by [@ispyropoulos]
+
+## 2.13.0 [☰](https://github.com/activeadmin/activeadmin/compare/v2.12.0..v2.13.0)
+
+### Documentation
+
+* Update validation errors documentation to account for deprecated `ActiveModel::Errors#keys`. [#7475] by [@amit]
+
+### Dependency Changes
+
+* Drop rails 6.0 support. [#7476] by [@deivid-rodriguez]
+
+### Performance
+
+* Fix pundit performance. [#7479] by [@deivid-rodriguez]
+
 ## 2.12.0 [☰](https://github.com/activeadmin/activeadmin/compare/v2.11.2..v2.12.0)
 
 ### Enhancements
@@ -722,6 +775,7 @@ Please check [0-6-stable] for previous changes.
 [#6099]: https://github.com/activeadmin/activeadmin/pull/6099
 [#6124]: https://github.com/activeadmin/activeadmin/pull/6124
 [#6149]: https://github.com/activeadmin/activeadmin/pull/6149
+[#6195]: https://github.com/activeadmin/activeadmin/pull/6195
 [#6198]: https://github.com/activeadmin/activeadmin/pull/6198
 [#6210]: https://github.com/activeadmin/activeadmin/pull/6210
 [#6221]: https://github.com/activeadmin/activeadmin/pull/6221
@@ -736,8 +790,10 @@ Please check [0-6-stable] for previous changes.
 [#6451]: https://github.com/activeadmin/activeadmin/pull/6451
 [#6460]: https://github.com/activeadmin/activeadmin/pull/6460
 [#6462]: https://github.com/activeadmin/activeadmin/pull/6462
+[#6482]: https://github.com/activeadmin/activeadmin/pull/6482
 [#6487]: https://github.com/activeadmin/activeadmin/pull/6487
 [#6523]: https://github.com/activeadmin/activeadmin/pull/6523
+[#6535]: https://github.com/activeadmin/activeadmin/pull/6535
 [#6536]: https://github.com/activeadmin/activeadmin/pull/6536
 [#6548]: https://github.com/activeadmin/activeadmin/pull/6548
 [#6583]: https://github.com/activeadmin/activeadmin/pull/6583
@@ -752,6 +808,8 @@ Please check [0-6-stable] for previous changes.
 [#6936]: https://github.com/activeadmin/activeadmin/pull/6936
 [#6954]: https://github.com/activeadmin/activeadmin/pull/6954
 [#6959]: https://github.com/activeadmin/activeadmin/pull/6959
+[#7002]: https://github.com/activeadmin/activeadmin/pull/7002
+[#7013]: https://github.com/activeadmin/activeadmin/pull/7013
 [#7095]: https://github.com/activeadmin/activeadmin/pull/7095
 [#7127]: https://github.com/activeadmin/activeadmin/pull/7127
 [#7144]: https://github.com/activeadmin/activeadmin/pull/7144
@@ -772,6 +830,21 @@ Please check [0-6-stable] for previous changes.
 [#7384]: https://github.com/activeadmin/activeadmin/pull/7384
 [#7394]: https://github.com/activeadmin/activeadmin/pull/7394
 [#7453]: https://github.com/activeadmin/activeadmin/pull/7453
+[#7475]: https://github.com/activeadmin/activeadmin/pull/7475
+[#7476]: https://github.com/activeadmin/activeadmin/pull/7476
+[#7479]: https://github.com/activeadmin/activeadmin/pull/7479
+[#7487]: https://github.com/activeadmin/activeadmin/pull/7487
+[#7488]: https://github.com/activeadmin/activeadmin/pull/7488
+[#7541]: https://github.com/activeadmin/activeadmin/pull/7541
+[#7556]: https://github.com/activeadmin/activeadmin/pull/7556
+[#7599]: https://github.com/activeadmin/activeadmin/pull/7599
+[#7653]: https://github.com/activeadmin/activeadmin/pull/7653
+[#7772]: https://github.com/activeadmin/activeadmin/pull/7772
+[#7920]: https://github.com/activeadmin/activeadmin/pull/7920
+[#7944]: https://github.com/activeadmin/activeadmin/pull/7944
+[#7984]: https://github.com/activeadmin/activeadmin/pull/7984
+[#7985]: https://github.com/activeadmin/activeadmin/pull/7985
+[#7986]: https://github.com/activeadmin/activeadmin/pull/7986
 
 [@1000ship]: https://github.com/1000ship
 [@5t111111]: https://github.com/5t111111
@@ -782,11 +855,14 @@ Please check [0-6-stable] for previous changes.
 [@alejandroperea]: https://github.com/alejandroperea
 [@alex-bogomolov]: https://github.com/alex-bogomolov
 [@amiel]: https://github.com/amiel
+[@amit]: https://github.com/amit
 [@amiuhle]: https://github.com/amiuhle
 [@andreslemik]: https://github.com/andreslemik
 [@bartoszkopinski]: https://github.com/bartoszkopinski
+[@bliof]: https://github.com/bliof
 [@blocknotes]: https://github.com/blocknotes
 [@bolshakov]: https://github.com/bolshakov
+[@brunoarueira]: https://github.com/brunoarueira
 [@brunvez]: https://github.com/brunvez
 [@buren]: https://github.com/buren
 [@chancancode]: https://github.com/chancancode
@@ -808,22 +884,26 @@ Please check [0-6-stable] for previous changes.
 [@Fivell]: https://github.com/Fivell
 [@Fs00]: https://github.com/Fs00
 [@fuzziness]: https://github.com/fuzziness
+[@gabo-cs]: https://github.com/gabo-cs
 [@giapnhdev]: https://github.com/giapnhdev
 [@gigorok]: https://github.com/gigorok
 [@glebtv]: https://github.com/glebtv
 [@gonzedge]: https://github.com/gonzedge
 [@guigs]: https://github.com/guigs
 [@HappyKadaver]: https://github.com/HappyKadaver
+[@hfl]: https://github.com/hfl
 [@imcvampire]: https://github.com/imcvampire
 [@innparusu95]: https://github.com/innparusu95
 [@ionut998]: https://github.com/ionut998
 [@irmela]: https://github.com/irmela
+[@ispyropoulos]: https://github.com/ispyropoulos
 [@Ivanov-Anton]: https://github.com/Ivanov-Anton
 [@jasl]: https://github.com/jasl
 [@javawizard]: https://github.com/javawizard
 [@javierjulio]: https://github.com/javierjulio
 [@jawa]: https://github.com/jawa
 [@jaynetics]: https://github.com/jaynetics
+[@JewelSam]: https://github.com/JewelSam
 [@JiiHu]: https://github.com/JiiHu
 [@jiikko]: https://github.com/jiikko
 [@johnnyshields]: https://github.com/johnnyshields
@@ -837,6 +917,7 @@ Please check [0-6-stable] for previous changes.
 [@Kris-LIBIS]: https://github.com/Kris-LIBIS
 [@krzcho]: https://github.com/krzcho
 [@kwent]: https://github.com/kwent
+[@lanzhiheng]: https://github.com/lanzhiheng
 [@leio10]: https://github.com/leio10
 [@littleforest]: https://github.com/littleforest
 [@Looooong]: https://github.com/Looooong
@@ -859,11 +940,14 @@ Please check [0-6-stable] for previous changes.
 [@PChambino]: https://github.com/PChambino
 [@potatosalad]: https://github.com/potatosalad
 [@pranas]: https://github.com/pranas
+[@ray-curran]: https://github.com/ray-curran
 [@renotocn]: https://github.com/renotocn
 [@rn0rno]: https://github.com/rn0rno
 [@RobinvanderVliet]: https://github.com/RobinvanderVliet
 [@rogerkk]: https://github.com/rogerkk
 [@roramirez]: https://github.com/roramirez
+[@rs-phunt]: https://github.com/rs-phunt
+[@sanfrecce-osaka]: https://github.com/sanfrecce-osaka
 [@seanlinsley]: https://github.com/seanlinsley
 [@sergey-alekseev]: https://github.com/sergey-alekseev
 [@sgara]: https://github.com/sgara
@@ -876,12 +960,15 @@ Please check [0-6-stable] for previous changes.
 [@stereoscott]: https://github.com/stereoscott
 [@tagliala]: https://github.com/tagliala
 [@taralbass]: https://github.com/taralbass
+[@tf]: https://github.com/tf
 [@tiagotex]: https://github.com/tiagotex
 [@timoschilling]: https://github.com/timoschilling
 [@TimPetricola]: https://github.com/TimPetricola
+[@timwis]: https://github.com/timwis
 [@tomgilligan]: https://github.com/tomgilligan
 [@TonyArra]: https://github.com/TonyArra
 [@tordans]: https://github.com/tordans
+[@tvziet]: https://github.com/tvziet
 [@utkarsh2102]: https://github.com/utkarsh2102
 [@varyonic]: https://github.com/varyonic
 [@vcsjones]: https://github.com/vcsjones

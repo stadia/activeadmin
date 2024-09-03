@@ -1,8 +1,9 @@
 {
   "name": "@activeadmin/activeadmin",
-  "version": "2.12.0",
+  "version": "2.14.0",
   "description": "The administration framework for Ruby on Rails.",
   "main": "app/assets/javascripts/active_admin/base.js",
+  "type": "module",
   "files": [
     "app/assets/javascripts/active_admin/*.js",
     "src/**/*"
@@ -13,6 +14,7 @@
   },
   "keywords": [
     "administration",
+    "administrative",
     "rails"
   ],
   "author": "David Rodríguez <deivid.rodriguez@riseup.net>",
@@ -22,13 +24,13 @@
   },
   "homepage": "htts://activeadmin.info",
   "devDependencies": {
-    "@babel/core": "",
-    "@babel/preset-env": "",
+    "@babel/core": "*",
+    "@babel/preset-env": "*",
     "common-tags": "",
-    "eslint": "",
+    "eslint": "*",
     "eslint-plugin-import": "",
     "gherkin-lint": "",
-    "rollup": "",
+    "rollup": "*",
     "rollup-plugin-babel": "",
     "rollup-plugin-commonjs": "",
     "rollup-plugin-node-resolve": "",

@@ -38,8 +38,8 @@ module ActiveAdmin
               text_node(meta(name: name, content: content))
             end
 
-            active_admin_application.javascripts.each do |path|
-              javascript_tag = active_admin_namespace.use_webpacker ? javascript_pack_tag(path) : javascript_include_tag(path)
+            active_admin_application.javascripts.each do |path, options|
+              javascript_tag = active_admin_namespace.use_webpacker ? javascript_pack_tag(path, **options) : javascript_include_tag(path, **options)
               text_node(javascript_tag)
             end
 
@@ -49,7 +49,8 @@ module ActiveAdmin
               text_node(favicon_tag)
             end
 
-            text_node csrf_meta_tag
+            text_node csrf_meta_tags
+            text_node csp_meta_tag
           end
         end
 
